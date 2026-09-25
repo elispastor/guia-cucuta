@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarjeta - Guía Digital Cúcuta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
+  body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; }
+  .wrapper { max-width: 420px; width: 100%; }
+
+  .menu-btn { position: fixed; top: 20px; right: 20px; background: #fff; border: none; font-size: 24px; color: #0b1a2e; cursor: pointer; padding: 10px 14px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 998; }
+  .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+  .menu-overlay.active { display: block; }
+  .menu-panel { position: fixed; top: 0; right: 0; width: 75%; max-width: 280px; height: 100%; background: #fff; padding: 24px 20px; transform: translateX(100%); transition: transform 0.3s ease; z-index: 1000; box-shadow: -8px 0 30px rgba(0,0,0,0.3); overflow-y: auto; }
+  .menu-panel.open { transform: translateX(0); }
+  .menu-panel .close-btn { background: none; border: none; font-size: 28px; float: right; cursor: pointer; color: #1a2f44; }
+  .menu-panel ul { list-style: none; margin-top: 40px; }
+  .menu-panel ul li { padding: 14px 0; border-bottom: 1px solid #eef2f6; font-size: 16px; font-weight: 600; color: #1a2f44; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .menu-panel ul li i { width: 24px; color: #1a4b6d; }
+
+  .tarjeta { background: #fff; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); }
+  .cabecera { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; color: #fff; }
+  .cabecera .logo { font-size: 13px; letter-spacing: 1.5px; color: #fbbf24; font-weight: 700; }
+  .cabecera .ciudad { font-size: 11px; color: #a0c4e8; letter-spacing: 1px; margin-top: 4px; }
+
+  .cuerpo { padding: 24px 20px; text-align: center; }
+
+  .avatar {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 16px;
+    margin: 0 auto 14px;
+    background: linear-gradient(135deg, #0f2b44, #1a4b6d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #fbbf24;
+    overflow: hidden;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar .inicial { font-size: 42px; font-weight: 800; color: #fff; }
+
+  .nombre { font-size: 22px; font-weight: 800; color: #0b1a2e; }
+  .negocio { font-size: 16px; font-weight: 600; color: #1a4b6d; margin-top: 4px; }
+  .descripcion { font-size: 14px; color: #4a5e72; margin-top: 10px; font-style: italic; }
+  .dato { font-size: 15px; color: #4a5e72; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .dato i { color: #1a4b6d; width: 18px; }
+
+  .acciones { display: flex; gap: 8px; padding: 0 20px 20px; flex-wrap: wrap; }
+  .acciones a, .acciones button {
+    flex: 1; min-width: 90px; padding: 12px; border-radius: 60px; border: none;
+    font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-wa { background: #25D366; color: #fff; }
+  .btn-call { background: #1a4b6d; color: #fff; }
+  .btn-share { background: #fbbf24; color: #0b1a2e; }
+  .btn-ref { background: #8b5cf6; color: #fff; flex: 1 1 100%; }
+
+  .qr-box { text-align: center; padding: 0 20px 20px; }
+  .qr-box img { width: 140px; height: 140px; border-radius: 12px; background: #fff; padding: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .qr-box p { font-size: 11px; color: #6b7f93; margin-top: 6px; }
+
+  .footer { text-align: center; padding: 14px; font-size: 11px; color: #6b7f93; background: #f8fafc; }
+
+  .vacio { text-align: center; color: #fff; padding: 40px 20px; }
+  .vacio a { color: #fbbf24; }
+</style>
+</head>
+<body>
+
+<button class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="menu-panel" id="menuPanel">
+  <button class="close-btn" id="menuClose"><i class="fas fa-times"></i></button>
+  <ul>
+    <li id="menuInicio"><i class="fas fa-home"></i> Inicio</li>
+    <li id="menuCompartir"><i class="fas fa-share-alt"></i> Compartir</li>
+    <li id="menuReferido"><i class="fas fa-gift"></i> Invitar y ganar</li>
+    <li id="menuRegistro"><i class="fas fa-user-plus"></i> Crear mi tarjeta</li>
+    <li id="menuContacto"><i class="fab fa-whatsapp"></i> WhatsApp</li>
+  </ul>
+</div>
+
+<div class="wrapper">
+<div id="contenido"></div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+const nombre = params.get('n') || '';
+const telefono = params.get('t') || '';
+const negocio = params.get('g') || '';
+const ciudad = params.get('c') || '';
+const ruta = params.get('r') || '';
+const direccion = params.get('d') || '';
+const descripcion = params.get('ds') || '';
+const foto = params.get('f') || '';
+const ref = params.get('ref') || '';
+
+const cont = document.getElementById('contenido');
+
+if (!nombre) {
+  cont.innerHTML = '<div class="vacio"><h2>Tarjeta no encontrada</h2><p>Ve a la <a href="/">página principal</a> para crear la tuya.</p></div>';
+} else {
+  const inicial = nombre.charAt(0).toUpperCase();
+  const avatarHTML = foto
+    ? '<img src="' + foto + '" alt="Foto" onerror="this.parentNode.innerHTML=\'<span class=&quot;inicial&quot;>' + inicial + '</span>\'">'
+    : '<span class="inicial">' + inicial + '</span>';
+
+  const prefijo = params.get('p') || '57';
+  let telLimpio = telefono.replace(/\D/g, '');
+  if (telLimpio.startsWith('0')) telLimpio = telLimpio.substring(1);
+
+  const urlBase = window.location.origin + '/';
+  const nombreRef = encodeURIComponent(nombre);
+  const urlReferido = urlBase + 'registro.html?ref=' + nombreRef;
+
+  cont.innerHTML = `
+    <div class="tarjeta">
+      <div class="cabecera">
+        <div class="logo">GUÍA DIGITAL CÚCUTA - COLOMBIA</div>
+        <div class="ciudad">${ciudad ? ciudad.toUpperCase() : 'CÚCUTA - COLOMBIA'}</div>
+      </div>
+      <div class="cuerpo">
+        <div class="avatar">${avatarHTML}</div>
+        <div class="nombre">${nombre}</div>
+        ${negocio ? '<div class="negocio">' + negocio + '</div>' : ''}
+        ${descripcion ? '<div class="descripcion">"' + descripcion + '"</div>' : ''}
+        ${telefono ? '<div class="dato"><i class="fas fa-phone"></i> ' + telefono + '</div>' : ''}
+        ${ruta ? '<div class="dato"><i class="fas fa-route"></i> ' + ruta + '</div>' : ''}
+        ${direccion ? '<div class="dato"><i class="fas fa-location-dot"></i> ' + direccion + '</div>' : ''}
+      </div>
+      <div class="acciones">
+        ${telefono ? '<a href="https://wa.me/' + prefijo + telLimpio + '?text=Hola%2C%20vi%20tu%20tarjeta%20en%20la%20Gu%C3%ADa%20Digital%20de%20C%C3%BAcuta" class="btn-wa" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>' : ''}
+        ${telefono ? '<a href="tel:' + telefono + '" class="btn-call"><i class="fas fa-phone"></i> Llamar</a>' : ''}
+        <button class="btn-share" onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</button>
+        <button class="btn-ref" onclick="compartirReferido()"><i class="fas fa-gift"></i> Invitar y ganar por COMPARTIR</button>
+      </div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(window.location.href)}" alt="QR">
+        <p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p>
+      </div>
+      <div class="footer">© 2026 Guía Digital Cúcuta - Colombia · Todos somos <i class="fas fa-heart"></i> · <i class="fas fa-copyright"></i> Derechos Reservados</div>
+    </div>
+  `;
+
+  window.urlReferido = urlReferido;
+  window.nombreTarjeta = nombre;
+}
+
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const menuPanel = document.getElementById('menuPanel');
+const menuOverlay = document.getElementById('menuOverlay');
+
+menuToggle.addEventListener('click', () => { menuPanel.classList.add('open'); menuOverlay.classList.add('active'); });
+menuClose.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+menuOverlay.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuInicio').addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuCompartir').addEventListener('click', () => { compartir(); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuReferido').addEventListener('click', () => { compartirReferido(); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuRegistro').addEventListener('click', () => { window.location.href = 'registro.html'; });
+document.getElementById('menuContacto').addEventListener('click', () => { window.location.href = 'https://wa.me/584244259543'; });
+
+function compartir() {
+  const texto = 'Mira mi tarjeta en la Guía Digital de Cúcuta: ' + window.nombreTarjeta;
+  if (navigator.share) {
+    navigator.share({ title: 'Mi tarjeta - Guía Digital Cúcuta', text: texto, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(texto + '\n' + window.location.href).then(() => alert('📋 Enlace copiado'));
+  }
+}
+
+function compartirReferido() {
+  const texto = 'Únete a la Guía Digital de Cúcuta y crea tu tarjeta. Yo te invité: ' + window.nombreTarjeta;
+  if (navigator.share) {
+    navigator.share({ title: 'Invítame a la Guía Digital Cúcuta', text: texto, url: window.urlReferido });
+  } else {
+    navigator.clipboard.writeText(texto + '\n' + window.urlReferido).then(() => alert('📋 Tu link de referido fue copiado:\n' + window.urlReferido));
+  }
+}
+</script>
+
+</body>
+</html>

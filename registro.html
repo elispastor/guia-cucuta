@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro - Guía Digital Cúcuta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
+  body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; }
+  .container { max-width: 440px; width: 100%; background: #ffffff; border-radius: 36px; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); overflow: hidden; padding: 24px 20px; }
+
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 8px 0 16px; border-bottom: 1px solid #eef2f6; margin-bottom: 16px; }
+  .header .brand h2 { font-size: 18px; font-weight: 700; color: #0b1a2e; }
+  .header .brand h2 span { color: #1a4b6d; }
+  .header .brand small { display: block; font-size: 10px; color: #6b7f93; letter-spacing: 1px; }
+  .menu-btn { background: none; border: none; font-size: 28px; color: #0b1a2e; cursor: pointer; padding: 4px 8px; }
+
+  .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+  .menu-overlay.active { display: block; }
+  .menu-panel { position: fixed; top: 0; right: 0; width: 75%; max-width: 280px; height: 100%; background: #fff; padding: 24px 20px; transform: translateX(100%); transition: transform 0.3s ease; z-index: 1000; box-shadow: -8px 0 30px rgba(0,0,0,0.3); overflow-y: auto; }
+  .menu-panel.open { transform: translateX(0); }
+  .menu-panel .close-btn { background: none; border: none; font-size: 28px; float: right; cursor: pointer; color: #1a2f44; }
+  .menu-panel ul { list-style: none; margin-top: 40px; }
+  .menu-panel ul li { padding: 14px 0; border-bottom: 1px solid #eef2f6; font-size: 16px; font-weight: 600; color: #1a2f44; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .menu-panel ul li i { width: 24px; color: #1a4b6d; }
+
+  .portada { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; border-radius: 20px; margin-bottom: 20px; }
+  .portada .icon { font-size: 48px; color: #fbbf24; margin-bottom: 6px; }
+  .portada h1 { font-size: 20px; font-weight: 800; color: #fff; }
+  .portada h1 span { color: #fbbf24; }
+  .portada .sub { font-size: 12px; color: #a0c4e8; letter-spacing: 1px; margin-top: 4px; }
+
+  .beneficios { background: #f8fafc; border-radius: 20px; padding: 18px; margin: 16px 0; border: 1px solid #e0e8ee; }
+  .beneficios h3 { font-size: 16px; color: #0b1a2e; margin-bottom: 10px; text-align: center; }
+  .beneficios h3 i { color: #fbbf24; }
+  .beneficios ul { list-style: none; }
+  .beneficios ul li { font-size: 13px; color: #1a2f44; padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
+  .beneficios ul li i { color: #22c55e; margin-top: 3px; }
+
+  /* ===== PLANES ===== */
+  .planes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+  .plan-card { background: #f8fafc; border-radius: 16px; padding: 14px; border: 2px solid #e0e8ee; text-align: center; cursor: pointer; transition: 0.2s; }
+  .plan-card:hover { transform: scale(1.02); }
+  .plan-card.seleccionado { border-color: #fbbf24; background: #fef3c7; }
+  .plan-card .emoji { font-size: 28px; margin-bottom: 4px; }
+  .plan-card .nombre { font-size: 13px; font-weight: 700; color: #0b1a2e; }
+  .plan-card .precio { font-size: 18px; font-weight: 800; color: #1a4b6d; margin: 4px 0; }
+  .plan-card .detalle { font-size: 10px; color: #6b7f93; }
+
+  .pago-box { background: #f8fafc; border-radius: 20px; padding: 18px; margin: 16px 0; border: 1px solid #e0e8ee; }
+  .pago-box h3 { font-size: 16px; color: #0b1a2e; margin-bottom: 10px; text-align: center; }
+  .pago-box h3 i { color: #fbbf24; }
+  .pago-box .dato-pago { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ccd9e0; font-size: 14px; }
+  .pago-box .dato-pago:last-child { border-bottom: none; }
+  .pago-box .dato-pago span:first-child { color: #6b7f93; font-weight: 600; }
+  .pago-box .dato-pago span:last-child { color: #0b1a2e; font-weight: 700; }
+
+  .btn-pago { display: block; width: 100%; padding: 14px; background: #25D366; color: #fff; text-align: center; border-radius: 60px; font-size: 16px; font-weight: 700; text-decoration: none; margin-top: 12px; }
+
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: #1a2f44; margin-bottom: 4px; }
+  .form-group label .req { color: #ef4444; }
+  .form-group input {
+    width: 100%; padding: 12px; border: 1px solid #ccd9e0; border-radius: 12px;
+    font-size: 15px; background: #f8fafc; color: #0b1a2e;
+  }
+  .form-group input:focus { outline: 2px solid #fbbf24; background: #fff; }
+  .form-group input[type="file"] { padding: 8px; background: #fff; }
+
+  .btn-generar {
+    width: 100%; padding: 14px; background: linear-gradient(45deg, #0f2b44, #1a4b6d);
+    color: #fff; border: none; border-radius: 60px; font-size: 16px; font-weight: 700;
+    cursor: pointer; margin-top: 8px;
+  }
+  .btn-generar:hover { opacity: 0.9; }
+
+  .nota { font-size: 11px; color: #6b7f93; text-align: center; margin-top: 12px; }
+
+  .ref-box { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 16px; padding: 14px; margin: 16px 0; text-align: center; }
+  .ref-box p { font-size: 13px; color: #78350f; }
+  .ref-box strong { color: #0b1a2e; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="brand">
+      <h2>GUÍA <span>DIGITAL</span></h2>
+      <small>CÚCUTA - COLOMBIA</small>
+    </div>
+    <button class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+  </div>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <div class="menu-panel" id="menuPanel">
+    <button class="close-btn" id="menuClose"><i class="fas fa-times"></i></button>
+    <ul>
+      <li id="menuInicio"><i class="fas fa-home"></i> Inicio</li>
+      <li id="menuBeneficios"><i class="fas fa-star"></i> Beneficios</li>
+      <li id="menuPrecio"><i class="fas fa-tag"></i> Planes</li>
+      <li id="menuPago"><i class="fas fa-credit-card"></i> Cómo pagar</li>
+      <li id="menuRegistro"><i class="fas fa-user-plus"></i> Registro</li>
+      <li id="menuContacto"><i class="fab fa-whatsapp"></i> WhatsApp</li>
+    </ul>
+  </div>
+
+  <div class="portada" id="inicio">
+    <div class="icon"><i class="fas fa-id-card"></i></div>
+    <h1>GUÍA <span>DIGITAL</span></h1>
+    <div class="sub">CÚCUTA - COLOMBIA · TODOS SOMOS SOCIOS</div>
+  </div>
+
+  <div class="beneficios" id="beneficios">
+    <h3><i class="fas fa-star"></i> ¿Qué ganas con tu tarjeta?</h3>
+    <ul>
+      <li><i class="fas fa-check-circle"></i> Apareces en la Guía Digital de Cúcuta</li>
+      <li><i class="fas fa-check-circle"></i> Tu propia tarjeta digital con código QR</li>
+      <li><i class="fas fa-check-circle"></i> Participas en la ruleta mensual de premios</li>
+      <li><i class="fas fa-check-circle"></i> Ganas comisión por cada persona que llegue con tu link</li>
+      <li><i class="fas fa-check-circle"></i> Presencia digital para tu negocio o servicio</li>
+      <li><i class="fas fa-check-circle"></i> Ayudas a construir comedores sociales</li>
+      <li><i class="fas fa-check-circle"></i> Todos somos socios, todos ganamos</li>
+    </ul>
+  </div>
+
+  <!-- ===== PLANES ===== -->
+  <h3 style="text-align:center; font-size:16px; color:#0b1a2e; margin:16px 0 8px;" id="precio">
+    <i class="fas fa-tag" style="color:#fbbf24;"></i> Elige tu plan
+  </h3>
+  <div class="planes-grid" id="planesGrid">
+    <div class="plan-card" data-plan="Básico" data-precio="25000">
+      <div class="emoji">🥉</div>
+      <div class="nombre">Básico</div>
+      <div class="precio">$25.000</div>
+      <div class="detalle">1 foto + QR + comisión 20%</div>
+    </div>
+    <div class="plan-card" data-plan="Pro" data-precio="50000">
+      <div class="emoji">🥈</div>
+      <div class="nombre">Pro</div>
+      <div class="precio">$50.000</div>
+      <div class="detalle">Carrusel 3 fotos + comisión 30%</div>
+    </div>
+    <div class="plan-card" data-plan="Avanzado" data-precio="100000">
+      <div class="emoji">🥇</div>
+      <div class="nombre">Avanzado</div>
+      <div class="precio">$100.000</div>
+      <div class="detalle">Carrusel 6 fotos + comisión 40%</div>
+    </div>
+    <div class="plan-card" data-plan="Élite" data-precio="200000">
+      <div class="emoji">💎</div>
+      <div class="nombre">Élite</div>
+      <div class="precio">$200.000</div>
+      <div class="detalle">Carrusel 12 fotos + comisión 50%</div>
+    </div>
+  </div>
+
+  <!-- ===== PAGO ===== -->
+  <div class="pago-box" id="pago">
+    <h3><i class="fas fa-credit-card"></i> Pago por Nequi</h3>
+    <div class="dato-pago"><span>Nequi</span><span>324 282 8699</span></div>
+    <div class="dato-pago"><span>Titular</span><span>Julio Vargas (hijo)</span></div>
+    <div class="dato-pago"><span>Monto</span><span id="montoPago">$25.000 COP</span></div>
+    <a href="https://wa.me/584244259543?text=Hola%2C%20quiero%20mi%20tarjeta%20de%20la%20Gu%C3%ADa%20Digital%20C%C3%BAcuta" class="btn-pago" target="_blank"><i class="fab fa-whatsapp"></i> Enviar comprobante por WhatsApp</a>
+  </div>
+
+  <div class="ref-box" id="refBox" style="display:none;">
+    <p>🎁 Llegaste invitado por: <strong id="refNombre"></strong></p>
+  </div>
+
+  <form id="formRegistro">
+    <h3 style="font-size:16px; color:#0b1a2e; margin-bottom:10px; text-align:center;"><i class="fas fa-user-plus" style="color:#fbbf24;"></i> Crea tu tarjeta ahora</h3>
+
+    <div class="form-group">
+      <label>Plan seleccionado <span class="req">*</span></label>
+      <input type="text" id="planSeleccionado" readonly value="" style="background:#fef3c7; font-weight:700;">
+    </div>
+
+    <div class="form-group">
+      <label>Nombre completo <span class="req">*</span></label>
+      <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+    </div>
+
+    <div class="form-group">
+      <label>Teléfono / WhatsApp <span class="req">*</span></label>
+      <input type="tel" id="telefono" placeholder="Ej: 3001234567" required>
+    </div>
+
+    <div class="form-group">
+      <label>Negocio o servicio que ofrece</label>
+      <input type="text" id="negocio" placeholder="Ej: Polarizados, Electricidad, Motorizado">
+    </div>
+
+    <div class="form-group">
+      <label>Ciudad</label>
+      <input type="text" id="ciudad" placeholder="Ej: Cúcuta" value="Cúcuta">
+    </div>
+
+    <div class="form-group">
+      <label>Ruta / Línea (solo motorizados)</label>
+      <input type="text" id="ruta" placeholder="Ej: Ruta 5 - Centro">
+    </div>
+
+    <div class="form-group">
+      <label>Dirección</label>
+      <input type="text" id="direccion" placeholder="Ej: Av. Principal, Local 3">
+    </div>
+
+    <div class="form-group">
+      <label>Descripción corta</label>
+      <input type="text" id="descripcion" placeholder="Ej: Servicio rápido y confiable">
+    </div>
+
+    <div class="form-group">
+      <label>Tu foto o logo (desde tu teléfono)</label>
+      <input type="file" id="foto" accept="image/*">
+    </div>
+
+    <button type="submit" class="btn-generar"><i class="fas fa-rocket"></i> Generar mi tarjeta</button>
+    <p class="nota">Los campos con <span style="color:#ef4444;">*</span> son obligatorios</p>
+  </form>
+
+</div>
+
+<script>
+// ===== MENÚ =====
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const menuPanel = document.getElementById('menuPanel');
+const menuOverlay = document.getElementById('menuOverlay');
+
+menuToggle.addEventListener('click', () => { menuPanel.classList.add('open'); menuOverlay.classList.add('active'); });
+menuClose.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+menuOverlay.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuInicio').addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuBeneficios').addEventListener('click', () => { document.getElementById('beneficios').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuPrecio').addEventListener('click', () => { document.getElementById('precio').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuPago').addEventListener('click', () => { document.getElementById('pago').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuRegistro').addEventListener('click', () => { document.getElementById('formRegistro').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuContacto').addEventListener('click', () => { window.location.href = 'https://wa.me/584244259543'; menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+
+// ===== SELECCIÓN DE PLAN =====
+let planActual = '';
+let precioActual = '';
+
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('seleccionado'));
+    card.classList.add('seleccionado');
+    planActual = card.dataset.plan;
+    precioActual = card.dataset.precio;
+    document.getElementById('planSeleccionado').value = planActual + ' — $' + Number(precioActual).toLocaleString('es-CO') + ' COP';
+    document.getElementById('montoPago').textContent = '$' + Number(precioActual).toLocaleString('es-CO') + ' COP';
+  });
+});
+
+// ===== REFERIDO =====
+const paramsURL = new URLSearchParams(window.location.search);
+const ref = paramsURL.get('ref');
+if (ref) {
+  document.getElementById('refBox').style.display = 'block';
+  document.getElementById('refNombre').textContent = ref;
+}
+
+// ===== ENVÍO DEL FORMULARIO =====
+document.getElementById('formRegistro').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  if (!planActual) {
+    alert('Por favor selecciona un plan primero');
+    return;
+  }
+
+  const nombre = document.getElementById('nombre').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+  const negocio = document.getElementById('negocio').value.trim();
+  const ciudad = document.getElementById('ciudad').value.trim();
+  const ruta = document.getElementById('ruta').value.trim();
+  const direccion = document.getElementById('direccion').value.trim();
+  const descripcion = document.getElementById('descripcion').value.trim();
+  const fotoInput = document.getElementById('foto');
+
+  // Guardar en KV
+  const guardarEnKV = () => {
+    const urlKV = 'https://guia-digital-api.ngegestion.workers.dev/?accion=guardar-persona'
+      + '&nombre=' + encodeURIComponent(nombre)
+      + '&tel=' + encodeURIComponent(telefono)
+      + '&plan=' + encodeURIComponent(planActual)
+      + '&precio=' + encodeURIComponent(precioActual)
+      + '&ref=' + encodeURIComponent(ref || '');
+    fetch(urlKV).catch(() => {});
+  };
+
+  const generar = (fotoData) => {
+    const params = new URLSearchParams({
+      n: nombre, t: telefono, g: negocio, c: ciudad,
+      r: ruta, d: direccion, ds: descripcion, f: fotoData || '',
+      plan: planActual, precio: precioActual,
+      ref: ref || ''
+    });
+
+    // Abrir la tarjeta en nueva pestaña
+    window.open('tarjeta.html?' + params.toString(), '_blank');
+
+    // Guardar link en KV
+    guardarEnKV();
+    const slug = nombre.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const urlTarjeta = 'https://cucuta.guia-digital.com/tarjeta.html?' + params.toString();
+    fetch('https://guia-digital-api.ngegestion.workers.dev/?accion=guardar-link&slug=' + slug + '&url=' + encodeURIComponent(urlTarjeta)).catch(() => {});
+  };
+
+  // Subir foto si existe
+  if (fotoInput.files && fotoInput.files[0]) {
+    const fd = new FormData();
+    fd.append('foto', fotoInput.files[0]);
+    fetch('https://subir-fotos.ngegestion.workers.dev', { method: 'POST', body: fd })
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok && data.url) {
+          generar(data.url);
+        } else {
+          alert('Error subiendo la foto: ' + (data.error || 'desconocido'));
+          generar('');
+        }
+      })
+      .catch(err => {
+        alert('Error de conexión: ' + err.message);
+        generar('');
+      });
+  } else {
+    generar('');
+  }
+});
+</script>
+
+</body>
+</html>

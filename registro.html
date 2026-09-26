@@ -279,7 +279,7 @@ document.getElementById('formRegistro').addEventListener('submit', function(e) {
   const descripcion = document.getElementById('descripcion').value.trim();
   const fotoInput = document.getElementById('foto');
 
-  // Guardar en KV (respaldo en Cloudflare)
+  // Guardar persona en KV (sistema de referidos)
   const guardarEnKV = () => {
     const urlKV = 'https://guia-digital-api.ngegestion.workers.dev/?accion=guardar-persona'
       + '&nombre=' + encodeURIComponent(nombre)
@@ -292,9 +292,7 @@ document.getElementById('formRegistro').addEventListener('submit', function(e) {
   };
 
   const generar = (fotoData) => {
-    // 1. Guardar en el panel de control (localStorage)
-    const STORAGE_KEY = 'tarjetas_cucuta_admin';
-    const tarjetas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    // 1. Crear objeto de la tarjeta
     const nuevaTarjeta = {
       id: 'tarjeta_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
       nombre: nombre,
@@ -311,13 +309,29 @@ document.getElementById('formRegistro').addEventListener('submit', function(e) {
       estado: 'pendiente',
       fecha: new Date().toLocaleString('es-CO')
     };
-    tarjetas.push(nuevaTarjeta);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tarjetas));
 
-    // 2. Guardar en KV (respaldo en Cloudflare)
+    // 2. Guardar en KV (nube de Cloudflare)
+    const paramsTarjeta = new URLSearchParams({
+      accion: 'guardar-tarjeta',
+      id: nuevaTarjeta.id,
+      nombre: nuevaTarjeta.nombre,
+      telefono: nuevaTarjeta.telefono,
+      negocio: nuevaTarjeta.negocio,
+      ciudad: nuevaTarjeta.ciudad,
+      ruta: nuevaTarjeta.ruta,
+      direccion: nuevaTarjeta.direccion,
+      descripcion: nuevaTarjeta.descripcion,
+      foto: nuevaTarjeta.foto,
+      plan: nuevaTarjeta.plan,
+      precio: nuevaTarjeta.precio,
+      ref: nuevaTarjeta.ref
+    });
+    fetch('https://guia-digital-api.ngegestion.workers.dev/?' + paramsTarjeta.toString()).catch(() => {});
+
+    // 3. Guardar persona en KV (sistema de referidos)
     guardarEnKV();
 
-    // 3. Abrir la tarjeta en nueva pestaña
+    // 4. Abrir la tarjeta en nueva pestaña
     const params = new URLSearchParams({
       n: nombre, t: telefono, g: negocio, c: ciudad || 'Cúcuta',
       r: ruta, d: direccion, ds: descripcion, f: fotoData || '',
@@ -326,7 +340,7 @@ document.getElementById('formRegistro').addEventListener('submit', function(e) {
     });
     window.open('tarjeta.html?' + params.toString(), '_blank');
 
-    // 4. Avisar al usuario que debe pagar
+    // 5. Avisar al usuario que debe pagar
     setTimeout(() => {
       alert('✅ Tu tarjeta ha sido creada.\n\n📌 IMPORTANTE: Para activarla en la guía, realiza el pago por Nequi al 3242828699 y envía el comprobante por WhatsApp.\n\nUna vez confirmado el pago, tu tarjeta aparecerá en la Guía Digital de Cúcuta.');
     }, 800);

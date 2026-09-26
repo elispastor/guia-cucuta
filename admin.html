@@ -3,87 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel de Control - Guía Digital Cúcuta</title>
+<title>🛡️ Panel de Control - Guía Digital Cúcuta</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-  body { background: #0b1c3a; color: white; min-height: 100vh; padding: 20px; }
+  body { 
+    background: linear-gradient(135deg, #0a1526 0%, #0b1c3a 50%, #0f2942 100%);
+    color: white; min-height: 100vh; padding: 20px;
+  }
   .container { max-width: 1200px; margin: 0 auto; }
-  h1 { color: #fbbf24; margin-bottom: 10px; font-size: 1.8rem; }
-  .sub { color: #9ca3af; margin-bottom: 25px; font-size: 0.9rem; }
+  
+  .header-panel {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 15px; margin-bottom: 25px;
+    padding-bottom: 20px; border-bottom: 2px solid rgba(251,191,36,0.2);
+  }
+  .header-panel h1 { 
+    color: #fbbf24; font-size: 2rem; 
+    text-shadow: 0 2px 10px rgba(251,191,36,0.3);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .header-panel .sub { color: #94a3b8; font-size: 0.9rem; margin-top: 5px; }
+  
+  .btn-refresh {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white; border: none; padding: 12px 24px; border-radius: 30px;
+    font-weight: bold; cursor: pointer; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 15px rgba(59,130,246,0.4);
+    transition: transform 0.2s;
+  }
+  .btn-refresh:hover { transform: translateY(-2px); }
+  .btn-refresh.girando i { animation: girar 1s linear infinite; }
+  @keyframes girar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-  .stat { background: #112b4f; padding: 20px; border-radius: 15px; border-left: 4px solid #fbbf24; }
-  .stat .num { font-size: 2rem; font-weight: bold; color: #fbbf24; }
-  .stat .lbl { color: #9ca3af; font-size: 0.85rem; }
+  /* ESTADÍSTICAS */
+  .stats { 
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 18px; margin-bottom: 30px; 
+  }
+  .stat { 
+    background: linear-gradient(145deg, #1a2f4d, #112b4f);
+    padding: 22px; border-radius: 18px; 
+    border: 1px solid rgba(251,191,36,0.15);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .stat:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 12px 30px rgba(251,191,36,0.15);
+  }
+  .stat::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
+    background: linear-gradient(180deg, #fbbf24, #f59e0b);
+  }
+  .stat .icon-stat { font-size: 2rem; margin-bottom: 8px; }
+  .stat .num { 
+    font-size: 2.2rem; font-weight: 900; color: #fbbf24; 
+    text-shadow: 0 2px 8px rgba(251,191,36,0.4);
+  }
+  .stat .lbl { color: #94a3b8; font-size: 0.85rem; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  .filtros { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-  .filtros button { background: #112b4f; color: white; border: 1px solid #1e3a5f; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-  .filtros button.activo { background: #fbbf24; color: #0b1c3a; }
+  /* FILTROS */
+  .filtros { 
+    display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; 
+    padding: 15px; background: rgba(17,43,79,0.5); border-radius: 18px;
+    backdrop-filter: blur(10px);
+  }
+  .filtros button { 
+    background: rgba(17,43,79,0.9); color: #cbd5e1; 
+    border: 1px solid rgba(251,191,36,0.2); 
+    padding: 10px 20px; border-radius: 30px; 
+    cursor: pointer; font-weight: 600; font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .filtros button:hover { border-color: #fbbf24; color: #fbbf24; }
+  .filtros button.activo { 
+    background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+    color: #0b1c3a; border-color: #fbbf24;
+    box-shadow: 0 4px 15px rgba(251,191,36,0.4);
+  }
 
-  .lista { display: flex; flex-direction: column; gap: 12px; }
-  .item { background: #112b4f; padding: 18px; border-radius: 15px; border: 1px solid #1e3a5f; }
+  /* LISTA */
+  .lista { display: flex; flex-direction: column; gap: 15px; }
+  .item { 
+    background: linear-gradient(145deg, #1a2f4d, #112b4f);
+    padding: 22px; border-radius: 18px; 
+    border: 1px solid rgba(251,191,36,0.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: all 0.3s;
+    position: relative;
+  }
+  .item:hover { 
+    transform: translateY(-3px); 
+    border-color: rgba(251,191,36,0.4);
+    box-shadow: 0 10px 30px rgba(251,191,36,0.1);
+  }
   .item.pagado { border-left: 5px solid #22c55e; }
   .item.pendiente { border-left: 5px solid #fbbf24; }
-  .item.rechazado { border-left: 5px solid #ef4444; opacity: 0.6; }
+  .item.rechazado { border-left: 5px solid #ef4444; opacity: 0.7; }
 
-  .item .fila1 { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
-  .item .nombre { font-size: 1.1rem; font-weight: bold; color: #fbbf24; }
-  .item .fecha { font-size: 0.75rem; color: #6b7280; }
-  .item .detalle { color: #d1d5db; font-size: 0.9rem; margin: 4px 0; }
-  .item .detalle strong { color: white; }
-
-  .acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-  .acciones button, .acciones a {
-    padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;
-    border: none; cursor: pointer; text-decoration: none;
+  .item .fila1 { 
+    display: flex; justify-content: space-between; align-items: center; 
+    flex-wrap: wrap; gap: 10px; margin-bottom: 12px;
   }
-  .btn-pagar { background: #22c55e; color: white; }
-  .btn-pendiente { background: #fbbf24; color: #0b1c3a; }
-  .btn-wa { background: #25d366; color: white; }
-  .btn-ver { background: #3b82f6; color: white; }
-  .btn-eliminar { background: #ef4444; color: white; }
+  .item .nombre { 
+    font-size: 1.25rem; font-weight: 800; color: #fbbf24;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .item .fecha { font-size: 0.75rem; color: #64748b; }
+  
+  .badge-estado {
+    padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-pagado { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid #22c55e; }
+  .badge-pendiente { background: rgba(251,191,36,0.2); color: #fbbf24; border: 1px solid #fbbf24; }
 
-  .vacio { text-align: center; padding: 60px 20px; color: #6b7280; }
-  .vacio i { font-size: 3rem; margin-bottom: 15px; color: #374151; }
-  .loading { text-align: center; padding: 60px; color: #fbbf24; font-size: 1.2rem; }
+  .item .detalle { color: #cbd5e1; font-size: 0.92rem; margin: 6px 0; }
+  .item .detalle strong { color: #e2e8f0; font-weight: 700; }
+  .item .detalle i { color: #fbbf24; width: 20px; margin-right: 6px; }
+
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(251,191,36,0.1); }
+  .acciones button, .acciones a {
+    padding: 10px 16px; border-radius: 25px; font-size: 0.85rem; font-weight: bold;
+    border: none; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: transform 0.2s;
+  }
+  .acciones button:hover, .acciones a:hover { transform: translateY(-2px); }
+  .btn-pagar { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+  .btn-pendiente { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0b1c3a; }
+  .btn-wa { background: linear-gradient(135deg, #25d366, #128c7e); color: white; }
+  .btn-ver { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+  .btn-eliminar { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+  .vacio { 
+    text-align: center; padding: 80px 20px; color: #64748b;
+    background: rgba(17,43,79,0.3); border-radius: 18px;
+  }
+  .vacio i { font-size: 4rem; margin-bottom: 20px; color: #334155; }
+  .vacio p { font-size: 1.1rem; }
+  
+  .loading { 
+    text-align: center; padding: 60px; 
+    color: #fbbf24; font-size: 1.2rem;
+  }
+  .loading i { font-size: 2rem; margin-bottom: 15px; display: block; animation: girar 1s linear infinite; }
+
+  /* NOTIFICACIÓN TOAST */
+  .toast {
+    position: fixed; top: 20px; right: 20px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white; padding: 18px 24px; border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(34,197,94,0.5);
+    z-index: 9999; font-weight: bold;
+    display: flex; align-items: center; gap: 12px;
+    animation: slideIn 0.4s ease;
+    max-width: 350px;
+  }
+  .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 40px rgba(239,68,68,0.5); }
+  .toast.warning { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0b1c3a; box-shadow: 0 10px 40px rgba(251,191,36,0.5); }
+  @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+  .toast.saliendo { animation: slideOut 0.4s ease forwards; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>🛡️ Panel de Control</h1>
-  <p class="sub">Guía Digital de Cúcuta · Gestión de tarjetas generadas</p>
+  <div class="header-panel">
+    <div>
+      <h1>🛡️ Panel de Control</h1>
+      <p class="sub">Guía Digital de Cúcuta · Gestión de tarjetas generadas</p>
+    </div>
+    <button class="btn-refresh" id="btnRefresh" onclick="recargar()">
+      <i class="fas fa-sync-alt"></i> Actualizar
+    </button>
+  </div>
 
   <div class="stats">
     <div class="stat">
+      <div class="icon-stat">📊</div>
       <div class="num" id="statTotal">0</div>
       <div class="lbl">Tarjetas totales</div>
     </div>
     <div class="stat">
+      <div class="icon-stat">✅</div>
       <div class="num" id="statPagado">0</div>
-      <div class="lbl">Pagadas ✅</div>
+      <div class="lbl">Pagadas</div>
     </div>
     <div class="stat">
+      <div class="icon-stat">⏳</div>
       <div class="num" id="statPendiente">0</div>
-      <div class="lbl">Pendientes ⏳</div>
+      <div class="lbl">Pendientes</div>
     </div>
     <div class="stat">
+      <div class="icon-stat">💰</div>
       <div class="num" id="statIngreso">$0</div>
       <div class="lbl">Ingresos confirmados</div>
     </div>
   </div>
 
   <div class="filtros">
-    <button class="activo" onclick="filtrar('todos', this)">📋 Todas</button>
-    <button onclick="filtrar('pendiente', this)">⏳ Pendientes</button>
-    <button onclick="filtrar('pagado', this)">✅ Pagadas</button>
-    <button onclick="filtrar('rechazado', this)">❌ Rechazadas</button>
-    <button onclick="recargar()" style="background:#3b82f6; color:white;">🔄 Recargar</button>
+    <button class="activo" data-filtro="todos" onclick="filtrar('todos', this)">📋 Todas</button>
+    <button data-filtro="pendiente" onclick="filtrar('pendiente', this)">⏳ Pendientes</button>
+    <button data-filtro="pagado" onclick="filtrar('pagado', this)">✅ Pagadas</button>
+    <button data-filtro="rechazado" onclick="filtrar('rechazado', this)">❌ Rechazadas</button>
   </div>
 
   <div class="lista" id="lista">
-    <div class="loading">⏳ Cargando tarjetas...</div>
+    <div class="loading"><i class="fas fa-spinner"></i> Cargando tarjetas...</div>
   </div>
 </div>
 
@@ -91,12 +222,75 @@
 const API = 'https://guia-digital-api.ngegestion.workers.dev/';
 let todasLasTarjetas = [];
 let filtroActual = 'todos';
+let cantidadAnterior = -1;
+let primeraCarga = true;
+
+function mostrarToast(mensaje, tipo = 'success') {
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + (tipo === 'success' ? '' : tipo);
+  const icono = tipo === 'error' ? '❌' : tipo === 'warning' ? '⚠️' : '✅';
+  toast.innerHTML = `<span style="font-size:1.5rem;">${icono}</span><span>${mensaje}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('saliendo');
+    setTimeout(() => toast.remove(), 400);
+  }, 4000);
+}
+
+function reproducirSonido() {
+  try {
+    // Genera un "ping" con Web Audio API (sin archivo externo)
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.setValueAtTime(1000, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch (e) { /* Ignorar si el navegador lo bloquea */ }
+}
+
+function pedirPermisoNotificaciones() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
 
 async function cargarTarjetas() {
   try {
     const respuesta = await fetch(API + '?accion=listar-tarjetas');
     const data = await respuesta.json();
-    todasLasTarjetas = data.tarjetas || [];
+    const nuevas = data.tarjetas || [];
+    
+    // Detectar si hay nuevas tarjetas
+    if (!primeraCarga && nuevas.length > cantidadAnterior) {
+      const diferencia = nuevas.length - cantidadAnterior;
+      reproducirSonido();
+      mostrarToast(`🔔 ¡${diferencia} tarjeta${diferencia > 1 ? 's' : ''} nueva${diferencia > 1 ? 's' : ''}!`);
+      
+      // Notificación del navegador
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('🛡️ Nueva tarjeta en Cúcuta', {
+          body: `Se ${diferencia > 1 ? 'generaron' : 'generó'} ${diferencia} tarjeta${diferencia > 1 ? 's' : ''} nueva${diferencia > 1 ? 's' : ''}`,
+          icon: 'portada-guia-cucuta.png'
+        });
+      }
+    }
+    
+    cantidadAnterior = nuevas.length;
+    primeraCarga = false;
+    todasLasTarjetas = nuevas;
+    
+    // Actualizar título de la pestaña
+    const pendientes = todasLasTarjetas.filter(t => t.estado === 'pendiente').length;
+    document.title = pendientes > 0 
+      ? `(${pendientes}) 🛡️ Panel - Cúcuta` 
+      : '🛡️ Panel de Control - Guía Digital Cúcuta';
+    
     renderizar(filtroActual);
   } catch (err) {
     document.getElementById('lista').innerHTML = '<div class="vacio"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar: ' + err.message + '</p></div>';
@@ -108,7 +302,6 @@ function renderizar(filtro = 'todos') {
   const contenedor = document.getElementById('lista');
   const filtradas = filtro === 'todos' ? todasLasTarjetas : todasLasTarjetas.filter(t => t.estado === filtro);
   
-  // Stats
   document.getElementById('statTotal').textContent = todasLasTarjetas.length;
   document.getElementById('statPagado').textContent = todasLasTarjetas.filter(t => t.estado === 'pagado').length;
   document.getElementById('statPendiente').textContent = todasLasTarjetas.filter(t => t.estado === 'pendiente').length;
@@ -116,30 +309,39 @@ function renderizar(filtro = 'todos') {
   document.getElementById('statIngreso').textContent = '$' + ingreso.toLocaleString('es-CO');
   
   if (filtradas.length === 0) {
-    contenedor.innerHTML = '<div class="vacio"><i class="fas fa-inbox"></i><p>Aún no hay tarjetas aquí.</p><p style="font-size:0.85rem; margin-top:8px;">Las tarjetas generadas aparecerán aquí.</p></div>';
+    contenedor.innerHTML = '<div class="vacio"><i class="fas fa-inbox"></i><p>Aún no hay tarjetas aquí.</p><p style="font-size:0.9rem; margin-top:10px; color:#475569;">Las tarjetas generadas aparecerán aquí automáticamente.</p></div>';
     return;
   }
   
-  contenedor.innerHTML = filtradas.map(t => `
-    <div class="item ${t.estado}">
-      <div class="fila1">
-        <span class="nombre">${t.nombre || 'Sin nombre'}</span>
-        <span class="fecha">${t.fecha || ''}</span>
+  contenedor.innerHTML = filtradas.map(t => {
+    const badge = t.estado === 'pagado' 
+      ? '<span class="badge-estado badge-pagado">✅ Pagado</span>' 
+      : '<span class="badge-estado badge-pendiente">⏳ Pendiente</span>';
+    
+    const telLimpio = (t.telefono||'').replace(/\D/g,'').replace(/^0/,'');
+    const msgCobro = encodeURIComponent('Hola ' + (t.nombre||'') + ', tu tarjeta digital en la Guía Digital de Cúcuta está lista. Para activarla realiza el pago por Nequi al 3242828699. Gracias!');
+    
+    return `
+      <div class="item ${t.estado}">
+        <div class="fila1">
+          <span class="nombre">👤 ${t.nombre || 'Sin nombre'}</span>
+          ${badge}
+        </div>
+        <div class="detalle"><i class="fas fa-phone"></i><strong>Teléfono:</strong> ${t.telefono || '—'}</div>
+        <div class="detalle"><i class="fas fa-briefcase"></i><strong>Negocio:</strong> ${t.negocio || '—'}</div>
+        <div class="detalle"><i class="fas fa-map-marker-alt"></i><strong>Ciudad:</strong> ${t.ciudad || 'Cúcuta'}</div>
+        <div class="detalle"><i class="fas fa-crown"></i><strong>Plan:</strong> ${t.plan || '—'} · $${(parseInt(t.precio) || 0).toLocaleString('es-CO')} COP</div>
+        <div class="detalle" style="font-size:0.75rem; color:#64748b; margin-top:10px;"><i class="fas fa-clock"></i>${t.fecha || ''}</div>
+        <div class="acciones">
+          <button class="btn-ver" onclick="verTarjeta('${t.id}')">👁️ Ver tarjeta</button>
+          <a class="btn-wa" href="https://wa.me/57${telLimpio}?text=${msgCobro}" target="_blank">💬 Cobrar</a>
+          ${t.estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.id + '\', \'pagado\')">✅ Marcar pagado</button>' : ''}
+          ${t.estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.id + '\', \'pendiente\')">⏳ Marcar pendiente</button>' : ''}
+          <button class="btn-eliminar" onclick="eliminar('${t.id}')">🗑️ Eliminar</button>
+        </div>
       </div>
-      <div class="detalle"><strong>📱 Teléfono:</strong> ${t.telefono || '—'}</div>
-      <div class="detalle"><strong>💼 Negocio:</strong> ${t.negocio || '—'}</div>
-      <div class="detalle"><strong>📍 Ciudad:</strong> ${t.ciudad || 'Cúcuta'}</div>
-      <div class="detalle"><strong>💰 Plan:</strong> ${t.plan || '—'} · $${(parseInt(t.precio) || 0).toLocaleString('es-CO')} COP</div>
-      <div class="detalle"><strong>📊 Estado:</strong> ${t.estado === 'pagado' ? '✅ Pagado' : t.estado === 'rechazado' ? '❌ Rechazado' : '⏳ Pendiente'}</div>
-      <div class="acciones">
-        <button class="btn-ver" onclick="verTarjeta('${t.id}')">👁️ Ver tarjeta</button>
-        <a class="btn-wa" href="https://wa.me/57${(t.telefono||'').replace(/\\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent('Hola ' + (t.nombre||'') + ', tu tarjeta digital está lista. Para activarla en la Guía Digital, realiza el pago por Nequi al 3242828699. Gracias!')}" target="_blank">💬 Cobrar</a>
-        ${t.estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.id + '\', \'pagado\')">✅ Marcar pagado</button>' : ''}
-        ${t.estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.id + '\', \'pendiente\')">⏳ Marcar pendiente</button>' : ''}
-        <button class="btn-eliminar" onclick="eliminar('${t.id}')">🗑️ Eliminar</button>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function filtrar(filtro, btn) {
@@ -150,23 +352,36 @@ function filtrar(filtro, btn) {
 
 async function cambiarEstado(id, nuevoEstado) {
   try {
-    await fetch(API + '?accion=actualizar-tarjeta&id=' + encodeURIComponent(id) + '&estado=' + encodeURIComponent(nuevoEstado));
-    const tarjeta = todasLasTarjetas.find(t => t.id === id);
-    if (tarjeta) tarjeta.estado = nuevoEstado;
-    renderizar(filtroActual);
+    const resp = await fetch(API + '?accion=actualizar-tarjeta&id=' + encodeURIComponent(id) + '&estado=' + encodeURIComponent(nuevoEstado));
+    const data = await resp.json();
+    if (data.ok) {
+      const tarjeta = todasLasTarjetas.find(t => t.id === id);
+      if (tarjeta) tarjeta.estado = nuevoEstado;
+      renderizar(filtroActual);
+      mostrarToast(nuevoEstado === 'pagado' ? '✅ Tarjeta marcada como pagada' : '⏳ Tarjeta marcada como pendiente');
+    } else {
+      mostrarToast('Error: ' + (data.error || 'desconocido'), 'error');
+    }
   } catch (err) {
-    alert('Error: ' + err.message);
+    mostrarToast('Error de conexión: ' + err.message, 'error');
   }
 }
 
 async function eliminar(id) {
   if (!confirm('¿Eliminar esta tarjeta permanentemente?')) return;
   try {
-    await fetch(API + '?accion=eliminar-tarjeta&id=' + encodeURIComponent(id));
-    todasLasTarjetas = todasLasTarjetas.filter(t => t.id !== id);
-    renderizar(filtroActual);
+    const resp = await fetch(API + '?accion=eliminar-tarjeta&id=' + encodeURIComponent(id));
+    const data = await resp.json();
+    if (data.ok) {
+      todasLasTarjetas = todasLasTarjetas.filter(t => t.id !== id);
+      cantidadAnterior = todasLasTarjetas.length; // Evitar que cuente como "nueva"
+      renderizar(filtroActual);
+      mostrarToast('🗑️ Tarjeta eliminada', 'warning');
+    } else {
+      mostrarToast('Error: ' + (data.error || 'desconocido'), 'error');
+    }
   } catch (err) {
-    alert('Error: ' + err.message);
+    mostrarToast('Error: ' + err.message, 'error');
   }
 }
 
@@ -185,11 +400,20 @@ function verTarjeta(id) {
 }
 
 function recargar() {
-  document.getElementById('lista').innerHTML = '<div class="loading">⏳ Cargando tarjetas...</div>';
-  cargarTarjetas();
+  const btn = document.getElementById('btnRefresh');
+  btn.classList.add('girando');
+  document.getElementById('lista').innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> Cargando tarjetas...</div>';
+  cargarTarjetas().then(() => {
+    setTimeout(() => btn.classList.remove('girando'), 500);
+  });
 }
 
+// Cargar al abrir
+pedirPermisoNotificaciones();
 cargarTarjetas();
+
+// Auto-actualizar cada 30 segundos
+setInterval(cargarTarjetas, 30000);
 </script>
 
 </body>

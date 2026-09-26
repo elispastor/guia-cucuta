@@ -38,7 +38,6 @@
   .beneficios ul li { font-size: 13px; color: #1a2f44; padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
   .beneficios ul li i { color: #22c55e; margin-top: 3px; }
 
-  /* ===== PLANES ===== */
   .planes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
   .plan-card { background: #f8fafc; border-radius: 16px; padding: 14px; border: 2px solid #e0e8ee; text-align: center; cursor: pointer; transition: 0.2s; }
   .plan-card:hover { transform: scale(1.02); }
@@ -126,7 +125,6 @@
     </ul>
   </div>
 
-  <!-- ===== PLANES ===== -->
   <h3 style="text-align:center; font-size:16px; color:#0b1a2e; margin:16px 0 8px;" id="precio">
     <i class="fas fa-tag" style="color:#fbbf24;"></i> Elige tu plan
   </h3>
@@ -157,11 +155,10 @@
     </div>
   </div>
 
-  <!-- ===== PAGO ===== -->
   <div class="pago-box" id="pago">
     <h3><i class="fas fa-credit-card"></i> Pago por Nequi</h3>
     <div class="dato-pago"><span>Nequi</span><span>324 282 8699</span></div>
-    <div class="dato-pago"><span>Titular</span><span>Julio Vargas (hijo)</span></div>
+    <div class="dato-pago"><span>Titular</span><span>Elis Alfredo Suarez Mendez</span></div>
     <div class="dato-pago"><span>Monto</span><span id="montoPago">$25.000 COP</span></div>
     <a href="https://wa.me/584244259543?text=Hola%2C%20quiero%20mi%20tarjeta%20de%20la%20Gu%C3%ADa%20Digital%20C%C3%BAcuta" class="btn-pago" target="_blank"><i class="fab fa-whatsapp"></i> Enviar comprobante por WhatsApp</a>
   </div>
@@ -282,36 +279,57 @@ document.getElementById('formRegistro').addEventListener('submit', function(e) {
   const descripcion = document.getElementById('descripcion').value.trim();
   const fotoInput = document.getElementById('foto');
 
-  // Guardar en KV
+  // Guardar en KV (respaldo en Cloudflare)
   const guardarEnKV = () => {
     const urlKV = 'https://guia-digital-api.ngegestion.workers.dev/?accion=guardar-persona'
       + '&nombre=' + encodeURIComponent(nombre)
       + '&tel=' + encodeURIComponent(telefono)
       + '&plan=' + encodeURIComponent(planActual)
       + '&precio=' + encodeURIComponent(precioActual)
+      + '&estado=pendiente'
       + '&ref=' + encodeURIComponent(ref || '');
     fetch(urlKV).catch(() => {});
   };
 
   const generar = (fotoData) => {
+    // 1. Guardar en el panel de control (localStorage)
+    const STORAGE_KEY = 'tarjetas_cucuta_admin';
+    const tarjetas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const nuevaTarjeta = {
+      id: 'tarjeta_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+      nombre: nombre,
+      telefono: telefono,
+      negocio: negocio,
+      ciudad: ciudad || 'Cúcuta',
+      ruta: ruta,
+      direccion: direccion,
+      descripcion: descripcion,
+      foto: fotoData || '',
+      plan: planActual,
+      precio: precioActual,
+      ref: ref || '',
+      estado: 'pendiente',
+      fecha: new Date().toLocaleString('es-CO')
+    };
+    tarjetas.push(nuevaTarjeta);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tarjetas));
+
+    // 2. Guardar en KV (respaldo en Cloudflare)
+    guardarEnKV();
+
+    // 3. Abrir la tarjeta en nueva pestaña
     const params = new URLSearchParams({
-      n: nombre, t: telefono, g: negocio, c: ciudad,
+      n: nombre, t: telefono, g: negocio, c: ciudad || 'Cúcuta',
       r: ruta, d: direccion, ds: descripcion, f: fotoData || '',
       plan: planActual, precio: precioActual,
       ref: ref || ''
     });
-
-    // Abrir la tarjeta en nueva pestaña
     window.open('tarjeta.html?' + params.toString(), '_blank');
 
-    // Guardar link en KV
-    guardarEnKV();
-    const slug = nombre.toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-    const urlTarjeta = 'https://cucuta.guia-digital.com/tarjeta.html?' + params.toString();
-    fetch('https://guia-digital-api.ngegestion.workers.dev/?accion=guardar-link&slug=' + slug + '&url=' + encodeURIComponent(urlTarjeta)).catch(() => {});
+    // 4. Avisar al usuario que debe pagar
+    setTimeout(() => {
+      alert('✅ Tu tarjeta ha sido creada.\n\n📌 IMPORTANTE: Para activarla en la guía, realiza el pago por Nequi al 3242828699 y envía el comprobante por WhatsApp.\n\nUna vez confirmado el pago, tu tarjeta aparecerá en la Guía Digital de Cúcuta.');
+    }, 800);
   };
 
   // Subir foto si existe

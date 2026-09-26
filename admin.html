@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Control - Guía Digital Cúcuta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+  body { background: #0b1c3a; color: white; min-height: 100vh; padding: 20px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { color: #fbbf24; margin-bottom: 10px; font-size: 1.8rem; }
+  .sub { color: #9ca3af; margin-bottom: 25px; font-size: 0.9rem; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+  .stat { background: #112b4f; padding: 20px; border-radius: 15px; border-left: 4px solid #fbbf24; }
+  .stat .num { font-size: 2rem; font-weight: bold; color: #fbbf24; }
+  .stat .lbl { color: #9ca3af; font-size: 0.85rem; }
+
+  .filtros { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filtros button { background: #112b4f; color: white; border: 1px solid #1e3a5f; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+  .filtros button.activo { background: #fbbf24; color: #0b1c3a; }
+
+  .lista { display: flex; flex-direction: column; gap: 12px; }
+  .item { background: #112b4f; padding: 18px; border-radius: 15px; border: 1px solid #1e3a5f; }
+  .item.pagado { border-left: 5px solid #22c55e; }
+  .item.pendiente { border-left: 5px solid #fbbf24; }
+  .item.rechazado { border-left: 5px solid #ef4444; opacity: 0.6; }
+
+  .item .fila1 { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+  .item .nombre { font-size: 1.1rem; font-weight: bold; color: #fbbf24; }
+  .item .fecha { font-size: 0.75rem; color: #6b7280; }
+  .item .detalle { color: #d1d5db; font-size: 0.9rem; margin: 4px 0; }
+  .item .detalle strong { color: white; }
+
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .acciones button, .acciones a {
+    padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;
+    border: none; cursor: pointer; text-decoration: none;
+  }
+  .btn-pagar { background: #22c55e; color: white; }
+  .btn-pendiente { background: #fbbf24; color: #0b1c3a; }
+  .btn-wa { background: #25d366; color: white; }
+  .btn-ver { background: #3b82f6; color: white; }
+  .btn-eliminar { background: #ef4444; color: white; }
+
+  .vacio { text-align: center; padding: 60px 20px; color: #6b7280; }
+  .vacio i { font-size: 3rem; margin-bottom: 15px; color: #374151; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🛡️ Panel de Control</h1>
+  <p class="sub">Guía Digital de Cúcuta · Gestión de tarjetas generadas</p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num" id="statTotal">0</div>
+      <div class="lbl">Tarjetas totales</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="statPagado">0</div>
+      <div class="lbl">Pagadas ✅</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="statPendiente">0</div>
+      <div class="lbl">Pendientes ⏳</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="statIngreso">$0</div>
+      <div class="lbl">Ingresos confirmados</div>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <button class="activo" onclick="filtrar('todos', this)">📋 Todas</button>
+    <button onclick="filtrar('pendiente', this)">⏳ Pendientes</button>
+    <button onclick="filtrar('pagado', this)">✅ Pagadas</button>
+    <button onclick="filtrar('rechazado', this)">❌ Rechazadas</button>
+  </div>
+
+  <div class="lista" id="lista"></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'tarjetas_cucuta_admin';
+
+function obtenerTarjetas() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  return data ? JSON.parse(data) : [];
+}
+
+function guardarTarjetas(tarjetas) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tarjetas));
+}
+
+function renderizar(filtro = 'todos') {
+  const tarjetas = obtenerTarjetas();
+  const contenedor = document.getElementById('lista');
+  const filtradas = filtro === 'todos' ? tarjetas : tarjetas.filter(t => t.estado === filtro);
+  
+  // Stats
+  document.getElementById('statTotal').textContent = tarjetas.length;
+  document.getElementById('statPagado').textContent = tarjetas.filter(t => t.estado === 'pagado').length;
+  document.getElementById('statPendiente').textContent = tarjetas.filter(t => t.estado === 'pendiente').length;
+  const ingreso = tarjetas.filter(t => t.estado === 'pagado').reduce((sum, t) => sum + (parseInt(t.precio) || 0), 0);
+  document.getElementById('statIngreso').textContent = '$' + ingreso.toLocaleString('es-CO');
+  
+  if (filtradas.length === 0) {
+    contenedor.innerHTML = '<div class="vacio"><i class="fas fa-inbox"></i><p>Aún no hay tarjetas aquí.</p><p style="font-size:0.85rem; margin-top:8px;">Las tarjetas generadas aparecerán aquí.</p></div>';
+    return;
+  }
+  
+  contenedor.innerHTML = filtradas.map(t => `
+    <div class="item ${t.estado}">
+      <div class="fila1">
+        <span class="nombre">${t.nombre || 'Sin nombre'}</span>
+        <span class="fecha">${t.fecha || ''}</span>
+      </div>
+      <div class="detalle"><strong>📱 Teléfono:</strong> ${t.telefono || '—'}</div>
+      <div class="detalle"><strong>💼 Negocio:</strong> ${t.negocio || '—'}</div>
+      <div class="detalle"><strong>📍 Ciudad:</strong> ${t.ciudad || 'Cúcuta'}</div>
+      <div class="detalle"><strong>💰 Plan:</strong> ${t.plan || '—'} · $${(parseInt(t.precio) || 0).toLocaleString('es-CO')} COP</div>
+      <div class="detalle"><strong>📊 Estado:</strong> ${t.estado === 'pagado' ? '✅ Pagado' : t.estado === 'rechazado' ? '❌ Rechazado' : '⏳ Pendiente'}</div>
+      <div class="acciones">
+        <button class="btn-ver" onclick="verTarjeta('${t.id}')">👁️ Ver tarjeta</button>
+        <a class="btn-wa" href="https://wa.me/57${(t.telefono||'').replace(/\\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent('Hola ' + t.nombre + ', tu tarjeta digital está lista. Para activarla en la Guía Digital, realiza el pago por Nequi al 3242828699. Gracias!')}" target="_blank">💬 Cobrar</a>
+        ${t.estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.id + '\', \'pagado\')">✅ Marcar pagado</button>' : ''}
+        ${t.estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.id + '\', \'pendiente\')">⏳ Marcar pendiente</button>' : ''}
+        <button class="btn-eliminar" onclick="eliminar('${t.id}')">🗑️ Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filtrar(filtro, btn) {
+  document.querySelectorAll('.filtros button').forEach(b => b.classList.remove('activo'));
+  btn.classList.add('activo');
+  renderizar(filtro);
+}
+
+function cambiarEstado(id, nuevoEstado) {
+  const tarjetas = obtenerTarjetas();
+  const tarjeta = tarjetas.find(t => t.id === id);
+  if (tarjeta) {
+    tarjeta.estado = nuevoEstado;
+    guardarTarjetas(tarjetas);
+    renderizar();
+  }
+}
+
+function eliminar(id) {
+  if (!confirm('¿Eliminar esta tarjeta permanentemente?')) return;
+  const tarjetas = obtenerTarjetas().filter(t => t.id !== id);
+  guardarTarjetas(tarjetas);
+  renderizar();
+}
+
+function verTarjeta(id) {
+  const tarjeta = obtenerTarjetas().find(t => t.id === id);
+  if (!tarjeta) return;
+  const url = 'tarjeta.html?n=' + encodeURIComponent(tarjeta.nombre || '')
+    + '&t=' + encodeURIComponent(tarjeta.telefono || '')
+    + '&g=' + encodeURIComponent(tarjeta.negocio || '')
+    + '&c=' + encodeURIComponent(tarjeta.ciudad || 'Cúcuta')
+    + '&r=' + encodeURIComponent(tarjeta.ruta || '')
+    + '&d=' + encodeURIComponent(tarjeta.direccion || '')
+    + '&ds=' + encodeURIComponent(tarjeta.descripcion || '')
+    + '&f=' + encodeURIComponent(tarjeta.foto || '');
+  window.open(url, '_blank');
+}
+
+renderizar();
+</script>
+
+</body>
+</html>

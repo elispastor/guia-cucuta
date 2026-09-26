@@ -46,6 +46,7 @@
 
   .vacio { text-align: center; padding: 60px 20px; color: #6b7280; }
   .vacio i { font-size: 3rem; margin-bottom: 15px; color: #374151; }
+  .loading { text-align: center; padding: 60px; color: #fbbf24; font-size: 1.2rem; }
 </style>
 </head>
 <body>
@@ -78,33 +79,40 @@
     <button onclick="filtrar('pendiente', this)">⏳ Pendientes</button>
     <button onclick="filtrar('pagado', this)">✅ Pagadas</button>
     <button onclick="filtrar('rechazado', this)">❌ Rechazadas</button>
+    <button onclick="recargar()" style="background:#3b82f6; color:white;">🔄 Recargar</button>
   </div>
 
-  <div class="lista" id="lista"></div>
+  <div class="lista" id="lista">
+    <div class="loading">⏳ Cargando tarjetas...</div>
+  </div>
 </div>
 
 <script>
-const STORAGE_KEY = 'tarjetas_cucuta_admin';
+const API = 'https://guia-digital-api.ngegestion.workers.dev/';
+let todasLasTarjetas = [];
+let filtroActual = 'todos';
 
-function obtenerTarjetas() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
-}
-
-function guardarTarjetas(tarjetas) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tarjetas));
+async function cargarTarjetas() {
+  try {
+    const respuesta = await fetch(API + '?accion=listar-tarjetas');
+    const data = await respuesta.json();
+    todasLasTarjetas = data.tarjetas || [];
+    renderizar(filtroActual);
+  } catch (err) {
+    document.getElementById('lista').innerHTML = '<div class="vacio"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar: ' + err.message + '</p></div>';
+  }
 }
 
 function renderizar(filtro = 'todos') {
-  const tarjetas = obtenerTarjetas();
+  filtroActual = filtro;
   const contenedor = document.getElementById('lista');
-  const filtradas = filtro === 'todos' ? tarjetas : tarjetas.filter(t => t.estado === filtro);
+  const filtradas = filtro === 'todos' ? todasLasTarjetas : todasLasTarjetas.filter(t => t.estado === filtro);
   
   // Stats
-  document.getElementById('statTotal').textContent = tarjetas.length;
-  document.getElementById('statPagado').textContent = tarjetas.filter(t => t.estado === 'pagado').length;
-  document.getElementById('statPendiente').textContent = tarjetas.filter(t => t.estado === 'pendiente').length;
-  const ingreso = tarjetas.filter(t => t.estado === 'pagado').reduce((sum, t) => sum + (parseInt(t.precio) || 0), 0);
+  document.getElementById('statTotal').textContent = todasLasTarjetas.length;
+  document.getElementById('statPagado').textContent = todasLasTarjetas.filter(t => t.estado === 'pagado').length;
+  document.getElementById('statPendiente').textContent = todasLasTarjetas.filter(t => t.estado === 'pendiente').length;
+  const ingreso = todasLasTarjetas.filter(t => t.estado === 'pagado').reduce((sum, t) => sum + (parseInt(t.precio) || 0), 0);
   document.getElementById('statIngreso').textContent = '$' + ingreso.toLocaleString('es-CO');
   
   if (filtradas.length === 0) {
@@ -125,7 +133,7 @@ function renderizar(filtro = 'todos') {
       <div class="detalle"><strong>📊 Estado:</strong> ${t.estado === 'pagado' ? '✅ Pagado' : t.estado === 'rechazado' ? '❌ Rechazado' : '⏳ Pendiente'}</div>
       <div class="acciones">
         <button class="btn-ver" onclick="verTarjeta('${t.id}')">👁️ Ver tarjeta</button>
-        <a class="btn-wa" href="https://wa.me/57${(t.telefono||'').replace(/\\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent('Hola ' + t.nombre + ', tu tarjeta digital está lista. Para activarla en la Guía Digital, realiza el pago por Nequi al 3242828699. Gracias!')}" target="_blank">💬 Cobrar</a>
+        <a class="btn-wa" href="https://wa.me/57${(t.telefono||'').replace(/\\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent('Hola ' + (t.nombre||'') + ', tu tarjeta digital está lista. Para activarla en la Guía Digital, realiza el pago por Nequi al 3242828699. Gracias!')}" target="_blank">💬 Cobrar</a>
         ${t.estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.id + '\', \'pagado\')">✅ Marcar pagado</button>' : ''}
         ${t.estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.id + '\', \'pendiente\')">⏳ Marcar pendiente</button>' : ''}
         <button class="btn-eliminar" onclick="eliminar('${t.id}')">🗑️ Eliminar</button>
@@ -140,25 +148,30 @@ function filtrar(filtro, btn) {
   renderizar(filtro);
 }
 
-function cambiarEstado(id, nuevoEstado) {
-  const tarjetas = obtenerTarjetas();
-  const tarjeta = tarjetas.find(t => t.id === id);
-  if (tarjeta) {
-    tarjeta.estado = nuevoEstado;
-    guardarTarjetas(tarjetas);
-    renderizar();
+async function cambiarEstado(id, nuevoEstado) {
+  try {
+    await fetch(API + '?accion=actualizar-tarjeta&id=' + encodeURIComponent(id) + '&estado=' + encodeURIComponent(nuevoEstado));
+    const tarjeta = todasLasTarjetas.find(t => t.id === id);
+    if (tarjeta) tarjeta.estado = nuevoEstado;
+    renderizar(filtroActual);
+  } catch (err) {
+    alert('Error: ' + err.message);
   }
 }
 
-function eliminar(id) {
+async function eliminar(id) {
   if (!confirm('¿Eliminar esta tarjeta permanentemente?')) return;
-  const tarjetas = obtenerTarjetas().filter(t => t.id !== id);
-  guardarTarjetas(tarjetas);
-  renderizar();
+  try {
+    await fetch(API + '?accion=eliminar-tarjeta&id=' + encodeURIComponent(id));
+    todasLasTarjetas = todasLasTarjetas.filter(t => t.id !== id);
+    renderizar(filtroActual);
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
 }
 
 function verTarjeta(id) {
-  const tarjeta = obtenerTarjetas().find(t => t.id === id);
+  const tarjeta = todasLasTarjetas.find(t => t.id === id);
   if (!tarjeta) return;
   const url = 'tarjeta.html?n=' + encodeURIComponent(tarjeta.nombre || '')
     + '&t=' + encodeURIComponent(tarjeta.telefono || '')
@@ -171,7 +184,12 @@ function verTarjeta(id) {
   window.open(url, '_blank');
 }
 
-renderizar();
+function recargar() {
+  document.getElementById('lista').innerHTML = '<div class="loading">⏳ Cargando tarjetas...</div>';
+  cargarTarjetas();
+}
+
+cargarTarjetas();
 </script>
 
 </body>

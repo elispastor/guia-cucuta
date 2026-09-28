@@ -12,7 +12,7 @@ const negocios = [
     { nombre: "Multiservicios Los Torres", url: "https://multiserviciosautomotrizlostorres.netlify.app/", categoria: "mecanica" },
     { nombre: "Electroauto El Rolo", url: "https://electroautoelrolo.netlify.app/", categoria: "mecanica" },
     { nombre: "Papa Barney", url: "https://papa-barney.netlify.app/", categoria: "mecanica" },
-    { nombre: "Cone Junior Torrado", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Cone%20Junior%20Torrado", categoria: "mecanica" },
+{ nombre: "Cone Junior Torrado", url: "https://taller-cone.pages.dev", categoria: "mecanica" },
     { nombre: "Gustavo Rojas", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Gustavo%20Rojas", categoria: "mecanica" },
     { nombre: "Jhon Rubio III", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Jhon%20Rubio", categoria: "mecanica" },
     { nombre: "Motores Jesús", url: "https://motores-motoreductores-jesus.netlify.app/", categoria: "motores" },

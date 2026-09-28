@@ -8,7 +8,7 @@ const negocios = [
     { nombre: "Autotaller Murillo", url: "https://autotallermurillo.netlify.app/", categoria: "mecanica" },
     { nombre: "Taller Mecánico TS", url: "https://taller-mecanico-ts.netlify.app/", categoria: "mecanica" },
     { nombre: "Mecánica Willson y Gustavo", url: "https://mecanicaautomotrizwillsonygustavo.netlify.app/", categoria: "mecanica" },
-    { nombre: "Taller Osama", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Taller%20Osama", categoria: "mecanica" },
+    { nombre: "Taller Osama", url: "https://taller-osama.pages.dev", categoria: "mecanica" },
     { nombre: "Multiservicios Los Torres", url: "https://multiserviciosautomotrizlostorres.netlify.app/", categoria: "mecanica" },
     { nombre: "Electroauto El Rolo", url: "https://electroautoelrolo.netlify.app/", categoria: "mecanica" },
     { nombre: "Papa Barney", url: "https://papa-barney.netlify.app/", categoria: "mecanica" },

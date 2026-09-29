@@ -67,7 +67,7 @@ const negocios = [
     { nombre: "EmprendeWorld NGE", url: "https://gane-dinero-con-la-publicidad.netlify.app", categoria: "publicidad", icono: "📢" },
     { nombre: "Tarjeta Digital Online", url: "https://tarjetaonline.netlify.app", categoria: "tarjetas digitales", icono: "💳" },
     { nombre: "Metalicas VALDERRAMA", url: "https://metalicas-valderrama.vercel.app", categoria: "soldadura", icono: "🔨" },
-{ nombre: "Alex Mariachi", url: "https://cucuta.guia-digital.com/alex-mariachi", categoria: "eventos" },{ nombre: "FULL MOBILE", url: "https://cucuta.guia-digital.com/full-movil.html", categoria: "celulares", icono: "📱" }
+{ nombre: "Alex Mariachi", url: "https://cucuta.guia-digital.com/alex-mariachi", categoria: "eventos" }
 ];
 
 const categorias = [

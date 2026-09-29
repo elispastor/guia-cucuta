@@ -187,8 +187,7 @@ function compartirSitio() {
 }
 
 // WHATSAPP
-const WHATSAPP = '584244259543';
-
+const WHATSAPP = '584227159158';
 // BUSCADOR
 const btnBuscar = document.getElementById('btnBuscarLocal');
 const inputBuscar = document.getElementById('buscadorLocal');

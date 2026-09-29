@@ -32,7 +32,7 @@ const negocios = [
     { nombre: "Fabrigomas", url: "https://fabrigomas.netlify.app/", categoria: "accesorios" },
     { nombre: "Otoniel Acarreos", url: "https://otoniel-acarreos.netlify.app/", categoria: "acarreos" },
     { nombre: "Acarreos Carlos", url: "https://acarreoscarlos.netlify.app/", categoria: "acarreos" },
-    { nombre: "Acarreos y Viajes Luis Díaz", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Acarreos%20Luis%20D%C3%ADaz", categoria: "acarreos" },
+{ nombre: "Acarreos y Viajes Luis Díaz", url: "https://cucuta.guia-digital.com/luis-diaz.html", categoria: "acarreos" },
     { nombre: "Acarreos Luis Bueno", url: "https://acarreosluisbueno.netlify.app/", categoria: "acarreos" },
     { nombre: "Acarreos Isidro", url: "https://acarreos-isidro.netlify.app/", categoria: "acarreos" },
     { nombre: "Gatos Hidráulicos María", url: "https://gatoshidraulicosmaria.netlify.app/", categoria: "acarreos" },

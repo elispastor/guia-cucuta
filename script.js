@@ -70,7 +70,7 @@ const negocios = [
     { nombre: "Tarjeta Digital Online", url: "https://tarjetaonline.netlify.app", categoria: "tarjetas digitales", icono: "💳" },
     { nombre: "Metalicas VALDERRAMA", url: "https://metalicas-valderrama.vercel.app", categoria: "soldadura", icono: "🔨" },
     { nombre: "Alex Mariachi", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Alex%20Mariachi", categoria: "eventos" },
-    { nombre: "FULL MOBILE", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20FULL%20MOBILE", categoria: "celulares", icono: "📱" },
+{ nombre: "FULL MOBILE", url: "https://cucuta.guia-digital.com/full-movil.html", categoria: "celulares", icono: "📱" }
 ];
 
 const categorias = [

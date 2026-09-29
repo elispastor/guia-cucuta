@@ -40,8 +40,7 @@ const negocios = [
     { nombre: "Cerrajería El Mago", url: "https://cerrajeriaelmago.netlify.app/", categoria: "puertas" },
     { nombre: "Marianacell", url: "https://marianacell.netlify.app/", categoria: "celulares" },
     { nombre: "Davidcell", url: "https://davidcell.netlify.app/", categoria: "celulares" },
-    { nombre: "KATA - Servicio Técnico Celular", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20KATA%20Servicio%20T%C3%A9cnico", categoria: "celulares" },
-    { nombre: "HDMovil2", url: "https://hdmovil2.netlify.app/", categoria: "celulares" },
+{ nombre: "KATA - Servicio Técnico Celular", url: "https://cucuta.guia-digital.com/kata", categoria: "celulares" },    { nombre: "HDMovil2", url: "https://hdmovil2.netlify.app/", categoria: "celulares" },
     { nombre: "Esbedcell", url: "https://esbedcell.netlify.app/", categoria: "celulares" },
     { nombre: "Mis Antojos", url: "https://mis-antojos-restaurante.netlify.app/", categoria: "restaurantes" },
     { nombre: "Restaurante La Mano de Dios", url: "https://restaurantlamanodedios.netlify.app/", categoria: "restaurantes" },
@@ -68,8 +67,7 @@ const negocios = [
     { nombre: "EmprendeWorld NGE", url: "https://gane-dinero-con-la-publicidad.netlify.app", categoria: "publicidad", icono: "📢" },
     { nombre: "Tarjeta Digital Online", url: "https://tarjetaonline.netlify.app", categoria: "tarjetas digitales", icono: "💳" },
     { nombre: "Metalicas VALDERRAMA", url: "https://metalicas-valderrama.vercel.app", categoria: "soldadura", icono: "🔨" },
-    { nombre: "Alex Mariachi", url: "https://wa.me/584244259543?text=Hola%2C%20quiero%20contactar%20Alex%20Mariachi", categoria: "eventos" },
-{ nombre: "FULL MOBILE", url: "https://cucuta.guia-digital.com/full-movil.html", categoria: "celulares", icono: "📱" }
+{ nombre: "Alex Mariachi", url: "https://cucuta.guia-digital.com/alex-mariachi", categoria: "eventos" },{ nombre: "FULL MOBILE", url: "https://cucuta.guia-digital.com/full-movil.html", categoria: "celulares", icono: "📱" }
 ];
 
 const categorias = [

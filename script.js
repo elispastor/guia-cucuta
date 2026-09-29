@@ -1,7 +1,7 @@
 // ===== 75 NEGOCIOS =====
 const negocios = [
     { nombre: "Fajas Edi", url: "https://fajasedi.netlify.app/", categoria: "belleza" },
-{ nombre: "La Estación de la Calidad", url: "https://cucuta.guia-digital.com/estacion-calidad.html", categoria: "accesorios" },    { nombre: "Ferretería La 17", url: "https://ferreteria-la-17.pages.dev/", categoria: "ferreterias" },
+{ nombre: "La Estación de la Calidad", url: "https://cucuta.guia-digital.com/estacion-calidad", categoria: "accesorios" },
     { nombre: "Tracto Auto M.F.", url: "https://tracto-auto-mf.pages.dev/", categoria: "mecanica" },
     { nombre: "Taller Barney", url: "https://taller-barney.netlify.app/", categoria: "mecanica" },
     { nombre: "Autotaller Murillo", url: "https://autotallermurillo.netlify.app/", categoria: "mecanica" },

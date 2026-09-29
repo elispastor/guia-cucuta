@@ -1,6 +1,7 @@
 // ===== 75 NEGOCIOS =====
 const negocios = [
     { nombre: "Fajas Edi", url: "https://fajasedi.netlify.app/", categoria: "belleza" },
+{ nombre: "STYLE COLLECTION", url: "https://tdi-julio-vargas.ngegestion.workers.dev/", categoria: "belleza", icono: "💄" },
 { nombre: "La Estación de la Calidad", url: "https://cucuta.guia-digital.com/estacion-calidad", categoria: "accesorios" },
     { nombre: "Tracto Auto M.F.", url: "https://tracto-auto-mf.pages.dev/", categoria: "mecanica" },
     { nombre: "Taller Barney", url: "https://taller-barney.netlify.app/", categoria: "mecanica" },

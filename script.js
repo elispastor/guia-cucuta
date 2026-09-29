@@ -12,6 +12,8 @@ const negocios = [
     { nombre: "Electroauto El Rolo", url: "https://electroautoelrolo.netlify.app/", categoria: "mecanica" },
     { nombre: "Papa Barney", url: "https://papa-barney.netlify.app/", categoria: "mecanica" },
 { nombre: "Cone Junior Torrado", url: "https://taller-cone.pages.dev", categoria: "mecanica" },
+{ nombre: "Ferretería La 17", url: "https://ferreteria-la-17.pages.dev/", categoria: "ferreterias" },
+{ nombre: "Gustavo Rojas", url: "https://taller-de-electricidad-gustavo-rojas.pages.dev", categoria: "mecanica" },
 { nombre: "Jhon Rubio III", url: "https://cucuta.guia-digital.com/jhon-rubio.html", categoria: "mecanica" },
     { nombre: "Motores Jesús", url: "https://motores-motoreductores-jesus.netlify.app/", categoria: "motores" },
     { nombre: "Embobinados Dacoor", url: "https://embobinadosdacoor.netlify.app/", categoria: "motores" },

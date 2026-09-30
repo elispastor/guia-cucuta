@@ -221,6 +221,46 @@
 
 </div>
 
+<script>
+// ===== MENÚ =====
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const menuPanel = document.getElementById('menuPanel');
+const menuOverlay = document.getElementById('menuOverlay');
+
+menuToggle.addEventListener('click', () => { menuPanel.classList.add('open'); menuOverlay.classList.add('active'); });
+menuClose.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+menuOverlay.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuInicio').addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuBeneficios').addEventListener('click', () => { document.getElementById('beneficios').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuPrecio').addEventListener('click', () => { document.getElementById('precio').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuPago').addEventListener('click', () => { document.getElementById('pago').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuRegistro').addEventListener('click', () => { document.getElementById('formRegistro').scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+document.getElementById('menuContacto').addEventListener('click', () => { window.location.href = 'https://wa.me/584227159158'; menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+
+// ===== SELECCIÓN DE PLAN =====
+let planActual = '';
+let precioActual = '';
+
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('seleccionado'));
+    card.classList.add('seleccionado');
+    planActual = card.dataset.plan;
+    precioActual = card.dataset.precio;
+    document.getElementById('planSeleccionado').value = planActual + ' — $' + Number(precioActual).toLocaleString('es-CO') + ' COP';
+    document.getElementById('montoPago').textContent = '$' + Number(precioActual).toLocaleString('es-CO') + ' COP';
+  });
+});
+
+// ===== REFERIDO =====
+const paramsURL = new URLSearchParams(window.location.search);
+const ref = paramsURL.get('ref');
+if (ref) {
+  document.getElementById('refBox').style.display = 'block';
+  document.getElementById('refNombre').textContent = ref;
+}
+
 // ===== SUPABASE =====
 const SUPABASE_URL = 'https://yugbdqfzbpqobwoslfri.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Zx5w0YmnEd9QGiLPkKtJrg_hjX-CGZx';
@@ -254,11 +294,9 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
   const descripcion = document.getElementById('descripcion').value.trim();
   const fotoInput = document.getElementById('foto');
 
-  // Generar slug a partir del negocio (o del nombre si no hay negocio)
   let slugBase = negocio ? generarSlug(negocio) : generarSlug(nombre);
   if (!slugBase) slugBase = 'tarjeta-' + Date.now();
 
-  // Verificar si el slug ya existe y agregar sufijo
   let slug = slugBase;
   let intento = 1;
   while (true) {
@@ -274,7 +312,6 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
     slug = slugBase + '-' + intento;
   }
 
-  // Subir foto si existe
   const subirFoto = async () => {
     if (fotoInput.files && fotoInput.files[0]) {
       const fd = new FormData();
@@ -292,7 +329,6 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
 
   const fotoUrl = await subirFoto();
 
-  // Guardar en Supabase
   const tarjeta = {
     slug: slug,
     nombre: nombre,

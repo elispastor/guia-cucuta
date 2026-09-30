@@ -9,13 +9,11 @@
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
   body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; }
   .container { max-width: 440px; width: 100%; background: #ffffff; border-radius: 36px; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); overflow: hidden; padding: 24px 20px; }
-
   .header { display: flex; justify-content: space-between; align-items: center; padding: 8px 0 16px; border-bottom: 1px solid #eef2f6; margin-bottom: 16px; }
   .header .brand h2 { font-size: 18px; font-weight: 700; color: #0b1a2e; }
   .header .brand h2 span { color: #1a4b6d; }
   .header .brand small { display: block; font-size: 10px; color: #6b7f93; letter-spacing: 1px; }
   .menu-btn { background: none; border: none; font-size: 28px; color: #0b1a2e; cursor: pointer; padding: 4px 8px; }
-
   .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
   .menu-overlay.active { display: block; }
   .menu-panel { position: fixed; top: 0; right: 0; width: 75%; max-width: 280px; height: 100%; background: #fff; padding: 24px 20px; transform: translateX(100%); transition: transform 0.3s ease; z-index: 1000; box-shadow: -8px 0 30px rgba(0,0,0,0.3); overflow-y: auto; }
@@ -24,20 +22,17 @@
   .menu-panel ul { list-style: none; margin-top: 40px; }
   .menu-panel ul li { padding: 14px 0; border-bottom: 1px solid #eef2f6; font-size: 16px; font-weight: 600; color: #1a2f44; display: flex; align-items: center; gap: 14px; cursor: pointer; }
   .menu-panel ul li i { width: 24px; color: #1a4b6d; }
-
   .portada { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; border-radius: 20px; margin-bottom: 20px; }
   .portada .icon { font-size: 48px; color: #fbbf24; margin-bottom: 6px; }
   .portada h1 { font-size: 20px; font-weight: 800; color: #fff; }
   .portada h1 span { color: #fbbf24; }
   .portada .sub { font-size: 12px; color: #a0c4e8; letter-spacing: 1px; margin-top: 4px; }
-
   .beneficios { background: #f8fafc; border-radius: 20px; padding: 18px; margin: 16px 0; border: 1px solid #e0e8ee; }
   .beneficios h3 { font-size: 16px; color: #0b1a2e; margin-bottom: 10px; text-align: center; }
   .beneficios h3 i { color: #fbbf24; }
   .beneficios ul { list-style: none; }
   .beneficios ul li { font-size: 13px; color: #1a2f44; padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
   .beneficios ul li i { color: #22c55e; margin-top: 3px; }
-
   .planes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
   .plan-card { background: #f8fafc; border-radius: 16px; padding: 14px; border: 2px solid #e0e8ee; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
   .plan-card:hover { transform: scale(1.02); }
@@ -48,7 +43,6 @@
   .plan-card .nombre { font-size: 13px; font-weight: 700; color: #0b1a2e; }
   .plan-card .precio { font-size: 18px; font-weight: 800; color: #1a4b6d; margin: 4px 0; }
   .plan-card .detalle { font-size: 10px; color: #6b7f93; }
-
   .pago-box { background: #f8fafc; border-radius: 20px; padding: 18px; margin: 16px 0; border: 1px solid #e0e8ee; }
   .pago-box h3 { font-size: 16px; color: #0b1a2e; margin-bottom: 10px; text-align: center; }
   .pago-box h3 i { color: #fbbf24; }
@@ -56,32 +50,19 @@
   .pago-box .dato-pago:last-child { border-bottom: none; }
   .pago-box .dato-pago span:first-child { color: #6b7f93; font-weight: 600; }
   .pago-box .dato-pago span:last-child { color: #0b1a2e; font-weight: 700; }
-
   .btn-pago { display: block; width: 100%; padding: 14px; background: #25D366; color: #fff; text-align: center; border-radius: 60px; font-size: 16px; font-weight: 700; text-decoration: none; margin-top: 12px; }
-
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; font-size: 13px; font-weight: 600; color: #1a2f44; margin-bottom: 4px; }
   .form-group label .req { color: #ef4444; }
-  .form-group input {
-    width: 100%; padding: 12px; border: 1px solid #ccd9e0; border-radius: 12px;
-    font-size: 15px; background: #f8fafc; color: #0b1a2e;
-  }
+  .form-group input { width: 100%; padding: 12px; border: 1px solid #ccd9e0; border-radius: 12px; font-size: 15px; background: #f8fafc; color: #0b1a2e; }
   .form-group input:focus { outline: 2px solid #fbbf24; background: #fff; }
   .form-group input[type="file"] { padding: 8px; background: #fff; }
-
-  .btn-generar {
-    width: 100%; padding: 14px; background: linear-gradient(45deg, #0f2b44, #1a4b6d);
-    color: #fff; border: none; border-radius: 60px; font-size: 16px; font-weight: 700;
-    cursor: pointer; margin-top: 8px;
-  }
+  .btn-generar { width: 100%; padding: 14px; background: linear-gradient(45deg, #0f2b44, #1a4b6d); color: #fff; border: none; border-radius: 60px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; }
   .btn-generar:hover { opacity: 0.9; }
-
   .nota { font-size: 11px; color: #6b7f93; text-align: center; margin-top: 12px; }
-
   .ref-box { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 16px; padding: 14px; margin: 16px 0; text-align: center; }
   .ref-box p { font-size: 13px; color: #78350f; }
   .ref-box strong { color: #0b1a2e; }
-
   #carruselBox { display: none; background: #f0f9ff; border: 1px solid #3b82f6; border-radius: 16px; padding: 14px; margin-bottom: 12px; }
   #carruselBox h4 { font-size: 14px; color: #1e3a8a; margin-bottom: 8px; }
   #carruselBox p { font-size: 11px; color: #475569; margin-bottom: 8px; }
@@ -239,7 +220,6 @@ const menuToggle = document.getElementById('menuToggle');
 const menuClose = document.getElementById('menuClose');
 const menuPanel = document.getElementById('menuPanel');
 const menuOverlay = document.getElementById('menuOverlay');
-
 menuToggle.addEventListener('click', () => { menuPanel.classList.add('open'); menuOverlay.classList.add('active'); });
 menuClose.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
 menuOverlay.addEventListener('click', () => { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
@@ -253,13 +233,9 @@ document.getElementById('menuContacto').addEventListener('click', () => { window
 // ===== SELECCIÓN DE PLAN =====
 let planActual = '';
 let precioActual = '';
-
 document.querySelectorAll('.plan-card').forEach(card => {
   card.addEventListener('click', () => {
-    if (card.classList.contains('proximamente')) {
-      alert('🔜 Este plan estará disponible próximamente.');
-      return;
-    }
+    if (card.classList.contains('proximamente')) { alert('🔜 Este plan estará disponible próximamente.'); return; }
     document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('seleccionado'));
     card.classList.add('seleccionado');
     planActual = card.dataset.plan;
@@ -267,11 +243,7 @@ document.querySelectorAll('.plan-card').forEach(card => {
     document.getElementById('planSeleccionado').value = planActual + ' — $' + Number(precioActual).toLocaleString('es-CO') + ' COP';
     document.getElementById('montoPago').textContent = '$' + Number(precioActual).toLocaleString('es-CO') + ' COP';
     const carruselBox = document.getElementById('carruselBox');
-    if (planActual === 'Pro') {
-      carruselBox.style.display = 'block';
-    } else {
-      carruselBox.style.display = 'none';
-    }
+    if (planActual === 'Pro') { carruselBox.style.display = 'block'; } else { carruselBox.style.display = 'none'; }
   });
 });
 
@@ -288,13 +260,7 @@ const SUPABASE_URL = 'https://yugbdqfzbpqobwoslfri.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Zx5w0YmnEd9QGiLPkKtJrg_hjX-CGZx';
 
 function generarSlug(texto) {
-  return texto
-    .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-');
 }
 
 async function subirFoto(file) {
@@ -305,18 +271,40 @@ async function subirFoto(file) {
     const r = await fetch('https://subir-fotos.ngegestion.workers.dev', { method: 'POST', body: fd });
     const data = await r.json();
     return data.ok && data.url ? data.url : '';
-  } catch (err) {
-    return '';
-  }
+  } catch (err) { return ''; }
 }
 
+// Generar código único EDI0XX
+async function generarCodigo() {
+  try {
+    // Contar cuántas tarjetas hay
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?select=id`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'count=exact' }
+    });
+    const data = await res.json();
+    const total = data.length || 0;
+    let numero = total + 1;
+    let codigo = 'EDI' + String(numero).padStart(3, '0');
+
+    // Verificar que el código no exista ya
+    while (true) {
+      const check = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?codigo=eq.${codigo}&select=codigo`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const checkData = await check.json();
+      if (!checkData || checkData.length === 0) break;
+      numero++;
+      codigo = 'EDI' + String(numero).padStart(3, '0');
+    }
+    return codigo;
+  } catch (err) { return 'EDI' + Date.now().toString().slice(-6); }
+}
+
+// ===== ENVÍO DEL FORMULARIO =====
 document.getElementById('formRegistro').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  if (!planActual) {
-    alert('Por favor selecciona un plan primero');
-    return;
-  }
+  if (!planActual) { alert('Por favor selecciona un plan primero'); return; }
 
   const nombre = document.getElementById('nombre').value.trim();
   const telefono = document.getElementById('telefono').value.trim();
@@ -328,26 +316,26 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
   const fotoInput = document.getElementById('foto');
   const carruselInput = document.getElementById('carrusel');
 
+  // Slug único
   let slugBase = negocio ? generarSlug(negocio) : generarSlug(nombre);
   if (!slugBase) slugBase = 'tarjeta-' + Date.now();
-
   let slug = slugBase;
   let intento = 1;
   while (true) {
-    const check = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?slug=eq.${slug}&select=slug`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
+    const check = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?slug=eq.${slug}&select=slug`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } });
     const data = await check.json();
     if (!data || data.length === 0) break;
     intento++;
     slug = slugBase + '-' + intento;
   }
 
+  // Generar código EDI automático
+  const codigoNuevo = await generarCodigo();
+
+  // Subir foto
   const fotoUrl = fotoInput.files && fotoInput.files[0] ? await subirFoto(fotoInput.files[0]) : '';
 
+  // Subir carrusel (Plan Pro)
   let carruselUrls = [];
   if (planActual === 'Pro' && carruselInput.files && carruselInput.files.length > 0) {
     const archivos = Array.from(carruselInput.files).slice(0, 6);
@@ -370,7 +358,10 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
     carrusel: carruselUrls.join(','),
     plan: planActual,
     precio: precioActual,
-    ref: ref || ''
+    ref: ref || '',
+    codigo: codigoNuevo,
+    visitas: 0,
+    visto: false
   };
 
   try {
@@ -394,7 +385,7 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
     window.open('tarjeta.html?slug=' + slug, '_blank');
 
     setTimeout(() => {
-      alert('✅ Tu tarjeta ha sido creada.\n\n📌 IMPORTANTE: Para activarla en la guía, realiza el pago por Nequi al 3242828699 y envía el comprobante por WhatsApp.\n\nUna vez confirmado el pago, tu tarjeta aparecerá en la Guía Digital de Cúcuta.');
+      alert('✅ Tu tarjeta ha sido creada.\n\n📌 Tu código de referido es: ' + codigoNuevo + '\n\nCompártelo con tus amigos para ganar comisiones.\n\n📌 IMPORTANTE: Para activarla en la guía, realiza el pago por Nequi al 3242828699 y envía el comprobante por WhatsApp.');
     }, 800);
 
   } catch (err) {

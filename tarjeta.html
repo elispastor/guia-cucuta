@@ -13,7 +13,8 @@
   .cabecera .logo { font-size: 13px; letter-spacing: 1.5px; color: #fbbf24; font-weight: 700; }
   .cabecera .ciudad { font-size: 11px; color: #a0c4e8; letter-spacing: 1px; margin-top: 4px; }
   .cuerpo { padding: 24px 20px; text-align: center; }
-.avatar { width: 100%; max-width: 320px; aspect-ratio: 1/1; border-radius: 16px; margin: 0 auto 14px; background: linear-gradient(135deg, #0f2b44, #1a4b6d); display: flex; align-items: center; justify-content: center; border: 4px solid #fbbf24; overflow: hidden; }  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar { width: 100%; max-width: 320px; aspect-ratio: 1/1; border-radius: 16px; margin: 0 auto 14px; background: linear-gradient(135deg, #0f2b44, #1a4b6d); display: flex; align-items: center; justify-content: center; border: 4px solid #fbbf24; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .avatar .inicial { font-size: 42px; font-weight: 800; color: #fff; }
   .nombre { font-size: 22px; font-weight: 800; color: #0b1a2e; }
   .negocio { font-size: 16px; font-weight: 600; color: #1a4b6d; margin-top: 4px; }
@@ -25,6 +26,7 @@
   .btn-wa { background: #25D366; color: #fff; }
   .btn-call { background: #1a4b6d; color: #fff; }
   .btn-share { background: #fbbf24; color: #0b1a2e; }
+  .btn-invitar { background: linear-gradient(45deg, #8b5cf6, #6d28d9); color: #fff; width: 100%; margin-top: 4px; flex: 1 1 100%; padding: 14px; }
   .qr-box { text-align: center; padding: 0 20px 20px; }
   .qr-box img { width: 140px; height: 140px; border-radius: 12px; background: #fff; padding: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   .qr-box p { font-size: 11px; color: #6b7f93; margin-top: 6px; }
@@ -39,8 +41,7 @@
 <div id="contenido"><div class="cargando">⏳ Cargando tarjeta...</div></div>
 
 <script>
-const SUPABASE_URL = 'https://yugbdqfzbpqobwoslfri.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Zx5w0YmnEd9QGiLPkKtJrg_hjX-CGZx';
+const API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
 
 const params = new URLSearchParams(window.location.search);
 const slug = params.get('slug');
@@ -50,69 +51,79 @@ const cont = document.getElementById('contenido');
 if (!slug) {
   cont.innerHTML = '<div class="error"><h2>Tarjeta no encontrada</h2><p>Ve a <a href="/">la guía</a> y crea la tuya.</p></div>';
 } else {
-  fetch(`${SUPABASE_URL}/rest/v1/tarjetas?slug=eq.${encodeURIComponent(slug)}&select=*`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`
-    }
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (!data || data.length === 0) {
-      cont.innerHTML = '<div class="error"><h2>Tarjeta no encontrada</h2><p>Ve a <a href="/">la guía</a> y crea la tuya.</p></div>';
-      return;
-    }
+  fetch(API_URL + '?accion=buscar-tarjeta&slug=' + encodeURIComponent(slug))
+    .then(r => r.json())
+    .then(res => {
+      const t = res.data;
+      if (!t) {
+        cont.innerHTML = '<div class="error"><h2>Tarjeta no encontrada</h2><p>Ve a <a href="/">la guía</a> y crea la tuya.</p></div>';
+        return;
+      }
 
-    const t = data[0];
-    const inicial = (t.nombre || '?').charAt(0).toUpperCase();
-    const avatarHTML = t.foto
-      ? `<img src="${t.foto}" alt="Foto" onerror="this.parentNode.innerHTML='<span class=&quot;inicial&quot;>${inicial}</span>'">`
-      : `<span class="inicial">${inicial}</span>`;
+      const inicial = (t.nombre || '?').charAt(0).toUpperCase();
+      const avatarHTML = t.foto
+        ? `<img src="${t.foto}" alt="Foto" onerror="this.parentNode.innerHTML='<span class=&quot;inicial&quot;>${inicial}</span>'">`
+        : `<span class="inicial">${inicial}</span>`;
 
-    const telLimpio = (t.telefono || '').replace(/\D/g, '');
+      const telLimpio = (t.telefono || '').replace(/\D/g, '');
+      const codigoRef = t.codigo || '';
 
-    cont.innerHTML = `
-      <div class="tarjeta">
-        <div class="cabecera">
-          <div class="logo">GUÍA DIGITAL CÚCUTA</div>
-          <div class="ciudad">${(t.ciudad || 'CÚCUTA').toUpperCase()}</div>
+      cont.innerHTML = `
+        <div class="tarjeta">
+          <div class="cabecera">
+            <div class="logo">GUÍA DIGITAL CÚCUTA</div>
+            <div class="ciudad">${(t.ciudad || 'CÚCUTA').toUpperCase()}</div>
+          </div>
+          <div class="cuerpo">
+            <div class="avatar">${avatarHTML}</div>
+            <div class="nombre">${t.nombre}</div>
+            ${t.negocio ? '<div class="negocio">' + t.negocio + '</div>' : ''}
+            ${t.descripcion ? '<div class="descripcion">"' + t.descripcion + '"</div>' : ''}
+            ${t.telefono ? '<div class="dato"><i class="fas fa-phone"></i> ' + t.telefono + '</div>' : ''}
+            ${t.ruta ? '<div class="dato"><i class="fas fa-route"></i> ' + t.ruta + '</div>' : ''}
+            ${t.direccion ? '<div class="dato"><i class="fas fa-location-dot"></i> ' + t.direccion + '</div>' : ''}
+          </div>
+          <div class="acciones">
+            ${t.telefono ? '<a href="https://wa.me/57' + telLimpio + '?text=Hola%2C%20vi%20tu%20tarjeta%20en%20la%20Gu%C3%ADa%20Digital" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>' : ''}
+            ${t.telefono ? '<a href="tel:' + t.telefono + '" class="btn-call"><i class="fas fa-phone"></i> Llamar</a>' : ''}
+            <button class="btn-share" onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</button>
+            ${codigoRef ? '<button class="btn-invitar" onclick="invitar()"><i class="fas fa-gift"></i> 🎁 Invitar y ganar por COMPARTIR</button>' : ''}
+          </div>
+          <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(window.location.href)}" alt="QR">
+            <p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p>
+          </div>
+          <div class="footer">© 2026 Guía Digital Cúcuta · Todos somos <i class="fas fa-heart"></i></div>
         </div>
-        <div class="cuerpo">
-          <div class="avatar">${avatarHTML}</div>
-          <div class="nombre">${t.nombre}</div>
-          ${t.negocio ? '<div class="negocio">' + t.negocio + '</div>' : ''}
-          ${t.descripcion ? '<div class="descripcion">"' + t.descripcion + '"</div>' : ''}
-          ${t.telefono ? '<div class="dato"><i class="fas fa-phone"></i> ' + t.telefono + '</div>' : ''}
-          ${t.ruta ? '<div class="dato"><i class="fas fa-route"></i> ' + t.ruta + '</div>' : ''}
-          ${t.direccion ? '<div class="dato"><i class="fas fa-location-dot"></i> ' + t.direccion + '</div>' : ''}
-        </div>
-        <div class="acciones">
-          ${t.telefono ? '<a href="https://wa.me/57' + telLimpio + '?text=Hola%2C%20vi%20tu%20tarjeta%20en%20la%20Gu%C3%ADa%20Digital" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>' : ''}
-          ${t.telefono ? '<a href="tel:' + t.telefono + '" class="btn-call"><i class="fas fa-phone"></i> Llamar</a>' : ''}
-          <button class="btn-share" onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</button>
-        </div>
-        <div class="qr-box">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(window.location.href)}" alt="QR">
-          <p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p>
-        </div>
-        <div class="footer">© 2026 Guía Digital Cúcuta · Todos somos <i class="fas fa-heart"></i></div>
-      </div>
-    `;
-  })
-  .catch(err => {
-    cont.innerHTML = '<div class="error"><h2>Error cargando tarjeta</h2><p>' + err.message + '</p></div>';
-  });
+      `;
+
+      // Guardar el código para invitar
+      window.codigoTarjeta = codigoRef;
+      window.nombreTarjeta = t.nombre;
+    })
+    .catch(err => {
+      cont.innerHTML = '<div class="error"><h2>Error cargando tarjeta</h2><p>' + err.message + '</p></div>';
+    });
 }
 
 function compartir() {
-  const nombre = document.querySelector('.nombre')?.textContent || '';
+  const nombre = window.nombreTarjeta || '';
   const texto = 'Mira mi tarjeta en la Guía Digital Cúcuta: ' + nombre;
   if (navigator.share) {
     navigator.share({ title: 'Mi tarjeta - Guía Digital', text: texto, url: window.location.href });
   } else {
-    navigator.clipboard.writeText(texto + '\n' + window.location.href).then(() => {
-      alert('📋 Enlace copiado');
-    });
+    navigator.clipboard.writeText(texto + '\n' + window.location.href).then(() => alert('📋 Enlace copiado'));
+  }
+}
+
+function invitar() {
+  const codigo = window.codigoTarjeta || '';
+  const url = 'https://cucuta.guia-digital.com/registro?ref=' + codigo;
+  const texto = '🎁 ¡Hola! Te regalo tu tarjeta digital GRATIS en la Guía Digital de Cúcuta.\n\nRegístrate aquí: ' + url + '\n\nEs gratis y te da presencia digital. ¡Aprovecha!';
+  if (navigator.share) {
+    navigator.share({ title: 'Te regalo tu tarjeta digital', text: texto, url: url });
+  } else {
+    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
   }
 }
 </script>

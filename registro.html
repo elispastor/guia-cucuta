@@ -151,7 +151,7 @@
   </div>
 
   <div class="ref-box" id="refBox" style="display:none;">
-    <p>🎁 Llegaste invitado por: <strong id="refNombre"></strong></p>
+    <p>🎁 Llegaste invitado por: <strong id="refNombre">Cargando...</strong></p>
   </div>
 
   <form id="formRegistro">
@@ -215,6 +215,9 @@
 </div>
 
 <script>
+// ===== API =====
+const API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
+
 // ===== MENÚ =====
 const menuToggle = document.getElementById('menuToggle');
 const menuClose = document.getElementById('menuClose');
@@ -250,14 +253,27 @@ document.querySelectorAll('.plan-card').forEach(card => {
 // ===== REFERIDO =====
 const paramsURL = new URLSearchParams(window.location.search);
 const ref = paramsURL.get('ref');
+
 if (ref) {
   document.getElementById('refBox').style.display = 'block';
-  document.getElementById('refNombre').textContent = ref;
+  document.getElementById('refNombre').textContent = 'Cargando...';
+
+  fetch(API_URL + '?accion=buscar-por-codigo&codigo=' + encodeURIComponent(ref))
+    .then(r => r.json())
+    .then(res => {
+      const patrocinador = res.data;
+      if (patrocinador && patrocinador.nombre) {
+        document.getElementById('refNombre').textContent = patrocinador.nombre.toUpperCase() + ' (' + ref + ')';
+      } else {
+        document.getElementById('refNombre').textContent = ref;
+      }
+    })
+    .catch(() => {
+      document.getElementById('refNombre').textContent = ref;
+    });
 }
 
-// ===== API =====
-const API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
-
+// ===== UTILIDADES =====
 function generarSlug(texto) {
   return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-');
 }
@@ -273,26 +289,25 @@ async function subirFoto(file) {
   } catch (err) { return ''; }
 }
 
-// Generar código único EDI0XX
+// Generar código único EDI-0XX
 async function generarCodigo() {
   try {
     const res = await fetch(API_URL + '?accion=contar-tarjetas');
     const data = await res.json();
     let numero = (data.total || 0) + 1;
-    let codigo = 'EDI' + String(numero).padStart(3, '0');
+    let codigo = 'EDI-' + String(numero).padStart(3, '0');
 
-    // Verificar que no exista
     let intento = 0;
     while (intento < 100) {
       const check = await fetch(API_URL + '?accion=buscar-por-codigo&codigo=' + codigo);
       const checkData = await check.json();
       if (!checkData.data) break;
       numero++;
-      codigo = 'EDI' + String(numero).padStart(3, '0');
+      codigo = 'EDI-' + String(numero).padStart(3, '0');
       intento++;
     }
     return codigo;
-  } catch (err) { return 'EDI' + Date.now().toString().slice(-6); }
+  } catch (err) { return 'EDI-' + Date.now().toString().slice(-6); }
 }
 
 // ===== ENVÍO DEL FORMULARIO =====

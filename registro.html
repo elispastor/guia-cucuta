@@ -255,9 +255,8 @@ if (ref) {
   document.getElementById('refNombre').textContent = ref;
 }
 
-// ===== SUPABASE =====
-const SUPABASE_URL = 'https://yugbdqfzbpqobwoslfri.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Zx5w0YmnEd9QGiLPkKtJrg_hjX-CGZx';
+// ===== API =====
+const API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
 
 function generarSlug(texto) {
   return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-');
@@ -277,24 +276,20 @@ async function subirFoto(file) {
 // Generar código único EDI0XX
 async function generarCodigo() {
   try {
-    // Contar cuántas tarjetas hay
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?select=id`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'count=exact' }
-    });
+    const res = await fetch(API_URL + '?accion=contar-tarjetas');
     const data = await res.json();
-    const total = data.length || 0;
-    let numero = total + 1;
+    let numero = (data.total || 0) + 1;
     let codigo = 'EDI' + String(numero).padStart(3, '0');
 
-    // Verificar que el código no exista ya
-    while (true) {
-      const check = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?codigo=eq.${codigo}&select=codigo`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
+    // Verificar que no exista
+    let intento = 0;
+    while (intento < 100) {
+      const check = await fetch(API_URL + '?accion=buscar-por-codigo&codigo=' + codigo);
       const checkData = await check.json();
-      if (!checkData || checkData.length === 0) break;
+      if (!checkData.data) break;
       numero++;
       codigo = 'EDI' + String(numero).padStart(3, '0');
+      intento++;
     }
     return codigo;
   } catch (err) { return 'EDI' + Date.now().toString().slice(-6); }
@@ -322,9 +317,9 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
   let slug = slugBase;
   let intento = 1;
   while (true) {
-    const check = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas?slug=eq.${slug}&select=slug`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } });
+    const check = await fetch(API_URL + '?accion=buscar-tarjeta&slug=' + slug);
     const data = await check.json();
-    if (!data || data.length === 0) break;
+    if (!data.data) break;
     intento++;
     slug = slugBase + '-' + intento;
   }
@@ -345,7 +340,8 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
     }
   }
 
-  const tarjeta = {
+  const params = new URLSearchParams({
+    accion: 'guardar-tarjeta',
     slug: slug,
     nombre: nombre,
     telefono: telefono,
@@ -359,26 +355,15 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
     plan: planActual,
     precio: precioActual,
     ref: ref || '',
-    codigo: codigoNuevo,
-    visitas: 0,
-    visto: false
-  };
+    codigo: codigoNuevo
+  });
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/tarjetas`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(tarjeta)
-    });
+    const res = await fetch(API_URL + '?' + params.toString());
+    const data = await res.json();
 
-    if (!res.ok) {
-      const error = await res.text();
-      alert('Error guardando la tarjeta: ' + error);
+    if (!data.ok) {
+      alert('Error guardando la tarjeta: ' + (data.error || 'desconocido'));
       return;
     }
 

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tarjeta - Guía Digital Cúcuta</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5949598980404445" crossorigin="anonymous"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
   body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; }
@@ -12,8 +13,6 @@
   .cabecera { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; color: #fff; }
   .cabecera .logo { font-size: 13px; letter-spacing: 1.5px; color: #fbbf24; font-weight: 700; }
   .cabecera .ciudad { font-size: 11px; color: #a0c4e8; letter-spacing: 1px; margin-top: 4px; }
-
-  /* CARRUSEL */
   .carrusel { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #000; }
   .carrusel-inner { display: flex; transition: transform 0.5s ease; height: 100%; }
   .carrusel-slide { min-width: 100%; flex-shrink: 0; }
@@ -24,7 +23,6 @@
   .carrusel-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 30px; z-index: 10; max-width: 90%; flex-wrap: wrap; justify-content: center; }
   .indicator { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; }
   .indicator.active { background: #fbbf24; width: 18px; border-radius: 10px; }
-
   .cuerpo { padding: 24px 20px; text-align: center; }
   .avatar { width: 100%; max-width: 320px; aspect-ratio: 1/1; border-radius: 16px; margin: 0 auto 14px; background: linear-gradient(135deg, #0f2b44, #1a4b6d); display: flex; align-items: center; justify-content: center; border: 4px solid #fbbf24; overflow: hidden; }
   .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -34,12 +32,16 @@
   .descripcion { font-size: 14px; color: #4a5e72; margin-top: 10px; font-style: italic; }
   .dato { font-size: 15px; color: #4a5e72; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .dato i { color: #1a4b6d; width: 18px; }
+  .visitas-box { display: inline-flex; align-items: center; gap: 8px; background: #f8fafc; border: 2px solid #fbbf24; border-radius: 60px; padding: 8px 18px; margin: 14px auto 0; font-size: 13px; color: #0b1a2e; font-weight: 700; }
+  .visitas-box i { color: #fbbf24; font-size: 16px; }
   .acciones { display: flex; gap: 8px; padding: 0 20px 20px; flex-wrap: wrap; }
   .acciones a, .acciones button { flex: 1; min-width: 90px; padding: 12px; border-radius: 60px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
   .btn-wa { background: #25D366; color: #fff; }
   .btn-call { background: #1a4b6d; color: #fff; }
   .btn-share { background: #fbbf24; color: #0b1a2e; }
   .btn-invitar { background: linear-gradient(45deg, #8b5cf6, #6d28d9); color: #fff; flex: 1 1 100%; margin-top: 4px; padding: 14px; }
+  .btn-oficina { background: linear-gradient(45deg, #16a34a, #15803d); color: #fff; flex: 1 1 100%; margin-top: 4px; padding: 14px; font-size: 15px; }
+  .ad-box { text-align: center; padding: 12px 20px; background: #f8fafc; border-top: 1px solid #eef2f6; border-bottom: 1px solid #eef2f6; min-height: 70px; }
   .qr-box { text-align: center; padding: 0 20px 20px; }
   .qr-box img { width: 140px; height: 140px; border-radius: 12px; background: #fff; padding: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   .qr-box p { font-size: 11px; color: #6b7f93; margin-top: 6px; }
@@ -47,11 +49,32 @@
   .cargando { text-align: center; color: #fff; padding: 40px 20px; font-size: 16px; }
   .error { text-align: center; color: #fff; padding: 40px 20px; }
   .error a { color: #fbbf24; }
+  .modal-info { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+  .modal-info.active { display: flex; }
+  .modal-info .contenido { background: #fff; border-radius: 24px; padding: 30px 24px; text-align: center; max-width: 400px; width: 100%; position: relative; }
+  .modal-info .cerrar { position: absolute; top: 14px; right: 14px; background: #fbbf24; border: none; font-size: 22px; cursor: pointer; color: #0b1a2e; width: 40px; height: 40px; border-radius: 50%; }
+  .modal-info h3 { color: #0b1a2e; font-size: 1.3rem; margin-bottom: 12px; }
+  .modal-info p { color: #4a5e72; font-size: 14px; margin-bottom: 10px; line-height: 1.5; text-align: left; }
+  .modal-info .btn-ok { width: 100%; padding: 14px; background: linear-gradient(45deg, #16a34a, #15803d); color: #fff; border: none; border-radius: 60px; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 10px; }
 </style>
 </head>
 <body>
 
 <div id="contenido"><div class="cargando">⏳ Cargando tarjeta...</div></div>
+
+<div class="modal-info" id="modalInfo">
+  <div class="contenido">
+    <button class="cerrar" onclick="cerrarInfo()">✕</button>
+    <h3>💰 Mi Oficina Digital</h3>
+    <p>Esta es tu <strong>oficina privada</strong>. Aquí puedes:</p>
+    <p>📊 Ver cuántas personas visitan tu tarjeta.</p>
+    <p>👥 Ver tus referidos y los de tus referidos (3 niveles).</p>
+    <p>💰 Ver cuánto dinero llevas ganado en comisiones.</p>
+    <p>🔗 Copiar tu link personal para invitar.</p>
+    <p>🔐 Solo tú entras, con tu clave secreta.</p>
+    <button class="btn-ok" onclick="cerrarInfo()">Entendido</button>
+  </div>
+</div>
 
 <script>
 const API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
@@ -81,7 +104,6 @@ if (!slug) {
       const telLimpio = (t.telefono || '').replace(/\D/g, '');
       const codigoRef = t.codigo || '';
 
-      // Construir carrusel si hay fotos
       let carruselHTML = '';
       const fotosCarrusel = (t.carrusel || '').split(',').filter(u => u.trim() !== '');
       if (fotosCarrusel.length > 0) {
@@ -116,12 +138,18 @@ if (!slug) {
             ${t.telefono ? '<div class="dato"><i class="fas fa-phone"></i> ' + t.telefono + '</div>' : ''}
             ${t.ruta ? '<div class="dato"><i class="fas fa-route"></i> ' + t.ruta + '</div>' : ''}
             ${t.direccion ? '<div class="dato"><i class="fas fa-location-dot"></i> ' + t.direccion + '</div>' : ''}
+            <div class="visitas-box"><i class="fas fa-eye"></i> <span id="contadorVisitas">0</span> visitas</div>
           </div>
           <div class="acciones">
             ${t.telefono ? '<a href="https://wa.me/57' + telLimpio + '?text=Hola%2C%20vi%20tu%20tarjeta%20en%20la%20Gu%C3%ADa%20Digital" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>' : ''}
             ${t.telefono ? '<a href="tel:' + t.telefono + '" class="btn-call"><i class="fas fa-phone"></i> Llamar</a>' : ''}
             <button class="btn-share" onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</button>
             ${codigoRef ? '<button class="btn-invitar" onclick="invitar()"><i class="fas fa-gift"></i> 🎁 Invitar y ganar por COMPARTIR</button>' : ''}
+            <button class="btn-oficina" onclick="mostrarInfoOficina()"><i class="fas fa-money-bag"></i> 💰 Mi Oficina Digital</button>
+          </div>
+          <div class="ad-box">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5949598980404445" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
           </div>
           <div class="qr-box">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(window.location.href)}" alt="QR">
@@ -131,7 +159,6 @@ if (!slug) {
         </div>
       `;
 
-      // Activar carrusel si hay más de 1 foto
       if (fotosCarrusel.length > 1) {
         window.totalSlides = fotosCarrusel.length;
         window.currentSlide = 0;
@@ -140,10 +167,23 @@ if (!slug) {
 
       window.codigoTarjeta = codigoRef;
       window.nombreTarjeta = t.nombre;
+      window.slugTarjeta = slug;
+
+      incrementarVisita();
     })
     .catch(err => {
       cont.innerHTML = '<div class="error"><h2>Error cargando tarjeta</h2><p>' + err.message + '</p></div>';
     });
+}
+
+async function incrementarVisita() {
+  try {
+    const res = await fetch(API_URL + '?accion=sumar-visita&slug=' + encodeURIComponent(slug));
+    const data = await res.json();
+    if (data.ok && data.visitas !== undefined) {
+      document.getElementById('contadorVisitas').textContent = data.visitas;
+    }
+  } catch (err) { console.log('Error contador:', err); }
 }
 
 function compartir() {
@@ -167,20 +207,12 @@ function invitar() {
   }
 }
 
-function irSlide(i) {
-  window.currentSlide = i;
-  actualizarCarrusel();
-}
-function slideNext() {
-  if (!window.totalSlides) return;
-  window.currentSlide = (window.currentSlide + 1) % window.totalSlides;
-  actualizarCarrusel();
-}
-function slidePrev() {
-  if (!window.totalSlides) return;
-  window.currentSlide = (window.currentSlide - 1 + window.totalSlides) % window.totalSlides;
-  actualizarCarrusel();
-}
+function mostrarInfoOficina() { document.getElementById('modalInfo').classList.add('active'); }
+function cerrarInfo() { document.getElementById('modalInfo').classList.remove('active'); }
+
+function irSlide(i) { window.currentSlide = i; actualizarCarrusel(); }
+function slideNext() { if (!window.totalSlides) return; window.currentSlide = (window.currentSlide + 1) % window.totalSlides; actualizarCarrusel(); }
+function slidePrev() { if (!window.totalSlides) return; window.currentSlide = (window.currentSlide - 1 + window.totalSlides) % window.totalSlides; actualizarCarrusel(); }
 function actualizarCarrusel() {
   const inner = document.getElementById('carruselInner');
   if (inner) inner.style.transform = `translateX(-${window.currentSlide * 100}%)`;

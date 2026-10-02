@@ -8,7 +8,20 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5949598980404445" crossorigin="anonymous"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
-  body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; }
+  body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; padding-top: 80px; }
+  .header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(11, 28, 58, 0.95); backdrop-filter: blur(10px); border-bottom: 3px solid #fbbf24; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  .header .marca { font-size: 14px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
+  .menu-btn { background: none; border: none; font-size: 28px; color: #fbbf24; cursor: pointer; padding: 4px 8px; }
+  .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1100; }
+  .menu-overlay.active { display: block; }
+  .menu-panel { position: fixed; top: 0; right: 0; width: 75%; max-width: 300px; height: 100%; background: #0b1c3a; padding: 24px 20px; transform: translateX(100%); transition: transform 0.3s ease; z-index: 1200; box-shadow: -8px 0 30px rgba(0,0,0,0.5); overflow-y: auto; border-left: 3px solid #fbbf24; }
+  .menu-panel.open { transform: translateX(0); }
+  .menu-panel .close-btn { background: none; border: none; font-size: 28px; float: right; cursor: pointer; color: #fbbf24; }
+  .menu-panel ul { list-style: none; margin-top: 40px; }
+  .menu-panel ul li { padding: 14px 0; border-bottom: 1px solid rgba(251,191,36,0.2); font-size: 16px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; }
+  .menu-panel ul li:hover { color: #fbbf24; padding-left: 8px; }
+  .menu-panel ul li i { width: 24px; color: #fbbf24; }
+
   .tarjeta { max-width: 420px; width: 100%; background: #fff; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); }
   .cabecera { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; color: #fff; }
   .cabecera .logo { font-size: 13px; letter-spacing: 1.5px; color: #fbbf24; font-weight: 700; }
@@ -60,6 +73,25 @@
 </head>
 <body>
 
+<header class="header">
+  <span class="marca">GUÍA DIGITAL CÚCUTA</span>
+  <button class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+</header>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="menu-panel" id="menuPanel">
+  <button class="close-btn" id="menuClose"><i class="fas fa-times"></i></button>
+  <ul>
+    <li onclick="irA('inicio')"><i class="fas fa-home"></i> Inicio</li>
+    <li onclick="irA('carrusel')"><i class="fas fa-images"></i> Carrusel</li>
+    <li onclick="irA('qr')"><i class="fas fa-qrcode"></i> Mi QR</li>
+    <li onclick="abrirInfoOficina()"><i class="fas fa-money-bag"></i> Mi Oficina</li>
+    <li onclick="invitar()"><i class="fas fa-gift"></i> Invitar y ganar</li>
+    <li onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</li>
+    <li onclick="window.location.href='https://cucuta.guia-digital.com'"><i class="fas fa-arrow-left"></i> Volver a la Guía</li>
+  </ul>
+</div>
+
 <div id="contenido"><div class="cargando">⏳ Cargando tarjeta...</div></div>
 
 <div class="modal-info" id="modalInfo">
@@ -81,6 +113,22 @@ var API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
 var params = new URLSearchParams(window.location.search);
 var slug = params.get('slug');
 var cont = document.getElementById('contenido');
+
+// MENÚ
+var menuToggle = document.getElementById('menuToggle');
+var menuClose = document.getElementById('menuClose');
+var menuPanel = document.getElementById('menuPanel');
+var menuOverlay = document.getElementById('menuOverlay');
+menuToggle.addEventListener('click', function() { menuPanel.classList.add('open'); menuOverlay.classList.add('active'); });
+menuClose.addEventListener('click', function() { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+menuOverlay.addEventListener('click', function() { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
+
+function irA(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+  menuPanel.classList.remove('open');
+  menuOverlay.classList.remove('active');
+}
 
 if (!slug) {
   cont.innerHTML = '<div class="error"><h2>Tarjeta no encontrada</h2><p>Ve a <a href="/">la guía</a> y crea la tuya.</p></div>';
@@ -105,7 +153,7 @@ if (!slug) {
       var carruselHTML = '';
       var fotosCarrusel = (t.carrusel || '').split(',').filter(function(u) { return u.trim() !== ''; });
       if (fotosCarrusel.length > 0) {
-        carruselHTML = '<div class="carrusel"><div class="carrusel-inner" id="carruselInner">';
+        carruselHTML = '<div class="carrusel" id="carrusel"><div class="carrusel-inner" id="carruselInner">';
         fotosCarrusel.forEach(function(url) {
           carruselHTML += '<div class="carrusel-slide"><img src="' + url + '" alt="Foto"></div>';
         });
@@ -122,7 +170,7 @@ if (!slug) {
         carruselHTML += '</div>';
       }
 
-      var html = '<div class="tarjeta">';
+      var html = '<div class="tarjeta" id="inicio">';
       html += '<div class="cabecera"><div class="logo">GUÍA DIGITAL CÚCUTA</div><div class="ciudad">' + ((t.ciudad || 'CÚCUTA').toUpperCase()) + '</div></div>';
       html += carruselHTML;
       html += '<div class="cuerpo">';
@@ -141,10 +189,10 @@ if (!slug) {
       if (t.telefono) html += '<a href="tel:' + t.telefono + '" class="btn-call"><i class="fas fa-phone"></i> Llamar</a>';
       html += '<button class="btn-share" onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</button>';
       if (codigoRef) html += '<button class="btn-invitar" onclick="invitar()"><i class="fas fa-gift"></i> 🎁 Invitar y ganar por COMPARTIR</button>';
-      html += '<button class="btn-oficina" onclick="mostrarInfoOficina()"><i class="fas fa-money-bag"></i> 💰 Mi Oficina Digital</button>';
+      html += '<button class="btn-oficina" onclick="abrirInfoOficina()"><i class="fas fa-money-bag"></i> 💰 Mi Oficina Digital</button>';
       html += '</div>';
 
-      html += '<div class="qr-box">';
+      html += '<div class="qr-box" id="qr">';
       html += '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(window.location.href) + '" alt="QR">';
       html += '<p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p>';
       html += '</div>';
@@ -203,7 +251,11 @@ function invitar() {
   }
 }
 
-function mostrarInfoOficina() { document.getElementById('modalInfo').classList.add('active'); }
+function abrirInfoOficina() {
+  document.getElementById('modalInfo').classList.add('active');
+  menuPanel.classList.remove('open');
+  menuOverlay.classList.remove('active');
+}
 function cerrarInfo() { document.getElementById('modalInfo').classList.remove('active'); }
 
 function irSlide(i) { window.currentSlide = i; actualizarCarrusel(); }

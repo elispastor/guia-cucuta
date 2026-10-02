@@ -204,8 +204,7 @@
 
     <div id="carruselBox">
       <h4>📸 Fotos para tu carrusel (Plan Pro)</h4>
-      <p>Sube hasta 6 fotos para mostrar tu negocio. Se mostrarán en un carrusel al inicio de tu tarjeta.</p>
-      <input type="file" id="carrusel" accept="image/*" multiple>
+Sube hasta 10 fotos para mostrar tu negocio.      <input type="file" id="carrusel" accept="image/*" multiple>
     </div>
 
     <button type="submit" class="btn-generar"><i class="fas fa-rocket"></i> Generar mi tarjeta</button>
@@ -348,8 +347,7 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
   // Subir carrusel (Plan Pro)
   let carruselUrls = [];
   if (planActual === 'Pro' && carruselInput.files && carruselInput.files.length > 0) {
-    const archivos = Array.from(carruselInput.files).slice(0, 6);
-    for (const archivo of archivos) {
+const archivos = Array.from(carruselInput.files).slice(0, 10);    for (const archivo of archivos) {
       const url = await subirFoto(archivo);
       if (url) carruselUrls.push(url);
     }

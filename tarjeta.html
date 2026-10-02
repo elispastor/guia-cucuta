@@ -21,7 +21,6 @@
   .menu-panel ul li { padding: 14px 0; border-bottom: 1px solid rgba(251,191,36,0.2); font-size: 16px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; }
   .menu-panel ul li:hover { color: #fbbf24; padding-left: 8px; }
   .menu-panel ul li i { width: 24px; color: #fbbf24; }
-
   .tarjeta { max-width: 420px; width: 100%; background: #fff; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); }
   .cabecera { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; color: #fff; }
   .cabecera .logo { font-size: 13px; letter-spacing: 1.5px; color: #fbbf24; font-weight: 700; }
@@ -54,7 +53,6 @@
   .btn-share { background: #fbbf24; color: #0b1a2e; }
   .btn-invitar { background: linear-gradient(45deg, #8b5cf6, #6d28d9); color: #fff; flex: 1 1 100%; margin-top: 4px; padding: 14px; }
   .btn-oficina { background: linear-gradient(45deg, #16a34a, #15803d); color: #fff; flex: 1 1 100%; margin-top: 4px; padding: 14px; font-size: 15px; }
-  .ad-box { text-align: center; padding: 12px 20px; background: #f8fafc; border-top: 1px solid #eef2f6; border-bottom: 1px solid #eef2f6; min-height: 70px; }
   .qr-box { text-align: center; padding: 0 20px 20px; }
   .qr-box img { width: 140px; height: 140px; border-radius: 12px; background: #fff; padding: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   .qr-box p { font-size: 11px; color: #6b7f93; margin-top: 6px; }
@@ -67,8 +65,27 @@
   .modal-info .contenido { background: #fff; border-radius: 24px; padding: 30px 24px; text-align: center; max-width: 400px; width: 100%; position: relative; }
   .modal-info .cerrar { position: absolute; top: 14px; right: 14px; background: #fbbf24; border: none; font-size: 22px; cursor: pointer; color: #0b1a2e; width: 40px; height: 40px; border-radius: 50%; }
   .modal-info h3 { color: #0b1a2e; font-size: 1.3rem; margin-bottom: 12px; }
-  .modal-info p { color: #4a5e72; font-size: 14px; margin-bottom: 10px; line-height: 1.5; text-align: left; }
+  .modal-info p { color: #4a5e72; font-size: 14px; margin-bottom: 10px; line-height: 1.5; }
+  .modal-info input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #fbbf24; font-size: 16px; margin-bottom: 12px; text-align: center; }
   .modal-info .btn-ok { width: 100%; padding: 14px; background: linear-gradient(45deg, #16a34a, #15803d); color: #fff; border: none; border-radius: 60px; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 10px; }
+  #mensajeError { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+  .oficina-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; overflow-y: auto; padding: 20px; }
+  .oficina-overlay.active { display: block; }
+  .oficina-panel { max-width: 900px; margin: 40px auto; background: linear-gradient(160deg, #112b4f, #0b1c3a); border: 3px solid #fbbf24; border-radius: 24px; padding: 24px; position: relative; color: #fff; }
+  .oficina-panel .cerrar-oficina { position: absolute; top: 16px; right: 16px; background: #fbbf24; border: none; font-size: 22px; cursor: pointer; color: #0b1c3a; width: 40px; height: 40px; border-radius: 50%; }
+  .oficina-panel h2 { color: #fbbf24; font-size: 1.8rem; text-align: center; margin-bottom: 8px; }
+  .oficina-panel .subtitulo-oficina { text-align: center; color: #a0c4e8; font-size: 13px; margin-bottom: 24px; letter-spacing: 1px; }
+  .stats-oficina { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-oficina { background: rgba(0,0,0,0.4); border-radius: 16px; padding: 16px; text-align: center; border: 1px solid rgba(251,191,36,0.3); }
+  .stat-oficina .num { font-size: 28px; font-weight: 800; color: #fbbf24; }
+  .stat-oficina .label { font-size: 11px; color: #a0c4e8; margin-top: 4px; letter-spacing: 0.5px; }
+  .tabla-refs { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+  .tabla-refs th { color: #fbbf24; text-align: left; padding: 8px 4px; border-bottom: 1px solid rgba(251,191,36,0.3); font-size: 11px; }
+  .tabla-refs td { padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e5eef8; }
+  .tabla-refs .pagado { color: #22c55e; font-weight: 700; }
+  .tabla-refs .pendiente { color: #f59e0b; font-weight: 700; }
+  .vacio { text-align: center; padding: 20px; color: #a0c4e8; font-size: 13px; }
+  .btn-cerrar-sesion { display: block; width: 100%; margin-top: 20px; padding: 14px; background: #ef4444; color: white; border: none; border-radius: 60px; font-weight: 700; font-size: 15px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -85,10 +102,9 @@
     <li onclick="irA('inicio')"><i class="fas fa-home"></i> Inicio</li>
     <li onclick="irA('carrusel')"><i class="fas fa-images"></i> Carrusel</li>
     <li onclick="irA('qr')"><i class="fas fa-qrcode"></i> Mi QR</li>
-    <li onclick="abrirInfoOficina()"><i class="fas fa-money-bag"></i> Mi Oficina</li>
+    <li onclick="abrirOficina()"><i class="fas fa-money-bag"></i> Mi Oficina</li>
     <li onclick="invitar()"><i class="fas fa-gift"></i> Invitar y ganar</li>
     <li onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</li>
-    <li onclick="window.location.href='https://cucuta.guia-digital.com'"><i class="fas fa-arrow-left"></i> Volver a la Guía</li>
   </ul>
 </div>
 
@@ -97,14 +113,32 @@
 <div class="modal-info" id="modalInfo">
   <div class="contenido">
     <button class="cerrar" onclick="cerrarInfo()">✕</button>
-    <h3>💰 Mi Oficina Digital</h3>
-    <p>Esta es tu <strong>oficina privada</strong>. Aquí puedes:</p>
-    <p>📊 Ver cuántas personas visitan tu tarjeta.</p>
-    <p>👥 Ver tus referidos y los de tus referidos (3 niveles).</p>
-    <p>💰 Ver cuánto dinero llevas ganado en comisiones.</p>
-    <p>🔗 Copiar tu link personal para invitar.</p>
-    <p>🔐 Solo tú entras, con tu clave secreta.</p>
-    <button class="btn-ok" onclick="cerrarInfo()">Entendido</button>
+    <h3 id="tituloModal">🔐 Mi Oficina</h3>
+    <p id="textoModal">Escribe tu clave.</p>
+    <input type="password" id="inputClave" placeholder="Escribe tu clave">
+    <button class="btn-ok" id="btnClave" onclick="procesarClave()">Entrar</button>
+    <div id="mensajeError"></div>
+  </div>
+</div>
+
+<div class="oficina-overlay" id="oficinaOverlay">
+  <div class="oficina-panel">
+    <button class="cerrar-oficina" onclick="cerrarOficina()"><i class="fas fa-times"></i></button>
+    <h2>💼 MI OFICINA PRIVADA</h2>
+    <div class="subtitulo-oficina">EDI · ECOSISTEMA DIGITAL INTELIGENTE</div>
+    <div class="stats-oficina">
+      <div class="stat-oficina"><div class="num" id="statVisitas">0</div><div class="label">VISITAS</div></div>
+      <div class="stat-oficina"><div class="num" id="statNivel1">0</div><div class="label">NIVEL 1</div></div>
+      <div class="stat-oficina"><div class="num" id="statNivel2">0</div><div class="label">NIVEL 2</div></div>
+      <div class="stat-oficina"><div class="num" id="statNivel3">0</div><div class="label">NIVEL 3</div></div>
+    </div>
+    <h3 style="color: #fbbf24; font-size: 1rem; margin-top: 20px;">🥇 NIVEL 1 (Directos)</h3>
+    <table class="tabla-refs"><thead><tr><th>Nombre</th><th>Plan</th><th>Estado</th></tr></thead><tbody id="tablaNivel1"><tr><td colspan="3" class="vacio">Sin referidos</td></tr></tbody></table>
+    <h3 style="color: #fbbf24; font-size: 1rem; margin-top: 20px;">🥈 NIVEL 2</h3>
+    <table class="tabla-refs"><thead><tr><th>Nombre</th><th>Plan</th><th>Estado</th></tr></thead><tbody id="tablaNivel2"><tr><td colspan="3" class="vacio">Sin referidos</td></tr></tbody></table>
+    <h3 style="color: #fbbf24; font-size: 1rem; margin-top: 20px;">🥉 NIVEL 3</h3>
+    <table class="tabla-refs"><thead><tr><th>Nombre</th><th>Plan</th><th>Estado</th></tr></thead><tbody id="tablaNivel3"><tr><td colspan="3" class="vacio">Sin referidos</td></tr></tbody></table>
+    <button class="btn-cerrar-sesion" onclick="cerrarOficina()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
   </div>
 </div>
 
@@ -113,8 +147,8 @@ var API_URL = 'https://guia-digital-api.ngegestion.workers.dev/';
 var params = new URLSearchParams(window.location.search);
 var slug = params.get('slug');
 var cont = document.getElementById('contenido');
+var codigoDueno = '';
 
-// MENÚ
 var menuToggle = document.getElementById('menuToggle');
 var menuClose = document.getElementById('menuClose');
 var menuPanel = document.getElementById('menuPanel');
@@ -122,13 +156,7 @@ var menuOverlay = document.getElementById('menuOverlay');
 menuToggle.addEventListener('click', function() { menuPanel.classList.add('open'); menuOverlay.classList.add('active'); });
 menuClose.addEventListener('click', function() { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
 menuOverlay.addEventListener('click', function() { menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); });
-
-function irA(id) {
-  var el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
-  menuPanel.classList.remove('open');
-  menuOverlay.classList.remove('active');
-}
+function irA(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); menuPanel.classList.remove('open'); menuOverlay.classList.remove('active'); }
 
 if (!slug) {
   cont.innerHTML = '<div class="error"><h2>Tarjeta no encontrada</h2><p>Ve a <a href="/">la guía</a> y crea la tuya.</p></div>';
@@ -141,30 +169,22 @@ if (!slug) {
         cont.innerHTML = '<div class="error"><h2>Tarjeta no encontrada</h2><p>Ve a <a href="/">la guía</a> y crea la tuya.</p></div>';
         return;
       }
-
       var inicial = (t.nombre || '?').charAt(0).toUpperCase();
-      var avatarHTML = t.foto
-        ? '<img src="' + t.foto + '" alt="Foto" onerror="this.parentNode.innerHTML=\'<span class=&quot;inicial&quot;>' + inicial + '</span>\'">'
-        : '<span class="inicial">' + inicial + '</span>';
-
+      var avatarHTML = t.foto ? '<img src="' + t.foto + '" alt="Foto" onerror="this.parentNode.innerHTML=\'<span class=&quot;inicial&quot;>' + inicial + '</span>\'">' : '<span class="inicial">' + inicial + '</span>';
       var telLimpio = (t.telefono || '').replace(/\D/g, '');
-      var codigoRef = t.codigo || '';
+      codigoDueno = t.codigo || '';
 
       var carruselHTML = '';
       var fotosCarrusel = (t.carrusel || '').split(',').filter(function(u) { return u.trim() !== ''; });
       if (fotosCarrusel.length > 0) {
         carruselHTML = '<div class="carrusel" id="carrusel"><div class="carrusel-inner" id="carruselInner">';
-        fotosCarrusel.forEach(function(url) {
-          carruselHTML += '<div class="carrusel-slide"><img src="' + url + '" alt="Foto"></div>';
-        });
+        fotosCarrusel.forEach(function(url) { carruselHTML += '<div class="carrusel-slide"><img src="' + url + '" alt="Foto"></div>'; });
         carruselHTML += '</div>';
         if (fotosCarrusel.length > 1) {
           carruselHTML += '<button class="carrusel-btn prev" onclick="slidePrev()"><i class="fas fa-chevron-left"></i></button>';
           carruselHTML += '<button class="carrusel-btn next" onclick="slideNext()"><i class="fas fa-chevron-right"></i></button>';
           carruselHTML += '<div class="carrusel-indicators" id="indicadores">';
-          fotosCarrusel.forEach(function(u, i) {
-            carruselHTML += '<span class="indicator ' + (i === 0 ? 'active' : '') + '" onclick="irSlide(' + i + ')"></span>';
-          });
+          fotosCarrusel.forEach(function(u, i) { carruselHTML += '<span class="indicator ' + (i === 0 ? 'active' : '') + '" onclick="irSlide(' + i + ')"></span>'; });
           carruselHTML += '</div>';
         }
         carruselHTML += '</div>';
@@ -183,22 +203,16 @@ if (!slug) {
       if (t.direccion) html += '<div class="dato"><i class="fas fa-location-dot"></i> ' + t.direccion + '</div>';
       html += '<div class="visitas-box"><i class="fas fa-eye"></i> <span id="contadorVisitas">0</span> visitas</div>';
       html += '</div>';
-
       html += '<div class="acciones">';
-      if (t.telefono) html += '<a href="https://wa.me/57' + telLimpio + '?text=Hola%2C%20vi%20tu%20tarjeta%20en%20la%20Gu%C3%ADa%20Digital" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+      if (t.telefono) html += '<a href="https://wa.me/57' + telLimpio + '?text=Hola" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
       if (t.telefono) html += '<a href="tel:' + t.telefono + '" class="btn-call"><i class="fas fa-phone"></i> Llamar</a>';
       html += '<button class="btn-share" onclick="compartir()"><i class="fas fa-share-alt"></i> Compartir</button>';
-      if (codigoRef) html += '<button class="btn-invitar" onclick="invitar()"><i class="fas fa-gift"></i> 🎁 Invitar y ganar por COMPARTIR</button>';
-      html += '<button class="btn-oficina" onclick="abrirInfoOficina()"><i class="fas fa-money-bag"></i> 💰 Mi Oficina Digital</button>';
+      if (codigoDueno) html += '<button class="btn-invitar" onclick="invitar()"><i class="fas fa-gift"></i> 🎁 Invitar y ganar</button>';
+      html += '<button class="btn-oficina" onclick="abrirOficina()"><i class="fas fa-money-bag"></i> 💰 Mi Oficina Digital</button>';
       html += '</div>';
-
-      html += '<div class="qr-box" id="qr">';
-      html += '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(window.location.href) + '" alt="QR">';
-      html += '<p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p>';
-      html += '</div>';
+      html += '<div class="qr-box" id="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(window.location.href) + '" alt="QR"><p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p></div>';
       html += '<div class="footer">© 2026 Guía Digital Cúcuta · Todos somos <i class="fas fa-heart"></i></div>';
       html += '</div>';
-
       cont.innerHTML = html;
 
       if (fotosCarrusel.length > 1) {
@@ -206,16 +220,10 @@ if (!slug) {
         window.currentSlide = 0;
         setInterval(function() { slideNext(); }, 5000);
       }
-
-      window.codigoTarjeta = codigoRef;
       window.nombreTarjeta = t.nombre;
-      window.slugTarjeta = slug;
-
       incrementarVisita();
     })
-    .catch(function(err) {
-      cont.innerHTML = '<div class="error"><h2>Error cargando tarjeta</h2><p>' + err.message + '</p></div>';
-    });
+    .catch(function(err) { cont.innerHTML = '<div class="error"><h2>Error</h2><p>' + err.message + '</p></div>'; });
 }
 
 function incrementarVisita() {
@@ -226,37 +234,112 @@ function incrementarVisita() {
         var el = document.getElementById('contadorVisitas');
         if (el) el.textContent = data.visitas;
       }
-    })
-    .catch(function(err) { console.log('Error contador:', err); });
+    });
 }
 
 function compartir() {
   var nombre = window.nombreTarjeta || '';
-  var texto = 'Mira mi tarjeta en la Guía Digital Cúcuta: ' + nombre;
-  if (navigator.share) {
-    navigator.share({ title: 'Mi tarjeta - Guía Digital', text: texto, url: window.location.href });
-  } else {
-    navigator.clipboard.writeText(texto + '\n' + window.location.href).then(function() { alert('📋 Enlace copiado'); });
-  }
+  var texto = 'Mira mi tarjeta: ' + nombre;
+  if (navigator.share) { navigator.share({ title: 'Mi tarjeta', text: texto, url: window.location.href }); }
+  else { navigator.clipboard.writeText(texto + '\n' + window.location.href).then(function() { alert('📋 Copiado'); }); }
 }
 
 function invitar() {
-  var codigo = window.codigoTarjeta || '';
-  var url = 'https://cucuta.guia-digital.com/registro?ref=' + codigo;
-  var texto = '🎁 ¡Hola! Te regalo tu tarjeta digital GRATIS en la Guía Digital de Cúcuta.\n\nRegístrate aquí: ' + url + '\n\nEs gratis y te da presencia digital. ¡Aprovecha!';
-  if (navigator.share) {
-    navigator.share({ title: 'Te regalo tu tarjeta digital', text: texto, url: url });
+  var url = 'https://cucuta.guia-digital.com/registro?ref=' + codigoDueno;
+  var texto = '🎁 Te regalo tu tarjeta digital GRATIS en la Guía Digital de Cúcuta.\n\nRegístrate aquí: ' + url;
+  if (navigator.share) { navigator.share({ title: 'Te regalo tu tarjeta', text: texto, url: url }); }
+  else { window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank'); }
+}
+
+function abrirOficina() {
+  menuPanel.classList.remove('open');
+  menuOverlay.classList.remove('active');
+  verificarOficina();
+}
+
+async function verificarOficina() {
+  try {
+    var res = await fetch(API_URL + '?accion=leer-oficina&codigo=' + encodeURIComponent(codigoDueno));
+    var data = await res.json();
+    var oficina = data.data;
+    document.getElementById('mensajeError').style.display = 'none';
+    document.getElementById('inputClave').value = '';
+    if (!oficina || !oficina.clave) {
+      document.getElementById('tituloModal').textContent = '🔐 Crear mi Clave';
+      document.getElementById('textoModal').textContent = 'Elige una clave secreta. Solo tú la sabrás.';
+      document.getElementById('btnClave').textContent = 'Guardar Clave';
+      document.getElementById('modalInfo').dataset.modo = 'crear';
+    } else {
+      document.getElementById('tituloModal').textContent = '🔐 Mi Oficina';
+      document.getElementById('textoModal').textContent = 'Escribe tu clave para entrar.';
+      document.getElementById('btnClave').textContent = 'Entrar';
+      document.getElementById('modalInfo').dataset.modo = 'entrar';
+    }
+    document.getElementById('modalInfo').classList.add('active');
+  } catch (err) { alert('Error conectando'); }
+}
+
+async function procesarClave() {
+  var clave = document.getElementById('inputClave').value.trim();
+  var errEl = document.getElementById('mensajeError');
+  errEl.style.display = 'none';
+  if (clave.length < 4) { errEl.textContent = 'Mínimo 4 caracteres'; errEl.style.display = 'block'; return; }
+  var modo = document.getElementById('modalInfo').dataset.modo;
+  if (modo === 'crear') {
+    await fetch(API_URL + '?accion=guardar-oficina&codigo=' + encodeURIComponent(codigoDueno) + '&clave=' + encodeURIComponent(clave) + '&nombre=' + encodeURIComponent(window.nombreTarjeta || ''));
+    cerrarInfo();
+    document.getElementById('oficinaOverlay').classList.add('active');
+    cargarOficina();
   } else {
-    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+    var res = await fetch(API_URL + '?accion=verificar-clave&codigo=' + encodeURIComponent(codigoDueno) + '&clave=' + encodeURIComponent(clave));
+    var data = await res.json();
+    if (!data.valida) { errEl.textContent = '🔒 Clave incorrecta'; errEl.style.display = 'block'; return; }
+    cerrarInfo();
+    document.getElementById('oficinaOverlay').classList.add('active');
+    cargarOficina();
   }
 }
 
-function abrirInfoOficina() {
-  document.getElementById('modalInfo').classList.add('active');
-  menuPanel.classList.remove('open');
-  menuOverlay.classList.remove('active');
-}
 function cerrarInfo() { document.getElementById('modalInfo').classList.remove('active'); }
+function cerrarOficina() { document.getElementById('oficinaOverlay').classList.remove('active'); }
+
+async function cargarOficina() {
+  try {
+    var res = await fetch(API_URL + '?accion=buscar-tarjeta&slug=' + encodeURIComponent(slug));
+    var data = await res.json();
+    document.getElementById('statVisitas').textContent = (data.data && data.data.visitas) || 0;
+  } catch (e) { document.getElementById('statVisitas').textContent = '0'; }
+
+  try {
+    var res1 = await fetch(API_URL + '?accion=listar-tarjetas&ref=' + encodeURIComponent(codigoDueno));
+    var data1 = await res1.json();
+    var nivel1 = data1.data || [];
+    document.getElementById('statNivel1').textContent = nivel1.length;
+    document.getElementById('tablaNivel1').innerHTML = nivel1.length === 0 ? '<tr><td colspan="3" class="vacio">Sin referidos</td></tr>' : nivel1.map(function(d) { return '<tr><td>' + (d.nombre || '—') + '</td><td>' + (d.plan || '—') + '</td><td class="' + (d.precio && Number(d.precio) > 0 ? 'pagado' : 'pendiente') + '">' + (d.precio && Number(d.precio) > 0 ? '✅ Pagado' : '⏳ Pendiente') + '</td></tr>'; }).join('');
+
+    var nivel2 = [];
+    for (var i = 0; i < nivel1.length; i++) {
+      var cod1 = nivel1[i].codigo;
+      if (!cod1) continue;
+      var r2 = await fetch(API_URL + '?accion=listar-tarjetas&ref=' + encodeURIComponent(cod1));
+      var d2 = await r2.json();
+      if (d2.data) nivel2 = nivel2.concat(d2.data);
+    }
+    document.getElementById('statNivel2').textContent = nivel2.length;
+    document.getElementById('tablaNivel2').innerHTML = nivel2.length === 0 ? '<tr><td colspan="3" class="vacio">Sin referidos</td></tr>' : nivel2.map(function(d) { return '<tr><td>' + (d.nombre || '—') + '</td><td>' + (d.plan || '—') + '</td><td class="' + (d.precio && Number(d.precio) > 0 ? 'pagado' : 'pendiente') + '">' + (d.precio && Number(d.precio) > 0 ? '✅ Pagado' : '⏳ Pendiente') + '</td></tr>'; }).join('');
+
+    var nivel3 = [];
+    for (var j = 0; j < nivel2.length; j++) {
+      var cod2 = nivel2[j].codigo;
+      if (!cod2) continue;
+      var r3 = await fetch(API_URL + '?accion=listar-tarjetas&ref=' + encodeURIComponent(cod2));
+      var d3 = await r3.json();
+      if (d3.data) nivel3 = nivel3.concat(d3.data);
+    }
+    document.getElementById('statNivel3').textContent = nivel3.length;
+    document.getElementById('tablaNivel3').innerHTML = nivel3.length === 0 ? '<tr><td colspan="3" class="vacio">Sin referidos</td></tr>' : nivel3.map(function(d) { return '<tr><td>' + (d.nombre || '—') + '</td><td>' + (d.plan || '—') + '</td><td class="' + (d.precio && Number(d.precio) > 0 ? 'pagado' : 'pendiente') + '">' + (d.precio && Number(d.precio) > 0 ? '✅ Pagado' : '⏳ Pendiente') + '</td></tr>'; }).join('');
+  } catch (e) { console.log(e); }
+}
 
 function irSlide(i) { window.currentSlide = i; actualizarCarrusel(); }
 function slideNext() { if (!window.totalSlides) return; window.currentSlide = (window.currentSlide + 1) % window.totalSlides; actualizarCarrusel(); }

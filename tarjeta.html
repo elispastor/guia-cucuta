@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarjeta - Guía Digital Cúcuta</title>
+<title>Tarjeta - Guía Digital</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5949598980404445" crossorigin="anonymous"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
   body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px 16px; padding-top: 80px; }
-  .header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(11, 28, 58, 0.95); backdrop-filter: blur(10px); border-bottom: 3px solid #fbbf24; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  .header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(11, 28, 58, 0.95); backdrop-filter: blur(10px); border-bottom: 3px solid #fbbf24; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  .header .marca-wrap { display: flex; align-items: center; gap: 8px; }
+  .header .marca-wrap img { height: 36px; width: auto; }
   .header .marca { font-size: 14px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
   .menu-btn { background: none; border: none; font-size: 28px; color: #fbbf24; cursor: pointer; padding: 4px 8px; }
   .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1100; }
@@ -22,9 +24,9 @@
   .menu-panel ul li:hover { color: #fbbf24; padding-left: 8px; }
   .menu-panel ul li i { width: 24px; color: #fbbf24; }
   .tarjeta { max-width: 420px; width: 100%; background: #fff; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); }
-  .cabecera { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 20px; text-align: center; color: #fff; }
+  .cabecera { background: linear-gradient(135deg, #0f2b44, #1a4b6d); padding: 16px; text-align: center; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .cabecera .pulpo-mini { height: 36px; width: auto; }
   .cabecera .logo { font-size: 13px; letter-spacing: 1.5px; color: #fbbf24; font-weight: 700; }
-  .cabecera .ciudad { font-size: 11px; color: #a0c4e8; letter-spacing: 1px; margin-top: 4px; }
   .carrusel { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #000; }
   .carrusel-inner { display: flex; transition: transform 0.5s ease; height: 100%; }
   .carrusel-slide { min-width: 100%; flex-shrink: 0; }
@@ -91,7 +93,10 @@
 <body>
 
 <header class="header">
-  <span class="marca">GUÍA DIGITAL CÚCUTA</span>
+  <div class="marca-wrap">
+    <img src="pulpito.png" alt="Pulpo Cordial">
+    <span class="marca">GUÍA DIGITAL</span>
+  </div>
   <button class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
 </header>
 
@@ -191,7 +196,7 @@ if (!slug) {
       }
 
       var html = '<div class="tarjeta" id="inicio">';
-      html += '<div class="cabecera"><div class="logo">GUÍA DIGITAL CÚCUTA</div><div class="ciudad">' + ((t.ciudad || 'CÚCUTA').toUpperCase()) + '</div></div>';
+      html += '<div class="cabecera"><img src="pulpito.png" alt="Pulpo" class="pulpo-mini"><div class="logo">GUÍA DIGITAL</div></div>';
       html += carruselHTML;
       html += '<div class="cuerpo">';
       html += '<div class="avatar">' + avatarHTML + '</div>';
@@ -211,7 +216,7 @@ if (!slug) {
       html += '<button class="btn-oficina" onclick="abrirOficina()"><i class="fas fa-money-bag"></i> 💰 Mi Oficina Digital</button>';
       html += '</div>';
       html += '<div class="qr-box" id="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(window.location.href) + '" alt="QR"><p><i class="fas fa-qrcode"></i> Escanea para ver mi tarjeta</p></div>';
-      html += '<div class="footer">© 2026 Guía Digital Cúcuta · Todos somos <i class="fas fa-heart"></i></div>';
+      html += '<div class="footer">© 2026 Guía Digital · Todos somos <i class="fas fa-heart"></i></div>';
       html += '</div>';
       cont.innerHTML = html;
 
@@ -246,7 +251,7 @@ function compartir() {
 
 function invitar() {
   var url = 'https://cucuta.guia-digital.com/registro?ref=' + codigoDueno;
-  var texto = '🎁 Te regalo tu tarjeta digital GRATIS en la Guía Digital de Cúcuta.\n\nRegístrate aquí: ' + url;
+  var texto = '🎁 Te regalo tu tarjeta digital GRATIS en la Guía Digital.\n\nRegístrate aquí: ' + url;
   if (navigator.share) { navigator.share({ title: 'Te regalo tu tarjeta', text: texto, url: url }); }
   else { window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank'); }
 }

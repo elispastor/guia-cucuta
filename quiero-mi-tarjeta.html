@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiero mi Tarjeta Digital Gratis · Guía Digital Cúcuta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
+  body { background: linear-gradient(145deg, #0a1a2e, #1a2f44); min-height: 100vh; color: #fff; }
+
+  /* HEADER */
+  .header { background: rgba(11, 28, 58, 0.95); backdrop-filter: blur(10px); border-bottom: 3px solid #fbbf24; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  .header .marca-wrap { display: flex; align-items: center; gap: 8px; }
+  .header .marca-wrap img { height: 36px; width: auto; }
+  .header .marca { font-size: 14px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* PORTADA */
+  .portada { width: 100%; border-radius: 24px; overflow: hidden; border: 3px solid #fbbf24; box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6); margin-bottom: 28px; }
+  .portada img { width: 100%; display: block; }
+
+  /* TÍTULOS */
+  .titulo-1 { font-size: 2.2rem; font-weight: 900; text-align: center; line-height: 1.1; color: #fff; text-shadow: 0 0 25px rgba(251,191,36,0.6); margin-bottom: 10px; }
+  .titulo-1 span { color: #fbbf24; display: block; font-size: 2.6rem; }
+  .subtitulo-1 { font-size: 1rem; text-align: center; color: #fbbf24; letter-spacing: 2px; font-weight: 700; margin-bottom: 24px; }
+
+  /* BLOQUE PERSUASIVO */
+  .bloque { background: linear-gradient(135deg, #112b4f, #0b1c3a); border: 2px solid rgba(251,191,36,0.4); border-radius: 24px; padding: 24px 20px; margin-bottom: 24px; }
+  .bloque h2 { font-size: 1.5rem; color: #fbbf24; margin-bottom: 14px; text-align: center; }
+  .bloque p { font-size: 1rem; line-height: 1.6; color: #e5eef8; margin-bottom: 12px; }
+  .bloque p strong { color: #fbbf24; }
+
+  /* BENEFICIOS */
+  .beneficios { background: rgba(255,255,255,0.05); border-radius: 24px; padding: 24px 20px; margin-bottom: 24px; border: 2px solid rgba(251,191,36,0.3); }
+  .beneficios h2 { font-size: 1.4rem; color: #fbbf24; margin-bottom: 16px; text-align: center; }
+  .beneficios ul { list-style: none; }
+  .beneficios ul li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; font-size: 1rem; color: #e5eef8; border-bottom: 1px solid rgba(251,191,36,0.1); }
+  .beneficios ul li:last-child { border-bottom: none; }
+  .beneficios ul li i { color: #22c55e; font-size: 1.2rem; margin-top: 2px; flex-shrink: 0; }
+
+  /* BLOQUE SEGUNDA ETAPA */
+  .segunda-etapa { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0b1c3a; border-radius: 24px; padding: 28px 20px; margin-bottom: 24px; text-align: center; box-shadow: 0 15px 40px rgba(251,191,36,0.4); }
+  .segunda-etapa h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: 14px; letter-spacing: 1px; }
+  .segunda-etapa p { font-size: 1rem; line-height: 1.6; font-weight: 600; margin-bottom: 10px; }
+  .segunda-etapa p strong { color: #0b1c3a; background: rgba(255,255,255,0.4); padding: 2px 8px; border-radius: 8px; }
+
+  /* BOTÓN ACCIÓN */
+  .btn-accion { display: block; width: 100%; padding: 20px; background: linear-gradient(45deg, #fbbf24, #f59e0b); color: #0b1c3a; text-align: center; border-radius: 60px; font-size: 1.2rem; font-weight: 900; text-decoration: none; letter-spacing: 1px; box-shadow: 0 15px 40px rgba(251,191,36,0.5); transition: all 0.3s; margin-bottom: 14px; }
+  .btn-accion:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(251,191,36,0.7); }
+  .btn-accion i { margin-right: 8px; }
+  .nota-btn { font-size: 12px; color: #a0c4e8; text-align: center; margin-bottom: 24px; }
+
+  /* QR */
+  .qr-box { text-align: center; background: rgba(255,255,255,0.05); border-radius: 24px; padding: 24px 20px; border: 2px solid #fbbf24; margin-bottom: 24px; }
+  .qr-box h3 { font-size: 1.1rem; color: #fbbf24; margin-bottom: 14px; }
+  .qr-box img { width: 180px; height: 180px; background: #fff; padding: 10px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+  .qr-box p { font-size: 12px; color: #a0c4e8; margin-top: 10px; }
+
+  /* PULPO */
+  .pulpo-box { text-align: center; margin-bottom: 24px; }
+  .pulpo-box img { width: 140px; height: auto; animation: flotar 3s ease-in-out infinite; }
+  @keyframes flotar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .pulpo-box p { font-size: 1rem; color: #fbbf24; font-weight: 700; margin-top: 10px; }
+
+  /* FRASE FINAL */
+  .frase { text-align: center; font-size: 1.3rem; font-weight: 800; color: #fbbf24; line-height: 1.4; margin: 32px 0 16px; text-shadow: 0 0 20px rgba(251,191,36,0.4); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px; border-top: 2px solid rgba(251,191,36,0.3); font-size: 12px; color: #6b7f93; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .footer img { height: 28px; width: auto; }
+  .footer i { color: #fbbf24; }
+
+  @media (min-width: 700px) {
+    .titulo-1 { font-size: 3rem; }
+    .titulo-1 span { font-size: 3.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="marca-wrap">
+    <img src="pulpito.png" alt="Pulpo">
+    <span class="marca">GUÍA DIGITAL CÚCUTA</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="portada">
+    <img src="portada-quiero-mi-tarjeta.jpg" alt="Quiero mi tarjeta digital gratis">
+  </div>
+
+  <h1 class="titulo-1">RECLAMA TU <span>TARJETA DIGITAL</span> GRATIS</h1>
+  <div class="subtitulo-1">LA GUÍA DEL PULPO CORDIAL</div>
+
+  <div class="bloque">
+    <h2>🐙 ¿Estás cansado de que las grandes plataformas se queden con todo?</h2>
+    <p>Tu negocio merece ser visto. Tu esfuerzo merece ser recompensado.</p>
+    <p>Aquí, <strong>TÚ eres el dueño</strong>. Aquí, <strong>TODOS GANAN</strong>.</p>
+    <p>Hoy tu presencia digital depende de redes sociales que pueden bloquearte, eliminarte o cobrarte por aparecer. <strong>No tienes derechos sobre tu propia vitrina.</strong></p>
+    <p>Mientras los "tiburones" que pagan publicidad aparecen, los pequeños desaparecen en el mar inmenso.</p>
+    <p><strong>Es hora de ser como el pulpo:</strong> inteligente, adaptable, y con varios brazos para sostenerse en cualquier tormenta.</p>
+  </div>
+
+  <div class="beneficios">
+    <h2>✨ ¿Qué ganas con tu tarjeta?</h2>
+    <ul>
+      <li><i class="fas fa-check-circle"></i> Tarjeta digital con QR</li>
+      <li><i class="fas fa-check-circle"></i> Derechos reservados por 1 año</li>
+      <li><i class="fas fa-check-circle"></i> Botón de WhatsApp, llamada y compartir</li>
+      <li><i class="fas fa-check-circle"></i> Ganas del 20% al 50% por referidos</li>
+      <li><i class="fas fa-check-circle"></i> Participas en la Ruleta de la Causa Común</li>
+      <li><i class="fas fa-check-circle"></i> Ayudas a construir comedores sociales</li>
+      <li><i class="fas fa-check-circle"></i> Todos somos socios, todos ganamos</li>
+    </ul>
+  </div>
+
+  <div class="segunda-etapa">
+    <h2>🚀 ESTA ES LA SEGUNDA ETAPA DE LA ERA DIGITAL</h2>
+    <p><strong>Antes:</strong> tú eras el cliente, las grandes corporaciones se quedaban con todo.</p>
+    <p><strong>Ahora:</strong> tú eres AFILIADO, y la publicidad se reparte entre TODOS.</p>
+  </div>
+
+  <div class="pulpo-box">
+    <img src="pulpito.png" alt="Pulpo Cordial">
+    <p>🐙 ¡El Pulpo Cordial te espera!</p>
+  </div>
+
+  <a href="https://cucuta.guia-digital.com/registro" class="btn-accion">
+    <i class="fas fa-gift"></i> QUIERO MI TARJETA GRATIS
+  </a>
+  <p class="nota-btn">Sin pagos mensuales · Solo pagas tu ubicación en la guía</p>
+
+  <div class="qr-box">
+    <h3><i class="fas fa-qrcode"></i> Escanea y únete</h3>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://cucuta.guia-digital.com/registro" alt="QR">
+    <p>Comparte este QR con quien quieras</p>
+  </div>
+
+  <div class="frase">
+    "Aquí todos ganan.<br>Tu tarjeta, tu voz, tu comunidad."
+  </div>
+
+</div>
+
+<footer class="footer">
+  <img src="pulpito.png" alt="Pulpo">
+  <span>© 2026 Guía Digital Cúcuta · Todos somos <i class="fas fa-heart"></i> · Derechos Reservados</span>
+  <span>EDI · Ecosistema Digital Inteligente</span>
+</footer>
+
+</body>
+</html>

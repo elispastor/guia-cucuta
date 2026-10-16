@@ -380,7 +380,7 @@ async function eliminar(id) {
 function verTarjeta(id) {
   const tarjeta = todasLasTarjetas.find(t => t.id === id);
   if (!tarjeta) return;
-  const url = 'tarjeta.html?slug=' + encodeURIComponent(tarjeta.slug || '');
+  const url = 'tarjeta.html?slug=' + encodeURIComponent(tarjeta.slug || 'prueba');
   window.open(url, '_blank');
 }
 

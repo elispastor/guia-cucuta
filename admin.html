@@ -387,8 +387,7 @@ async function eliminar(id) {
 function verTarjeta(id) {
   const tarjeta = todasLasTarjetas.find(t => t.id === id);
   if (!tarjeta) return;
-  const url = 'tarjeta.html?n=' + encodeURIComponent(tarjeta.nombre || '')
-    + '&t=' + encodeURIComponent(tarjeta.telefono || '')
+const url = 'tarjeta.html?slug=' + encodeURIComponent(tarjeta.slug || '');    + '&t=' + encodeURIComponent(tarjeta.telefono || '')
     + '&g=' + encodeURIComponent(tarjeta.negocio || '')
     + '&c=' + encodeURIComponent(tarjeta.ciudad || 'Cúcuta')
     + '&r=' + encodeURIComponent(tarjeta.ruta || '')

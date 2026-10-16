@@ -264,8 +264,7 @@ async function cargarTarjetas() {
   try {
     const respuesta = await fetch(API + '?accion=listar-tarjetas');
     const data = await respuesta.json();
-    const nuevas = data.tarjetas || [];
-    
+const nuevas = data.data || [];    
     // Detectar si hay nuevas tarjetas
     if (!primeraCarga && nuevas.length > cantidadAnterior) {
       const diferencia = nuevas.length - cantidadAnterior;

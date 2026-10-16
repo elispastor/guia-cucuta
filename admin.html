@@ -37,7 +37,6 @@
   .btn-refresh.girando i { animation: girar 1s linear infinite; }
   @keyframes girar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-  /* ESTADÍSTICAS */
   .stats { 
     display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
     gap: 18px; margin-bottom: 30px; 
@@ -65,7 +64,6 @@
   }
   .stat .lbl { color: #94a3b8; font-size: 0.85rem; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* FILTROS */
   .filtros { 
     display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; 
     padding: 15px; background: rgba(17,43,79,0.5); border-radius: 18px;
@@ -85,7 +83,6 @@
     box-shadow: 0 4px 15px rgba(251,191,36,0.4);
   }
 
-  /* LISTA */
   .lista { display: flex; flex-direction: column; gap: 15px; }
   .item { 
     background: linear-gradient(145deg, #1a2f4d, #112b4f);
@@ -152,7 +149,6 @@
   }
   .loading i { font-size: 2rem; margin-bottom: 15px; display: block; animation: girar 1s linear infinite; }
 
-  /* NOTIFICACIÓN TOAST */
   .toast {
     position: fixed; top: 20px; right: 20px;
     background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -239,7 +235,6 @@ function mostrarToast(mensaje, tipo = 'success') {
 
 function reproducirSonido() {
   try {
-    // Genera un "ping" con Web Audio API (sin archivo externo)
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -251,7 +246,7 @@ function reproducirSonido() {
     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + 0.3);
-  } catch (e) { /* Ignorar si el navegador lo bloquea */ }
+  } catch (e) { }
 }
 
 function pedirPermisoNotificaciones() {
@@ -264,14 +259,13 @@ async function cargarTarjetas() {
   try {
     const respuesta = await fetch(API + '?accion=listar-tarjetas');
     const data = await respuesta.json();
-const nuevas = data.data || [];    
-    // Detectar si hay nuevas tarjetas
+    const nuevas = data.data || [];
+    
     if (!primeraCarga && nuevas.length > cantidadAnterior) {
       const diferencia = nuevas.length - cantidadAnterior;
       reproducirSonido();
       mostrarToast(`🔔 ¡${diferencia} tarjeta${diferencia > 1 ? 's' : ''} nueva${diferencia > 1 ? 's' : ''}!`);
       
-      // Notificación del navegador
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('🛡️ Nueva tarjeta en Cúcuta', {
           body: `Se ${diferencia > 1 ? 'generaron' : 'generó'} ${diferencia} tarjeta${diferencia > 1 ? 's' : ''} nueva${diferencia > 1 ? 's' : ''}`,
@@ -284,7 +278,6 @@ const nuevas = data.data || [];
     primeraCarga = false;
     todasLasTarjetas = nuevas;
     
-    // Actualizar título de la pestaña
     const pendientes = todasLasTarjetas.filter(t => t.estado === 'pendiente').length;
     document.title = pendientes > 0 
       ? `(${pendientes}) 🛡️ Panel - Cúcuta` 
@@ -373,7 +366,7 @@ async function eliminar(id) {
     const data = await resp.json();
     if (data.ok) {
       todasLasTarjetas = todasLasTarjetas.filter(t => t.id !== id);
-      cantidadAnterior = todasLasTarjetas.length; // Evitar que cuente como "nueva"
+      cantidadAnterior = todasLasTarjetas.length;
       renderizar(filtroActual);
       mostrarToast('🗑️ Tarjeta eliminada', 'warning');
     } else {
@@ -400,11 +393,9 @@ function recargar() {
   });
 }
 
-// Cargar al abrir
 pedirPermisoNotificaciones();
 cargarTarjetas();
 
-// Auto-actualizar cada 30 segundos
 setInterval(cargarTarjetas, 30000);
 </script>
 

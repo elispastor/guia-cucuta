@@ -161,9 +161,9 @@ function renderizar(filtro = 'todos') {
         <div class="acciones">
           <button class="btn-ver" onclick="verTarjeta('${t.slug}')">👁️ Ver</button>
           <a class="btn-wa" href="https://wa.me/58${telLimpio}" target="_blank">💬 WhatsApp</a>
-          ${estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.slug + '\', \'pagado\')">✅ Pagar</button>' : ''}
-          ${estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.slug + '\', \'pendiente\')">⏳ Pendiente</button>' : ''}
-          <button class="btn-eliminar" onclick="eliminar('${t.slug}')">🗑️ Eliminar</button>
+          ${estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.id + '\', \'pagado\')">✅ Pagar</button>' : ''}
+          ${estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.id + '\', \'pendiente\')">⏳ Pendiente</button>' : ''}
+          <button class="btn-eliminar" onclick="eliminar('${t.id}')">🗑️ Eliminar</button>
         </div>
       </div>
     `;
@@ -176,12 +176,12 @@ function filtrar(filtro, btn) {
   renderizar(filtro);
 }
 
-async function cambiarEstado(slug, nuevoEstado) {
+async function cambiarEstado(id, nuevoEstado) {
   try {
-    const resp = await fetch(API + '?accion=actualizar-tarjeta&slug=' + encodeURIComponent(slug) + '&estado=' + encodeURIComponent(nuevoEstado));
+    const resp = await fetch(API + '?accion=actualizar-tarjeta&id=' + encodeURIComponent(id) + '&estado=' + encodeURIComponent(nuevoEstado));
     const data = await resp.json();
     if (data.ok) {
-      const tarjeta = todasLasTarjetas.find(t => t.slug === slug);
+      const tarjeta = todasLasTarjetas.find(t => t.id == id);
       if (tarjeta) tarjeta.estado = nuevoEstado;
       renderizar(filtroActual);
       mostrarToast(nuevoEstado === 'pagado' ? '✅ Tarjeta marcada como pagada' : '⏳ Tarjeta marcada como pendiente');
@@ -193,13 +193,13 @@ async function cambiarEstado(slug, nuevoEstado) {
   }
 }
 
-async function eliminar(slug) {
+async function eliminar(id) {
   if (!confirm('¿Eliminar esta tarjeta permanentemente?')) return;
   try {
-    const resp = await fetch(API + '?accion=eliminar-tarjeta&slug=' + encodeURIComponent(slug));
+    const resp = await fetch(API + '?accion=eliminar-tarjeta&id=' + encodeURIComponent(id));
     const data = await resp.json();
     if (data.ok) {
-      todasLasTarjetas = todasLasTarjetas.filter(t => t.slug !== slug);
+      todasLasTarjetas = todasLasTarjetas.filter(t => t.id != id);
       renderizar(filtroActual);
       mostrarToast('🗑️ Tarjeta eliminada correctamente', 'warning');
     } else {

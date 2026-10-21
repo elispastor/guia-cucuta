@@ -119,7 +119,16 @@ async function cargarTarjetas() {
   try {
     const respuesta = await fetch(API + '?accion=listar-tarjetas');
     const data = await respuesta.json();
-    todasLasTarjetas = data.data || [];
+    
+    // AQUÍ ESTÁ LA MAGIA: Filtramos para que no muestre las tarjetas de prueba
+    const todas = data.data || [];
+    todasLasTarjetas = todas.filter(t => {
+      const nombre = (t.nombre || '').toLowerCase();
+      const negocio = (t.negocio || '').toLowerCase();
+      // Si el nombre o negocio tiene palabras de prueba, lo ocultamos
+      return !nombre.includes('prueba') && !negocio.includes('prueba') && !nombre.includes('test') && !negocio.includes('test') && !nombre.includes('elis suarez');
+    });
+
     renderizar(filtroActual);
   } catch (err) {
     document.getElementById('lista').innerHTML = '<div class="vacio"><p>Error al cargar: ' + err.message + '</p></div>';
@@ -136,7 +145,7 @@ function renderizar(filtro = 'todos') {
   document.getElementById('statPendiente').textContent = todasLasTarjetas.filter(t => (t.estado || 'pendiente') === 'pendiente').length;
   
   if (filtradas.length === 0) {
-    contenedor.innerHTML = '<div class="vacio"><i class="fas fa-inbox"></i><p>No hay tarjetas en esta categoría.</p></div>';
+    contenedor.innerHTML = '<div class="vacio"><i class="fas fa-inbox"></i><p>No hay tarjetas para mostrar.</p></div>';
     return;
   }
   

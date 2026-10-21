@@ -2,239 +2,437 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛡️ Panel de Control - Guía Digital</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Mayorista Tocuyito | Guía Digital</title>
+<meta name="description" content="Directorio de negocios y servicios de Mayorista Tocuyito. Venta de plátanos y víveres al mayor.">
+<script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-  body { background: linear-gradient(135deg, #0a1526 0%, #0b1c3a 50%, #0f2942 100%); color: white; min-height: 100vh; padding: 20px; }
-  .container { max-width: 1200px; margin: 0 auto; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: #0b1c3a; font-family: 'Segoe UI', Arial, sans-serif; color: white; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  .navbar {
+    position: sticky; top: 0; z-index: 9999;
+    background: rgba(17, 43, 79, 0.95);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 4px solid #fbbf24;
+    padding: 15px 25px; margin-bottom: 30px;
+    border-radius: 0 0 20px 20px;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .navbar .brand { display: flex; flex-direction: column; }
+  .navbar .brand .title { color: white; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px; }
+  .navbar .brand .city { color: #fbbf24; font-size: 0.7rem; font-weight: 600; margin-top: -2px; }
+  .navbar .menu-desktop { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; align-items: center; flex-wrap: wrap; }
+  .navbar .menu-desktop a, .navbar .menu-desktop button {
+    color: white; text-decoration: none; background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 0.85rem; font-weight: 600; transition: color 0.2s;
+  }
+  .navbar .menu-desktop a:hover, .navbar .menu-desktop button:hover { color: #fbbf24; }
+  .navbar .btn-tarjeta-nav {
+    background: #fbbf24; color: #0b1c3a !important; padding: 8px 16px; border-radius: 30px;
+    font-weight: bold !important;
+  }
+  .navbar .menu-mobile-btn { display: none; background: none; border: none; color: #fbbf24; font-size: 1.5rem; cursor: pointer; }
+  #mobile-menu {
+    display: none; background: rgba(17, 43, 79, 0.98); backdrop-filter: blur(10px);
+    padding: 15px; margin-bottom: 20px; border-radius: 15px; border-left: 4px solid #fbbf24;
+  }
+  #mobile-menu.open { display: flex; flex-direction: column; gap: 12px; }
+  #mobile-menu a, #mobile-menu button {
+    color: white; text-decoration: none; padding: 10px; border-radius: 8px;
+    background: none; border: none; cursor: pointer; text-align: left;
+    font-family: inherit; font-size: 1rem; font-weight: 600;
+  }
+  #mobile-menu a:hover, #mobile-menu button:hover { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  @media (max-width: 900px) {
+    .navbar .menu-desktop { display: none; }
+    .navbar .menu-mobile-btn { display: block; }
+    .container { padding: 12px; }
+    .card { padding: 18px; }
+    .taller-card { padding: 15px; }
+  }
+  @media (max-width: 480px) {
+    .navbar .brand .title { font-size: 1rem; }
+    .navbar { padding: 10px 15px; }
+  }
+
+  .card { background: #112b4f; padding: 25px; border-radius: 20px; border-left: 5px solid #fbbf24; margin-bottom: 20px; }
+  .taller-card { background: #112b4f; border-radius: 20px; padding: 20px; margin-bottom: 20px; transition: 0.3s; border: 1px solid #1e3a5f; }
+  .taller-card:hover { transform: translateY(-5px); background: #1e3a5f; border-color: #fbbf24; }
   
-  .header-panel { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(251,191,36,0.2); }
-  .header-panel h1 { color: #fbbf24; font-size: 2rem; text-shadow: 0 2px 10px rgba(251,191,36,0.3); display: flex; align-items: center; gap: 12px; }
-  .header-panel .sub { color: #94a3b8; font-size: 0.9rem; margin-top: 5px; }
-  
-  .btn-refresh { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(59,130,246,0.4); transition: transform 0.2s; }
-  .btn-refresh:hover { transform: translateY(-2px); }
-  .btn-refresh.girando i { animation: girar 1s linear infinite; }
-  @keyframes girar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .btn { padding: 10px 20px; border-radius: 30px; font-weight: bold; display: inline-block; font-size: 0.9rem; transition: 0.2s; text-align: center; text-decoration: none; cursor: pointer; border: none; }
+  .btn-wsp { background: #25d366; color: white; }
+  .btn-sitio { background: #3b82f6; color: white; }
+  .btn-oro { background: #fbbf24; color: #0b1c3a; }
+  .btn:hover { transform: scale(1.05); }
+  .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; text-decoration: none; color: white; border: 2px solid #fbbf24; z-index: 1000; }
 
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 30px; }
-  .stat { background: linear-gradient(145deg, #1a2f4d, #112b4f); padding: 22px; border-radius: 18px; border: 1px solid rgba(251,191,36,0.15); box-shadow: 0 8px 24px rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
-  .stat:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(251,191,36,0.15); }
-  .stat::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: linear-gradient(180deg, #fbbf24, #f59e0b); }
-  .stat .icon-stat { font-size: 2rem; margin-bottom: 8px; }
-  .stat .num { font-size: 2.2rem; font-weight: 900; color: #fbbf24; text-shadow: 0 2px 8px rgba(251,191,36,0.4); }
-  .stat .lbl { color: #94a3b8; font-size: 0.85rem; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .plan-card {
+    background: rgba(0,0,0,0.35); padding: 20px; border-radius: 20px;
+    text-align: center; transition: 0.3s; position: relative;
+  }
+  .plan-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(251,191,36,0.3); }
+  .plan-basico { border: 2px solid rgba(251,191,36,0.3); }
+  .plan-pro { border: 2px solid rgba(251,191,36,0.6); }
+  .plan-avanzado { border: 2px solid #fbbf24; }
+  .plan-elite { border: 3px solid #fbbf24; background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(0,0,0,0.5)); }
+  .plan-elite::before {
+    content: "⭐ MÁS POPULAR";
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: #fbbf24; color: #0b1c3a; padding: 4px 12px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: bold;
+  }
 
-  .filtros { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; padding: 15px; background: rgba(17,43,79,0.5); border-radius: 18px; backdrop-filter: blur(10px); }
-  .filtros button { background: rgba(17,43,79,0.9); color: #cbd5e1; border: 1px solid rgba(251,191,36,0.2); padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
-  .filtros button:hover { border-color: #fbbf24; color: #fbbf24; }
-  .filtros button.activo { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0b1c3a; border-color: #fbbf24; box-shadow: 0 4px 15px rgba(251,191,36,0.4); }
+  .premio-item { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; text-align: center; border: 2px solid rgba(251,191,36,0.4); }
 
-  .lista { display: flex; flex-direction: column; gap: 15px; }
-  .item { background: linear-gradient(145deg, #1a2f4d, #112b4f); padding: 22px; border-radius: 18px; border: 1px solid rgba(251,191,36,0.1); box-shadow: 0 6px 20px rgba(0,0,0,0.25); transition: all 0.3s; position: relative; }
-  .item:hover { transform: translateY(-3px); border-color: rgba(251,191,36,0.4); box-shadow: 0 10px 30px rgba(251,191,36,0.1); }
-  .item.pagado { border-left: 5px solid #22c55e; }
-  .item.pendiente { border-left: 5px solid #fbbf24; }
+  .comedor-card {
+    background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(11,28,58,0.9));
+    border: 2px solid #fbbf24; border-radius: 20px; padding: 30px; text-align: center;
+  }
+  @keyframes flotar {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+  }
+  .animate-float { animation: flotar 3s ease-in-out infinite; }
 
-  .item .fila1 { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-  .item .nombre { font-size: 1.25rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 10px; }
-  .badge-estado { padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-  .badge-pagado { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid #22c55e; }
-  .badge-pendiente { background: rgba(251,191,36,0.2); color: #fbbf24; border: 1px solid #fbbf24; }
-
-  .item .detalle { color: #cbd5e1; font-size: 0.92rem; margin: 6px 0; }
-  .item .detalle strong { color: #e2e8f0; font-weight: 700; }
-  .item .detalle i { color: #fbbf24; width: 20px; margin-right: 6px; }
-
-  .acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(251,191,36,0.1); }
-  .acciones button, .acciones a { padding: 10px 16px; border-radius: 25px; font-size: 0.85rem; font-weight: bold; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: transform 0.2s; }
-  .acciones button:hover, .acciones a:hover { transform: translateY(-2px); }
-  .btn-pagar { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
-  .btn-pendiente { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0b1c3a; }
-  .btn-wa { background: linear-gradient(135deg, #25d366, #128c7e); color: white; }
-  .btn-ver { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-  .btn-eliminar { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-
-  .vacio { text-align: center; padding: 80px 20px; color: #64748b; background: rgba(17,43,79,0.3); border-radius: 18px; }
-  .vacio i { font-size: 4rem; margin-bottom: 20px; color: #334155; }
-  .loading { text-align: center; padding: 60px; color: #fbbf24; font-size: 1.2rem; }
-  .loading i { font-size: 2rem; margin-bottom: 15px; display: block; animation: girar 1s linear infinite; }
-
-  .toast { position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 18px 24px; border-radius: 15px; box-shadow: 0 10px 40px rgba(34,197,94,0.5); z-index: 9999; font-weight: bold; display: flex; align-items: center; gap: 12px; animation: slideIn 0.4s ease; max-width: 350px; }
-  .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 40px rgba(239,68,68,0.5); }
-  .toast.warning { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0b1c3a; }
-  @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
-  .toast.saliendo { animation: slideOut 0.4s ease forwards; }
+  img { max-width: 100%; height: auto; }
+  .portada-img { width: 100%; max-width: 800px; margin: 0 auto; display: block; }
 </style>
 </head>
 <body>
 
+<a href="https://api.whatsapp.com/send?phone=584244259543" class="whatsapp-float" target="_blank">💬</a>
+
+<nav class="navbar">
+  <div class="brand">
+    <div class="title">MAYORISTA TOCUYITO</div>
+    <div class="city">Abastecimiento</div>
+  </div>
+  <div class="menu-desktop">
+    <a href="#inicio">INICIO</a>
+    <a href="#directorio">DIRECTORIO</a>
+    <a href="#empleo">EMPLEO</a>
+    <a href="#comedor">COMEDOR</a>
+    <a href="#planes">PLANES</a>
+    <a href="#ruleta">RULETA</a>
+    <a href="#contacto">CONTACTO</a>
+    <button onclick="compartirSitio()">📤 COMPARTIR</button>
+    <a href="registro.html" class="btn-tarjeta-nav">📝 CREAR TARJETA</a>
+  </div>
+  <button class="menu-mobile-btn" id="menu-btn">☰</button>
+</nav>
+
+<div id="mobile-menu">
+  <a href="#inicio">INICIO</a>
+  <a href="#directorio">DIRECTORIO</a>
+  <a href="#empleo">EMPLEO</a>
+  <a href="#comedor">COMEDOR</a>
+  <a href="#planes">PLANES</a>
+  <a href="#ruleta">RULETA</a>
+  <a href="#contacto">CONTACTO</a>
+  <button onclick="compartirSitio()">📤 COMPARTIR</button>
+  <a href="registro.html" style="background:#fbbf24; color:#0b1c3a; text-align:center; font-weight:bold;">📝 CREAR MI TARJETA</a>
+</div>
+
 <div class="container">
-  <div class="header-panel">
-    <div>
-      <h1>🛡️ Panel de Control</h1>
-      <p class="sub">Gestión de tarjetas y negocios</p>
+
+  <div id="inicio" class="text-center my-6">
+    <img src="portada-mayorista.jpg" id="portadaImg" alt="Mayorista Tocuyito" class="portada-img rounded-2xl shadow-2xl" style="cursor:pointer" onerror="this.src='https://placehold.co/1200x400/0b1c3a/fbbf24?text=Mayorista+Tocuyito'">
+    <div class="mt-4 text-[#fbbf24] text-lg md:text-xl font-semibold italic tracking-wide">
+      CONEXIÓN TOTAL
     </div>
-    <button class="btn-refresh" id="btnRefresh" onclick="recargar()">
-      <i class="fas fa-sync-alt"></i> Actualizar
-    </button>
+    <div class="text-center my-4 px-4">
+      <p class="text-2xl md:text-3xl font-bold italic text-[#fbbf24] drop-shadow-lg">
+        "Servimos, no competimos"
+      </p>
+      <p class="text-sm text-gray-300 mt-2">⭐ Bienvenid@s a Mayorista Tocuyito - Venta al Mayor</p>
+    </div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="icon-stat">📊</div><div class="num" id="statTotal">0</div><div class="lbl">Tarjetas totales</div></div>
-    <div class="stat"><div class="icon-stat">✅</div><div class="num" id="statPagado">0</div><div class="lbl">Pagadas</div></div>
-    <div class="stat"><div class="icon-stat">⏳</div><div class="num" id="statPendiente">0</div><div class="lbl">Pendientes</div></div>
-    <div class="stat"><div class="icon-stat">💰</div><div class="num" id="statIngreso">$0</div><div class="lbl">Ingresos</div></div>
+  <div class="text-center my-6 px-4">
+    <h2 class="text-xl md:text-2xl font-bold italic text-white drop-shadow-lg">
+      Plátanos, Víveres y más al Mayor
+    </h2>
   </div>
 
-  <div class="filtros">
-    <button class="activo" data-filtro="todos" onclick="filtrar('todos', this)">📋 Todas</button>
-    <button data-filtro="pendiente" onclick="filtrar('pendiente', this)">⏳ Pendientes</button>
-    <button data-filtro="pagado" onclick="filtrar('pagado', this)">✅ Pagadas</button>
+  <div class="text-center my-6">
+    <a href="registro.html" class="btn btn-oro" style="padding: 15px 30px; font-size: 1rem; box-shadow: 0 10px 30px rgba(251,191,36,0.4);">
+      📝 CREAR MI TARJETA DIGITAL
+    </a>
+    <p class="text-xs text-gray-400 mt-2">Presencia digital profesional desde $5.90 USD (Bs. equivalente)</p>
   </div>
 
-  <div class="lista" id="lista">
-    <div class="loading"><i class="fas fa-spinner"></i> Cargando tarjetas...</div>
+  <div class="text-center my-6" id="pulpitoContainer">
+    <img src="pulpito.png" id="pulpitoImg" alt="Pulpito bienvenida" class="w-40 h-40 md:w-56 md:h-56 mx-auto cursor-pointer transition duration-300 hover:scale-110 animate-float" onerror="this.style.display='none'">
+    <div id="mensajePulpito" class="mt-3 text-white text-lg md:text-xl font-semibold"></div>
+    <p class="text-xs text-gray-400 mt-1">✨ Haz clic en el pulpito para saludar ✨</p>
   </div>
+
+  <!-- DIRECTORIO DE NEGOCIOS -->
+  <div id="directorio" class="mb-8">
+    <h2 class="text-2xl md:text-3xl font-bold text-[#fbbf24] mb-4 text-center">📋 DIRECTORIO DE NEGOCIOS</h2>
+    <div id="lista-negocios" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      <div class="text-center text-gray-400 col-span-1 md:col-span-2 py-8">Cargando negocios...</div>
+    </div>
+  </div>
+
+  <!-- BOLSA DE EMPLEO DEL MAYORISTA -->
+  <div id="empleo" class="card mb-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-[#34B7F1] text-center mb-2">💼 BOLSA DE EMPLEO DEL MAYORISTA</h2>
+    <p class="text-center text-gray-300 mb-6 text-sm md:text-base">Conectamos a los dueños de los puestos con gente lista para trabajar.</p>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Para los que buscan trabajo -->
+      <div class="bg-black/30 p-5 rounded-xl text-center border border-blue-500/30">
+        <i class="fas fa-user-tie text-5xl text-blue-400 mb-3"></i>
+        <h3 class="text-xl font-bold text-white mb-2">¿BUSCAS TRABAJO?</h3>
+        <p class="text-sm text-gray-300 mb-4">Deja tus datos para que los dueños de los negocios del mayorista te contacten.</p>
+        <button onclick="abrirFormulario('empleo')" class="btn btn-sitio w-full py-2 text-sm">📢 Publicar mi perfil</button>
+      </div>
+      
+      <!-- Para los que buscan empleados -->
+      <div class="bg-black/30 p-5 rounded-xl text-center border border-purple-500/30">
+        <i class="fas fa-store text-5xl text-purple-400 mb-3"></i>
+        <h3 class="text-xl font-bold text-white mb-2">¿BUSCAS EMPLEADO?</h3>
+        <p class="text-sm text-gray-300 mb-4">Publica tu vacante y encuentra ayudantes, cajeros o cargadores.</p>
+        <button onclick="abrirFormulario('vacante')" class="btn btn-wsp w-full py-2 text-sm">🚀 Publicar vacante</button>
+      </div>
+    </div>
+
+    <!-- Formulario Busco Empleo (Oculto) -->
+    <div id="formEmpleo" class="hidden mt-6 p-5 bg-black/40 rounded-xl border border-blue-500/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-blue-400">📋 Deja tu perfil de trabajo</h3>
+        <button onclick="cerrarFormulario('empleo')" class="text-white bg-red-600/50 hover:bg-red-600 px-3 py-1 rounded-full text-sm">✕ Cerrar</button>
+      </div>
+      <form onsubmit="enviarFormulario(event, 'empleo')">
+        <input type="text" name="nombre" placeholder="Tu nombre completo" required class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2">
+        <input type="tel" name="telefono" placeholder="Tu WhatsApp" required class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2">
+        <input type="text" name="oficio" placeholder="¿Qué sabes hacer? (Cargador, cajero, ayudante)" required class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2">
+        <textarea name="experiencia" placeholder="Cuéntanos un poco de tu experiencia" rows="2" class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2"></textarea>
+        <button type="submit" class="btn btn-sitio w-full py-3">📤 Enviar a los dueños</button>
+      </form>
+    </div>
+
+    <!-- Formulario Busco Empleado (Oculto) -->
+    <div id="formVacante" class="hidden mt-6 p-5 bg-black/40 rounded-xl border border-purple-500/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-purple-400">💼 Publica tu vacante</h3>
+        <button onclick="cerrarFormulario('vacante')" class="text-white bg-red-600/50 hover:bg-red-600 px-3 py-1 rounded-full text-sm">✕ Cerrar</button>
+      </div>
+      <form onsubmit="enviarFormulario(event, 'vacante')">
+        <input type="text" name="negocio" placeholder="Nombre de tu negocio o puesto" required class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2">
+        <input type="tel" name="telefono" placeholder="Tu WhatsApp" required class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2">
+        <input type="text" name="puesto" placeholder="¿Qué puesto necesitas? (Ayudante, cajero, cargador)" required class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2">
+        <textarea name="requisitos" placeholder="Requisitos del puesto" rows="2" class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white mb-2"></textarea>
+        <button type="submit" class="btn btn-wsp w-full py-3">📤 Publicar vacante</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="comedor" class="card mb-6">
+    <div class="comedor-card">
+      <div class="text-4xl md:text-5xl mb-3">🍲</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-[#fbbf24] mb-3">CONSTRUIMOS COMEDORES SOCIALES</h2>
+      <p class="text-base md:text-lg text-white mb-4">
+        Cada ticket que compras construye un comedor para los que más lo necesitan.
+      </p>
+      <a href="#ruleta" class="btn btn-oro py-3 px-6 md:px-8 text-base md:text-lg" style="display:inline-block;">🎟️ Comprar tickets</a>
+    </div>
+  </div>
+
+  <div id="planes" class="card mb-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-[#fbbf24] text-center mb-6">💎 PLANES PARA TU NEGOCIO</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="plan-card plan-basico">
+        <div class="text-4xl mb-2">🥉</div>
+        <strong class="text-[#fbbf24] text-xl md:text-2xl block mb-1">Básico</strong>
+        <span class="text-2xl md:text-3xl font-bold text-white block my-3">$5.90 USD</span>
+        <p class="text-xs text-gray-400 mb-3">Pago único anual</p>
+        <ul class="text-sm text-gray-200 space-y-1 mb-4 text-left">
+          <li>✅ Tarjeta digital con QR</li>
+          <li>✅ Link único</li>
+          <li>✅ Presencia en la guía</li>
+        </ul>
+        <a href="registro.html" class="btn btn-oro w-full py-2" style="display:block;">Quiero este plan</a>
+      </div>
+      <div class="plan-card plan-pro">
+        <div class="text-4xl mb-2">🥈</div>
+        <strong class="text-[#fbbf24] text-xl md:text-2xl block mb-1">Pro</strong>
+        <span class="text-2xl md:text-3xl font-bold text-white block my-3">$15 USD</span>
+        <p class="text-xs text-gray-400 mb-3">Pago único anual</p>
+        <ul class="text-sm text-gray-200 space-y-1 mb-4 text-left">
+          <li>✅ Todo lo del Básico</li>
+          <li>✅ Carrusel 3D (3 fotos)</li>
+        </ul>
+        <a href="registro.html" class="btn btn-oro w-full py-2" style="display:block;">Quiero este plan</a>
+      </div>
+      <div class="plan-card plan-avanzado">
+        <div class="text-4xl mb-2">🥇</div>
+        <strong class="text-[#fbbf24] text-xl md:text-2xl block mb-1">Avanzado</strong>
+        <span class="text-2xl md:text-3xl font-bold text-white block my-3">$30 USD</span>
+        <p class="text-xs text-gray-400 mb-3">Pago único anual</p>
+        <ul class="text-sm text-gray-200 space-y-1 mb-4 text-left">
+          <li>✅ Todo lo del Pro</li>
+          <li>✅ Carrusel 3D (6 fotos)</li>
+        </ul>
+        <a href="registro.html" class="btn btn-oro w-full py-2" style="display:block;">Quiero este plan</a>
+      </div>
+      <div class="plan-card plan-elite">
+        <div class="text-4xl mb-2">💎</div>
+        <strong class="text-[#fbbf24] text-xl md:text-2xl block mb-1">Élite</strong>
+        <span class="text-2xl md:text-3xl font-bold text-white block my-3">$50 USD</span>
+        <p class="text-xs text-gray-400 mb-3">Pago único anual</p>
+        <ul class="text-sm text-gray-200 space-y-1 mb-4 text-left">
+          <li>✅ Todo lo del Avanzado</li>
+          <li>✅ Carrusel 3D (12 fotos)</li>
+        </ul>
+        <a href="registro.html" class="btn btn-oro w-full py-2" style="display:block;">Quiero este plan</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="ruleta" class="card mb-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-[#fbbf24] text-center mb-2">🎰 RULETA DEL PULPO BENEFACTOR</h2>
+    <p class="text-center text-gray-300 mb-6 text-sm md:text-base">Un solo nivel. ¡Sorteo rápido!</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+      <div class="premio-item"><div class="text-3xl mb-1">🥇</div><p class="text-xs text-gray-400">1er Premio</p><p class="text-2xl font-bold text-[#fbbf24]">$50</p></div>
+      <div class="premio-item"><div class="text-3xl mb-1">🥈</div><p class="text-xs text-gray-400">2do Premio</p><p class="text-2xl font-bold text-[#fbbf24]">$20</p></div>
+      <div class="premio-item"><div class="text-3xl mb-1">🥉</div><p class="text-xs text-gray-400">3er Premio</p><p class="text-2xl font-bold text-[#fbbf24]">$10</p></div>
+    </div>
+    <div class="bg-black/40 p-5 rounded-xl mb-4">
+      <h3 class="text-lg md:text-xl font-bold text-[#fbbf24] mb-3">🎟️ Compra tus tickets</h3>
+      <p class="text-gray-300 mb-2 text-sm md:text-base">Cada ticket vale <strong class="text-[#fbbf24]">$2 USD</strong> (Bs. al cambio).</p>
+      <p class="text-sm text-gray-400 mb-4">💗 Todo el dinero de tickets construye comedores sociales.</p>
+      <a href="https://api.whatsapp.com/send?phone=584244259543&text=Hola%2C%20quiero%20comprar%20tickets%20para%20la%20Ruleta" target="_blank" class="btn btn-wsp py-3 px-6 text-sm md:text-base">🎟️ Comprar tickets por WhatsApp</a>
+    </div>
+  </div>
+
+  <div id="contacto" class="card text-center">
+    <h2 class="text-xl md:text-2xl font-bold text-[#fbbf24] mb-3">📲 ¿QUIERES APARECER AQUÍ?</h2>
+    <div class="flex justify-center gap-4 my-4 flex-wrap">
+      <a href="https://api.whatsapp.com/send?phone=584244259543" class="btn btn-wsp text-sm" target="_blank">📱 WhatsApp</a>
+      <a href="registro.html" class="btn btn-oro text-sm">📝 Crear mi tarjeta</a>
+      <button onclick="compartirSitio()" class="btn btn-sitio text-sm">📤 Compartir guía</button>
+    </div>
+
+    <div class="mt-6 p-5 bg-black/40 rounded-xl">
+      <h3 class="text-lg md:text-xl font-bold text-[#fbbf24] mb-3">💳 PAGO MÓVIL / TRANSFERENCIA</h3>
+      <div class="space-y-2 text-left max-w-md mx-auto text-sm">
+        <p class="flex justify-between"><span class="text-gray-400">Teléfono:</span> <strong>0424-4259543</strong></p>
+        <p class="flex justify-between"><span class="text-gray-400">Titular:</span> <strong>Elis Alfredo Suarez Mendez</strong></p>
+        <p class="flex justify-between"><span class="text-gray-400">Plan:</span> <strong>Desde $5.90 USD</strong></p>
+      </div>
+      <a href="https://api.whatsapp.com/send?phone=584244259543&text=Hola%2C%20quiero%20activar%20mi%20plan%20en%20Mayorista%20Tocuyito" class="btn btn-wsp py-3 px-6 mt-4 text-sm" target="_blank">💬 Enviar comprobante</a>
+    </div>
+
+    <div class="mt-6">
+      <h3 class="text-[#fbbf24] mb-2 text-sm md:text-base">📱 ESCANEA Y GUARDA ESTA GUÍA</h3>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://mayoristatocuyito.guia-digital.com" alt="QR Mayorista" class="mx-auto my-2 rounded-xl w-32 h-32 md:w-40 md:h-40">
+    </div>
+  </div>
+
+  <footer class="text-center py-6 border-t border-[#fbbf24] mt-8 text-sm">
+    <p>© 2026 Mayorista Tocuyito · Guía Digital</p>
+    <p class="text-gray-400 mt-1">Guía Digital - Unidos Ganamos Más</p>
+  </footer>
 </div>
 
 <script>
 const API = 'https://guia-digital-api.ngegestion.workers.dev/';
-let todasLasTarjetas = [];
-let filtroActual = 'todos';
 
-function mostrarToast(mensaje, tipo = 'success') {
-  const toast = document.createElement('div');
-  toast.className = 'toast ' + (tipo === 'success' ? '' : tipo);
-  const icono = tipo === 'error' ? '❌' : tipo === 'warning' ? '⚠️' : '✅';
-  toast.innerHTML = `<span style="font-size:1.5rem;">${icono}</span><span>${mensaje}</span>`;
-  document.body.appendChild(toast);
-  setTimeout(() => { toast.classList.add('saliendo'); setTimeout(() => toast.remove(), 400); }, 4000);
-}
-
-async function cargarTarjetas() {
+async function cargarNegocios() {
   try {
-    const respuesta = await fetch(API + '?accion=listar-tarjetas');
-    const data = await respuesta.json();
+    const res = await fetch(API + '?accion=listar-tarjetas');
+    const data = await res.json();
     
-    // AQUÍ ESTÁ LA MAGIA: Filtramos para que no muestre las tarjetas de prueba
-    const todas = data.data || [];
-    todasLasTarjetas = todas.filter(t => {
-      const nombre = (t.nombre || '').toLowerCase();
-      const negocio = (t.negocio || '').toLowerCase();
-      // Si el nombre o negocio tiene palabras de prueba, lo ocultamos
-      return !nombre.includes('prueba') && !negocio.includes('prueba') && !nombre.includes('test') && !negocio.includes('test') && !nombre.includes('elis suarez');
+    const todosLosNegocios = data.data || [];
+    
+    // EL FILTRO DEFINITIVO: Solo mostramos Lunchería JBL o negocios con ciudad "Tocuyito"
+    const negociosFiltrados = todosLosNegocios.filter(n => {
+      const negocioStr = (n.negocio || '').toLowerCase();
+      const ciudadStr = (n.ciudad || '').toLowerCase();
+      
+      // Si es Lunchería JBL, lo mostramos
+      if (negocioStr.includes('jbl')) return true;
+      
+      // Si la ciudad es Tocuyito, lo mostramos
+      if (ciudadStr.includes('tocuyito')) return true;
+      
+      // Si no cumple ninguna de las anteriores, lo ignoramos
+      return false;
     });
 
-    renderizar(filtroActual);
-  } catch (err) {
-    document.getElementById('lista').innerHTML = '<div class="vacio"><p>Error al cargar: ' + err.message + '</p></div>';
-  }
-}
+    const contenedor = document.getElementById('lista-negocios');
+    
+    if (negociosFiltrados.length === 0) {
+      contenedor.innerHTML = '<div class="text-center text-gray-400 col-span-1 md:col-span-2 py-8">Aún no hay negocios registrados en Tocuyito. ¡Sé el primero!</div>';
+      return;
+    }
 
-function renderizar(filtro = 'todos') {
-  filtroActual = filtro;
-  const contenedor = document.getElementById('lista');
-  const filtradas = filtro === 'todos' ? todasLasTarjetas : todasLasTarjetas.filter(t => (t.estado || 'pendiente') === filtro);
-  
-  document.getElementById('statTotal').textContent = todasLasTarjetas.length;
-  document.getElementById('statPagado').textContent = todasLasTarjetas.filter(t => t.estado === 'pagado').length;
-  document.getElementById('statPendiente').textContent = todasLasTarjetas.filter(t => (t.estado || 'pendiente') === 'pendiente').length;
-  
-  if (filtradas.length === 0) {
-    contenedor.innerHTML = '<div class="vacio"><i class="fas fa-inbox"></i><p>No hay tarjetas para mostrar.</p></div>';
-    return;
-  }
-  
-  contenedor.innerHTML = filtradas.map(t => {
-    const estado = t.estado || 'pendiente';
-    const badge = estado === 'pagado' 
-      ? '<span class="badge-estado badge-pagado">✅ Pagado</span>' 
-      : '<span class="badge-estado badge-pendiente">⏳ Pendiente</span>';
-    
-    const telLimpio = (t.telefono||'').replace(/\D/g,'');
-    
-    return `
-      <div class="item ${estado}">
-        <div class="fila1">
-          <span class="nombre">👤 ${t.nombre || 'Sin nombre'}</span>
-          ${badge}
-        </div>
-        <div class="detalle"><i class="fas fa-store"></i><strong>Negocio:</strong> ${t.negocio || '—'}</div>
-        <div class="detalle"><i class="fas fa-phone"></i><strong>Teléfono:</strong> ${t.telefono || '—'}</div>
-        <div class="detalle"><i class="fas fa-map-marker-alt"></i><strong>Ciudad:</strong> ${t.ciudad || '—'}</div>
-        <div class="detalle"><i class="fas fa-crown"></i><strong>Plan:</strong> ${t.plan || '—'} · $${t.precio || 0} USD</div>
-        <div class="acciones">
-          <button class="btn-ver" onclick="verTarjeta('${t.slug}')">👁️ Ver</button>
-          <a class="btn-wa" href="https://wa.me/58${telLimpio}" target="_blank">💬 WhatsApp</a>
-          ${estado !== 'pagado' ? '<button class="btn-pagar" onclick="cambiarEstado(\'' + t.id + '\', \'pagado\')">✅ Pagar</button>' : ''}
-          ${estado === 'pagado' ? '<button class="btn-pendiente" onclick="cambiarEstado(\'' + t.id + '\', \'pendiente\')">⏳ Pendiente</button>' : ''}
-          <button class="btn-eliminar" onclick="eliminar('${t.id}')">🗑️ Eliminar</button>
+    // Ordenamos para que el Panda salga primero
+    negociosFiltrados.sort((a, b) => {
+      const aEsPanda = (a.negocio || '').toLowerCase().includes('jbl') ? 1 : 0;
+      const bEsPanda = (b.negocio || '').toLowerCase().includes('jbl') ? 1 : 0;
+      return bEsPanda - aEsPanda; 
+    });
+
+    contenedor.innerHTML = negociosFiltrados.map(n => `
+      <div class="taller-card">
+        <h3 class="text-lg md:text-xl font-bold text-[#fbbf24]">${n.negocio || n.nombre}</h3>
+        <p class="text-sm text-gray-300 mb-3">${n.descripcion || 'Sin descripción'}</p>
+        <div class="flex gap-3 flex-wrap">
+          <a href="tarjeta.html?slug=${n.slug}" class="btn btn-sitio text-sm" target="_blank">👁️ Ver Tarjeta</a>
+          ${n.telefono ? `<a href="https://wa.me/58${n.telefono.replace(/\D/g,'')}" class="btn btn-wsp text-sm" target="_blank">💬 WhatsApp</a>` : ''}
         </div>
       </div>
-    `;
-  }).join('');
-}
-
-function filtrar(filtro, btn) {
-  document.querySelectorAll('.filtros button').forEach(b => b.classList.remove('activo'));
-  btn.classList.add('activo');
-  renderizar(filtro);
-}
-
-async function cambiarEstado(id, nuevoEstado) {
-  try {
-    const resp = await fetch(API + '?accion=actualizar-tarjeta&id=' + encodeURIComponent(id) + '&estado=' + encodeURIComponent(nuevoEstado));
-    const data = await resp.json();
-    if (data.ok) {
-      const tarjeta = todasLasTarjetas.find(t => t.id == id);
-      if (tarjeta) tarjeta.estado = nuevoEstado;
-      renderizar(filtroActual);
-      mostrarToast(nuevoEstado === 'pagado' ? '✅ Tarjeta marcada como pagada' : '⏳ Tarjeta marcada como pendiente');
-    } else {
-      mostrarToast('Error: ' + (data.error || 'desconocido'), 'error');
-    }
+    `).join('');
   } catch (err) {
-    mostrarToast('Error de conexión: ' + err.message, 'error');
+    document.getElementById('lista-negocios').innerHTML = '<div class="text-center text-red-400 col-span-1 md:col-span-2 py-8">Error al cargar los negocios: ' + err.message + '</div>';
   }
 }
 
-async function eliminar(id) {
-  if (!confirm('¿Eliminar esta tarjeta permanentemente?')) return;
-  try {
-    const resp = await fetch(API + '?accion=eliminar-tarjeta&id=' + encodeURIComponent(id));
-    const data = await resp.json();
-    if (data.ok) {
-      todasLasTarjetas = todasLasTarjetas.filter(t => t.id != id);
-      renderizar(filtroActual);
-      mostrarToast('🗑️ Tarjeta eliminada correctamente', 'warning');
-    } else {
-      mostrarToast('Error: ' + (data.error || 'desconocido'), 'error');
-    }
-  } catch (err) {
-    mostrarToast('Error: ' + err.message, 'error');
+function abrirFormulario(tipo) {
+  document.getElementById('formEmpleo').classList.add('hidden');
+  document.getElementById('formVacante').classList.add('hidden');
+  
+  if (tipo === 'empleo') {
+    document.getElementById('formEmpleo').classList.remove('hidden');
+    document.getElementById('formEmpleo').scrollIntoView({ behavior: 'smooth' });
+  } else if (tipo === 'vacante') {
+    document.getElementById('formVacante').classList.remove('hidden');
+    document.getElementById('formVacante').scrollIntoView({ behavior: 'smooth' });
   }
 }
 
-function verTarjeta(slug) {
-  const tarjeta = todasLasTarjetas.find(t => t.slug === slug);
-  if (!tarjeta) return;
-  window.open('tarjeta.html?slug=' + slug, '_blank');
+function cerrarFormulario(tipo) {
+  if (tipo === 'empleo') document.getElementById('formEmpleo').classList.add('hidden');
+  if (tipo === 'vacante') document.getElementById('formVacante').classList.add('hidden');
 }
 
-function recargar() {
-  const btn = document.getElementById('btnRefresh');
-  btn.classList.add('girando');
-  cargarTarjetas().then(() => setTimeout(() => btn.classList.remove('girando'), 500));
+function enviarFormulario(e, tipo) {
+  e.preventDefault();
+  const form = e.target;
+  const datos = new FormData(form);
+  let texto = '';
+  
+  if (tipo === 'empleo') {
+    texto = `💼 BUSCO EMPLEO EN EL MAYORISTA\n\nNombre: ${datos.get('nombre')}\nTeléfono: ${datos.get('telefono')}\nOficio: ${datos.get('oficio')}\nExperiencia: ${datos.get('experiencia') || ''}`;
+  } else if (tipo === 'vacante') {
+    texto = `🏪 OFREZCO EMPLEO EN EL MAYORISTA\n\nNegocio: ${datos.get('negocio')}\nTeléfono: ${datos.get('telefono')}\nPuesto: ${datos.get('puesto')}\nRequisitos: ${datos.get('requisitos') || ''}`;
+  }
+  
+  const telefonoAdmin = '584244259543'; 
+  window.open(`https://wa.me/${telefonoAdmin}?text=${encodeURIComponent(texto)}`, '_blank');
+  alert('✅ Solicitud enviada correctamente. El administrador se contactará contigo.');
+  form.reset();
+  cerrarFormulario(tipo);
 }
 
-// Iniciar
-cargarTarjetas();
-setInterval(cargarTarjetas, 30000);
-</script>
-
-</body>
-</html>
+document.getElementById('pulpitoImg')?.addEventListener('click', function() {
+  const mensaje = "Hola, soy el pulpo de Mayorista Tocuyito.

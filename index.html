@@ -5,16 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Guía Digital de Cúcuta | Directorio de negocios</title>
 <meta name="description" content="Directorio de negocios, talleres y servicios de Cúcuta. Ecosistema Digital Inteligente (EDI).">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://cucuta.guia-digital.com/">
-<meta property="og:title" content="Guía Digital de Cúcuta">
-<meta property="og:description" content="Directorio de negocios, talleres y servicios. Ecosistema Digital Inteligente (EDI).">
-<meta property="og:image" content="https://cucuta.guia-digital.com/portada-guia-cucuta.png">
-<meta property="og:locale" content="es_CO">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Guía Digital de Cúcuta">
-<meta name="twitter:description" content="Directorio de negocios, talleres y servicios de Cúcuta.">
-<meta name="twitter:image" content="https://cucuta.guia-digital.com/portada-guia-cucuta.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
@@ -279,6 +269,7 @@
     </div>
   </div>
 
+  <!-- CARRUSEL ORIGINAL (3 diapositivas) -->
   <div class="carrusel" id="carrusel">
     <div class="carrusel-inner" id="carruselInner">
       <div class="carrusel-slide">
@@ -306,6 +297,16 @@
     <button class="carrusel-btn prev" id="prevBtn">❮</button>
     <button class="carrusel-btn next" id="nextBtn">❯</button>
     <div class="carrusel-indicators" id="indicadores"></div>
+  </div>
+
+  <!-- NUEVO CARRUSEL DE NEGOCIOS (Fotos reales) -->
+  <div class="carrusel" id="carruselNegocios">
+    <div class="carrusel-inner" id="carruselNegociosInner">
+      <!-- Las fotos se cargarán solas desde la API -->
+    </div>
+    <button class="carrusel-btn prev" onclick="moverCarruselNegocios(-1)">❮</button>
+    <button class="carrusel-btn next" onclick="moverCarruselNegocios(1)">❯</button>
+    <div class="carrusel-indicators" id="indicadoresNegocios"></div>
   </div>
 
   <div id="planes" class="card mb-6">
@@ -558,6 +559,79 @@
 </div>
 
 <script src="script.js"></script>
+
+<!-- AQUÍ ESTÁ EL JAVASCRIPT CORREGIDO -->
+<script>
+// ===== LÓGICA DEL NUEVO CARRUSEL DE NEGOCIOS =====
+let indiceNegocios = 0;
+let totalFotosNegocios = 0;
+
+async function cargarCarruselNegocios() {
+  try {
+    const res = await fetch('https://guia-digital-api.ngegestion.workers.dev/?accion=listar-tarjetas');
+    const data = await res.json();
+    const negocios = data.data || [];
+    
+    // Filtramos solo los que tienen foto
+    const negociosConFoto = negocios.filter(n => n.foto && n.foto.trim() !== '');
+    
+    const contenedor = document.getElementById('carruselNegociosInner');
+    const indicadores = document.getElementById('indicadoresNegocios');
+    
+    if (negociosConFoto.length === 0) {
+      contenedor.innerHTML = '<div class="carrusel-slide"><div style="width:100%; height:100%; background:#112b4f; display:flex; align-items:center; justify-content:center; color:#a0c4e8;">Aún no hay fotos de negocios.</div></div>';
+      return;
+    }
+    
+    totalFotosNegocios = negociosConFoto.length;
+    
+    // Creamos las diapositivas
+    contenedor.innerHTML = negociosConFoto.map(n => `
+      <div class="carrusel-slide">
+        <a href="tarjeta.html?slug=${n.slug}" target="_blank">
+          <img src="${n.foto}" alt="${n.negocio || n.nombre}" style="cursor:pointer;">
+        </a>
+      </div>
+    `).join('');
+    
+    // Creamos los indicadores (puntitos)
+    indicadores.innerHTML = negociosConFoto.map((_, i) => `
+      <span class="indicator ${i === 0 ? 'active' : ''}" onclick="irAlNegocio(${i})"></span>
+    `).join('');
+    
+    actualizarCarruselNegocios();
+    setInterval(() => moverCarruselNegocios(1), 4000); // Cambia cada 4 segundos
+    
+  } catch (error) {
+    console.error("Error cargando el carrusel de negocios:", error);
+  }
+}
+
+function moverCarruselNegocios(direccion) {
+  if (totalFotosNegocios === 0) return;
+  indiceNegocios = (indiceNegocios + direccion + totalFotosNegocios) % totalFotosNegocios;
+  actualizarCarruselNegocios();
+}
+
+function irAlNegocio(indice) {
+  indiceNegocios = indice;
+  actualizarCarruselNegocios();
+}
+
+function actualizarCarruselNegocios() {
+  const inner = document.getElementById('carruselNegociosInner');
+  if (inner) {
+    inner.style.transform = `translateX(-${indiceNegocios * 100}%)`;
+  }
+  document.querySelectorAll('#indicadoresNegocios .indicator').forEach((ind, i) => {
+    if (i === indiceNegocios) ind.classList.add('active');
+    else ind.classList.remove('active');
+  });
+}
+
+// Ejecutar cuando la página cargue
+document.addEventListener('DOMContentLoaded', cargarCarruselNegocios);
+</script>
 
 </body>
 </html>

@@ -1,5 +1,5 @@
 [
-  { "nombre": "Fajas Edi", "url": "https://fajasedi.netlify.app/", "categoria": "belleza", "telefono": "" },
+  { "nombre": "Fajas Edi", "url": "https://fajasedi.netlify.app/", "categoria": "belleza", "telefono": "", "link": "https://fajasedi.netlify.app/" },
   { "nombre": "STYLE COLLECTION", "url": "https://tdi-julio-vargas.ngegestion.workers.dev/", "categoria": "belleza", "telefono": "" },
   { "nombre": "La Estación de la Calidad", "url": "https://cucuta.guia-digital.com/estacion-calidad", "categoria": "accesorios", "telefono": "" },
   { "nombre": "Tracto Auto M.F.", "url": "https://tracto-auto-mf.pages.dev/", "categoria": "mecanica", "telefono": "" },

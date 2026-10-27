@@ -76,7 +76,7 @@
     50% { box-shadow: 0 0 30px 10px rgba(251,191,36,0.7); }
   }
 
-  .carrusel { position: relative; width: 100%; margin: 30px 0; overflow: hidden; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); background: #000; }
+  .carrusel { position: relative; width: 100%; margin: 30px 0; overflow: hidden; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); background: #000; border: 2px solid #fbbf24; }
   .carrusel-inner { display: flex; transition: transform 0.5s ease; }
   .carrusel-slide { min-width: 100%; flex-shrink: 0; }
   .carrusel-slide img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
@@ -190,14 +190,14 @@
     </div>
   </div>
 
-  <!-- NUEVO CARRUSEL DE NEGOCIOS (PRIMERO) -->
-  <div class="carrusel" id="carruselNegocios">
-    <div class="carrusel-inner" id="carruselNegociosInner">
-      <!-- Las fotos se cargarán solas desde la API -->
+  <!-- NUEVO CARRUSEL DE IMÁGENES LOCALES (1 AL 35) -->
+  <div class="carrusel" id="carruselPortada">
+    <div class="carrusel-inner" id="carruselPortadaInner">
+      <!-- Las imágenes se cargarán solas con JavaScript -->
     </div>
-    <button class="carrusel-btn prev" onclick="moverCarruselNegocios(-1)">❮</button>
-    <button class="carrusel-btn next" onclick="moverCarruselNegocios(1)">❯</button>
-    <div class="carrusel-indicators" id="indicadoresNegocios"></div>
+    <button class="carrusel-btn prev" onclick="moverCarruselPortada(-1)">❮</button>
+    <button class="carrusel-btn next" onclick="moverCarruselPortada(1)">❯</button>
+    <div class="carrusel-indicators" id="indicadoresPortada"></div>
   </div>
 
   <div class="text-center my-8 px-4">
@@ -572,80 +572,60 @@
 
 <script src="script.js"></script>
 
-<!-- JAVASCRIPT PARA EL CARRUSEL DE NEGOCIOS (FOTOS REALES) -->
+<!-- JAVASCRIPT PARA EL CARRUSEL DE IMÁGENES LOCALES (1 AL 35) -->
 <script>
-let indiceNegocios = 0;
-let totalFotosNegocios = 0;
+let indicePortada = 0;
+let totalFotosPortada = 35; // Aquí le decimos que son 35 fotos
 
-async function cargarCarruselNegocios() {
-  try {
-    const res = await fetch('https://guia-digital-api.ngegestion.workers.dev/?accion=listar-tarjetas');
-    const data = await res.json();
-    const negocios = data.data || [];
-    
-    // Filtramos los que tengan foto
-    const negociosConFoto = negocios.filter(n => n.foto && n.foto.trim() !== '');
-    
-    const contenedor = document.getElementById('carruselNegociosInner');
-    const indicadores = document.getElementById('indicadoresNegocios');
-    
-    if (negociosConFoto.length === 0) {
-      contenedor.innerHTML = '<div class="carrusel-slide"><div style="width:100%; height:100%; background:#112b4f; display:flex; align-items:center; justify-content:center; color:#a0c4e8;">Aún no hay fotos de negocios.</div></div>';
-      return;
-    }
-    
-    totalFotosNegocios = negociosConFoto.length;
-    
-    // Creamos las diapositivas con el nombre del negocio
-    contenedor.innerHTML = negociosConFoto.map(n => `
+function iniciarCarruselPortada() {
+  const contenedor = document.getElementById('carruselPortadaInner');
+  const indicadores = document.getElementById('indicadoresPortada');
+  
+  if (!contenedor || !indicadores) return;
+
+  // Creamos las 35 diapositivas
+  let html = '';
+  for (let i = 1; i <= totalFotosPortada; i++) {
+    html += `
       <div class="carrusel-slide">
-        <a href="tarjeta.html?slug=${n.slug}" target="_blank" style="display:block; text-decoration:none;">
-          <div style="position:relative; width:100%; aspect-ratio:1/1; overflow:hidden;">
-            <img src="${n.foto}" alt="${n.negocio || n.nombre}" style="width:100%; height:100%; object-fit:cover;">
-            <div style="position:absolute; bottom:0; left:0; width:100%; background:rgba(0,0,0,0.7); padding:10px; text-align:center; color:white; font-weight:bold;">
-              ${n.negocio || n.nombre}
-            </div>
-          </div>
-        </a>
+        <img src="${i}.jpg" alt="Imagen ${i}" style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover;">
       </div>
-    `).join('');
-    
-    // Creamos los indicadores (puntitos)
-    indicadores.innerHTML = negociosConFoto.map((_, i) => `
-      <span class="indicator ${i === 0 ? 'active' : ''}" onclick="irAlNegocio(${i})"></span>
-    `).join('');
-    
-    actualizarCarruselNegocios();
-    setInterval(() => moverCarruselNegocios(1), 4000); // Cambia cada 4 segundos
-    
-  } catch (error) {
-    console.error("Error cargando el carrusel de negocios:", error);
+    `;
   }
+  contenedor.innerHTML = html;
+
+  // Creamos los puntitos indicadores
+  let puntos = '';
+  for (let i = 0; i < totalFotosPortada; i++) {
+    puntos += `<span class="indicator ${i === 0 ? 'active' : ''}" onclick="irAlPortada(${i})"></span>`;
+  }
+  indicadores.innerHTML = puntos;
+
+  actualizarCarruselPortada();
+  setInterval(() => moverCarruselPortada(1), 4000); // Cambia cada 4 segundos
 }
 
-function moverCarruselNegocios(direccion) {
-  if (totalFotosNegocios === 0) return;
-  indiceNegocios = (indiceNegocios + direccion + totalFotosNegocios) % totalFotosNegocios;
-  actualizarCarruselNegocios();
+function moverCarruselPortada(direccion) {
+  indicePortada = (indicePortada + direccion + totalFotosPortada) % totalFotosPortada;
+  actualizarCarruselPortada();
 }
 
-function irAlNegocio(indice) {
-  indiceNegocios = indice;
-  actualizarCarruselNegocios();
+function irAlPortada(indice) {
+  indicePortada = indice;
+  actualizarCarruselPortada();
 }
 
-function actualizarCarruselNegocios() {
-  const inner = document.getElementById('carruselNegociosInner');
+function actualizarCarruselPortada() {
+  const inner = document.getElementById('carruselPortadaInner');
   if (inner) {
-    inner.style.transform = `translateX(-${indiceNegocios * 100}%)`;
+    inner.style.transform = `translateX(-${indicePortada * 100}%)`;
   }
-  document.querySelectorAll('#indicadoresNegocios .indicator').forEach((ind, i) => {
-    if (i === indiceNegocios) ind.classList.add('active');
-    else ind.classList.remove('active');
+  document.querySelectorAll('#indicadoresPortada .indicator').forEach((ind, i) => {
+    ind.classList.toggle('active', i === indicePortada);
   });
 }
 
-document.addEventListener('DOMContentLoaded', cargarCarruselNegocios);
+document.addEventListener('DOMContentLoaded', iniciarCarruselPortada);
 </script>
 
 </body>

@@ -107,8 +107,11 @@ function mostrarNegocios(categoria) {
   }
   contenedor.innerHTML = filtrados.map(n => `
     <div class="taller-card">
-      <h3 class="text-xl font-bold text-[#fbbf24]">${n.nombre}</h3>
-      <p class="text-sm text-gray-300 mb-3">${obtenerNombreCategoria(n.categoria)}</p>
+<h3 class="text-xl font-bold text-[#fbbf24]">
+  <a href="${n.link || n.url}" target="_blank" style="text-decoration: none; color: inherit;">
+    ${n.nombre}
+  </a>
+</h3>      <p class="text-sm text-gray-300 mb-3">${obtenerNombreCategoria(n.categoria)}</p>
       <div class="flex gap-3 flex-wrap">
         <a href="${n.url}" target="_blank" rel="noopener noreferrer" class="btn btn-sitio">🔗 Ver sitio</a>
       </div>

@@ -76,22 +76,26 @@
     50% { box-shadow: 0 0 30px 10px rgba(251,191,36,0.7); }
   }
 
-    /* CARRUSEL CUADRADO PERFECTO */
+    /* CARRUSEL CUADRADO PERFECTO Y RESPONSIVO */
   .carrusel-cuadrado {
     position: relative;
     width: 90%; /* Ocupa el 90% en celular */
-    max-width: 400px; /* Pero en PC no crece más de 400px (cuadrado perfecto) */
-    aspect-ratio: 1/1; /* ¡LA MAGIA! Lo obliga a ser un cuadrado */
+    max-width: 400px; /* En PC no crece más de 400px */
+    aspect-ratio: 1/1; /* El contenedor es cuadrado */
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    background: #000; /* Fondo negro para los bordes */
+    background: #000;
     border: 3px solid #fbbf24;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Alinea el texto abajo */
   }
   .carrusel-cuadrado-inner {
     display: flex;
     height: 100%;
+    width: 100%;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .carrusel-cuadrado-slide {
@@ -99,30 +103,36 @@
     height: 100%;
     flex-shrink: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end; /* La foto arriba, el texto abajo */
     position: relative;
+    background: #000;
   }
-  /* La foto se ve completa, con el fondo negro rellenando */
   .carrusel-cuadrado-slide img {
     width: 100%;
     height: 100%;
-    object-fit: contain; 
+    object-fit: cover; /* La foto llena el cuadrado */
     display: block;
-  }
-  /* Franja oscura abajo para el nombre del negocio */
-  .carrusel-cuadrado-nombre {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
+    z-index: 1;
+  }
+  /* La franja del nombre del negocio */
+  .carrusel-cuadrado-nombre {
+    position: relative;
+    z-index: 2;
     width: 100%;
-    background: rgba(11, 28, 58, 0.9);
-    color: #fbbf24;
-    padding: 8px;
+    background: rgba(11, 28, 58, 0.95); /* Fondo azul oscuro semitransparente */
+    color: #ffffff;
+    padding: 10px;
     text-align: center;
     font-weight: bold;
-    font-size: 0.9rem;
-    border-top: 1px solid #fbbf24;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: 2px solid #fbbf24;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
   }
   .carrusel-cuadrado-btn {
     position: absolute;
@@ -662,14 +672,14 @@
 let indicePortada = 0;
 let totalFotosPortada = 35;
 
-// AQUÍ PUEDES AGREGAR LOS LINKS Y NOMBRES DE CADA FOTO
+// Nombres y links de los negocios
 const datosFotos = {
   1: { link: "https://fajasedi.netlify.app/", nombre: "Fajas Edi" },
   2: { link: "https://tdi-julio-vargas.ngegestion.workers.dev/", nombre: "STYLE COLLECTION" },
   3: { link: "https://cucuta.guia-digital.com/estacion-calidad", nombre: "La Estación de la Calidad" },
   4: { link: "https://tracto-auto-mf.pages.dev/", nombre: "Tracto Auto M.F." },
   5: { link: "https://taller-barney.netlify.app/", nombre: "Taller Barney" }
-  // Agrega más aquí: 6: { link: "link", nombre: "Nombre" }, etc.
+  // Agrega más: 6: { link: "link", nombre: "Nombre" }, etc.
 };
 
 function iniciarCarruselPortada() {
@@ -685,15 +695,16 @@ function iniciarCarruselPortada() {
     let contenidoFoto = `<img src="${i}.jpg" alt="Negocio ${i}">`;
     let nombreNegocio = data ? `<div class="carrusel-cuadrado-nombre">${data.nombre}</div>` : '';
 
-    // Si tiene link, envolvemos la imagen
+    // Si tiene link, envolvemos la imagen y el nombre
     if (data && data.link) {
-      contenidoFoto = `<a href="${data.link}" target="_blank" style="width:100%; height:100%; display:block; cursor:pointer;">${contenidoFoto}</a>`;
+      contenidoFoto = `<a href="${data.link}" target="_blank" style="width:100%; height:100%; display:block; cursor:pointer; position:relative;">${contenidoFoto}${nombreNegocio}</a>`;
+    } else {
+      contenidoFoto = `<div style="width:100%; height:100%; position:relative;">${contenidoFoto}${nombreNegocio}</div>`;
     }
 
     html += `
       <div class="carrusel-cuadrado-slide">
         ${contenidoFoto}
-        ${nombreNegocio}
       </div>
     `;
     puntos += `<span class="indicator ${i === 1 ? 'active' : ''}" onclick="irAlPortada(${i-1})"></span>`;

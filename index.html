@@ -656,61 +656,74 @@
   </footer>
 </div>
 
-<script src="script.js"></script>
-
-<!-- JAVASCRIPT PARA EL CARRUSEL VIP DE PORTADAS (1 AL 35) -->
+<!-- JAVASCRIPT PARA EL CARRUSEL CUADRADO (1 AL 35) -->
 <script>
-// --- CARRUSEL VIP DE PORTADAS ---
+// --- CARRUSEL CUADRADO (1 AL 35) ---
 let indicePortada = 0;
 let totalFotosPortada = 35;
 
-// AQUÍ PUEDES AGREGAR LOS LINKS DE CADA FOTO (1 al 35)
-// Si una foto no tiene link, simplemente se muestra la imagen.
-const linksFotos = {
-  1: "https://fajasedi.netlify.app/",
-  2: "https://tdi-julio-vargas.ngegestion.workers.dev/",
-  3: "https://cucuta.guia-digital.com/estacion-calidad",
-  4: "https://tracto-auto-mf.pages.dev/",
-  5: "https://taller-barney.netlify.app/"
-  // Agrega más aquí: 6: "link", 7: "link", etc.
+// AQUÍ PUEDES AGREGAR LOS LINKS Y NOMBRES DE CADA FOTO
+const datosFotos = {
+  1: { link: "https://fajasedi.netlify.app/", nombre: "Fajas Edi" },
+  2: { link: "https://tdi-julio-vargas.ngegestion.workers.dev/", nombre: "STYLE COLLECTION" },
+  3: { link: "https://cucuta.guia-digital.com/estacion-calidad", nombre: "La Estación de la Calidad" },
+  4: { link: "https://tracto-auto-mf.pages.dev/", nombre: "Tracto Auto M.F." },
+  5: { link: "https://taller-barney.netlify.app/", nombre: "Taller Barney" }
+  // Agrega más aquí: 6: { link: "link", nombre: "Nombre" }, etc.
 };
 
 function iniciarCarruselPortada() {
   const contenedor = document.getElementById('carruselPortadaInner');
-  if (!contenedor) return;
+  const indicadores = document.getElementById('indicadoresPortada');
+  if (!contenedor || !indicadores) return;
 
   let html = '';
+  let puntos = '';
+
   for (let i = 1; i <= totalFotosPortada; i++) {
-    const link = linksFotos[i];
-    
-    if (link) {
-      // Si la foto tiene link, la hacemos clicable
-      html += `
-        <div class="carrusel-portadas-slide">
-          <a href="${link}" target="_blank" style="width:100%; height:100%; display:block; cursor: pointer;">
-            <img src="${i}.jpg" alt="Negocio ${i}">
-          </a>
-        </div>
-      `;
-    } else {
-      // Si no tiene link, solo mostramos la foto
-      html += `
-        <div class="carrusel-portadas-slide">
-          <img src="${i}.jpg" alt="Negocio ${i}">
-        </div>
-      `;
+    const data = datosFotos[i];
+    let contenidoFoto = `<img src="${i}.jpg" alt="Negocio ${i}">`;
+    let nombreNegocio = data ? `<div class="carrusel-cuadrado-nombre">${data.nombre}</div>` : '';
+
+    // Si tiene link, envolvemos la imagen
+    if (data && data.link) {
+      contenidoFoto = `<a href="${data.link}" target="_blank" style="width:100%; height:100%; display:block; cursor:pointer;">${contenidoFoto}</a>`;
     }
+
+    html += `
+      <div class="carrusel-cuadrado-slide">
+        ${contenidoFoto}
+        ${nombreNegocio}
+      </div>
+    `;
+    puntos += `<span class="indicator ${i === 1 ? 'active' : ''}" onclick="irAlPortada(${i-1})"></span>`;
   }
+  
   contenedor.innerHTML = html;
-  setInterval(() => moverCarruselPortada(1), 4000); // Pasa cada 4 segundos
+  indicadores.innerHTML = puntos;
+
+  actualizarCarruselPortada();
+  setInterval(() => moverCarruselPortada(1), 4000);
 }
 
 function moverCarruselPortada(direccion) {
   indicePortada = (indicePortada + direccion + totalFotosPortada) % totalFotosPortada;
+  actualizarCarruselPortada();
+}
+
+function irAlPortada(indice) {
+  indicePortada = indice;
+  actualizarCarruselPortada();
+}
+
+function actualizarCarruselPortada() {
   const inner = document.getElementById('carruselPortadaInner');
   if (inner) {
     inner.style.transform = `translateX(-${indicePortada * 100}%)`;
   }
+  document.querySelectorAll('#indicadoresPortada .indicator').forEach((ind, i) => {
+    ind.classList.toggle('active', i === indicePortada);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', iniciarCarruselPortada);

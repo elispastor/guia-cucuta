@@ -1,4 +1,4 @@
-// ===== SCRIPT PRINCIPAL DE LA GUÍA DIGITAL (UNIFICADO) =====
+SCRIPT PRINCIPAL DE LA GUÍA DIGITAL (UNIFICADO) =====
 
 let negocios = [];
 let categoriaActual = "todos";

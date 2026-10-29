@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba de Carrusel 1080</title>
+<style>
+  body {
+    background-color: #0b1c3a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+  .carrusel-prueba {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    background: #000;
+    border: 3px solid #fbbf24;
+  }
+  .carrusel-prueba img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .letrero-nombre {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(11, 28, 58, 0.95));
+    color: #ffffff;
+    padding: 40px 15px 15px;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+    border-bottom: 2px solid #fbbf24;
+    box-sizing: border-box; /* Para que el padding no desborde */
+  }
+</style>
+</head>
+<body>
+
+  <div class="carrusel-prueba">
+    <!-- Aquí va la imagen de prueba -->
+    <img src="prueba.jpg" alt="Prueba de negocio">
+    <!-- Aquí va el letrero con el nombre -->
+    <div class="letrero-nombre">NOMBRE DEL NEGOCIO</div>
+  </div>
+
+</body>
+</html>

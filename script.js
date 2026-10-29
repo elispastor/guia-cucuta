@@ -1,4 +1,4 @@
-// ===== SCRIPT PRINCIPAL DE LA GUÍA DIGITAL =====
+// ===== SCRIPT PRINCIPAL DE LA GUÍA DIGITAL (UNIFICADO) =====
 
 let negocios = [];
 let categoriaActual = "todos";
@@ -8,11 +8,17 @@ async function cargarNegocios() {
   try {
     const respuesta = await fetch('negocios.json');
     negocios = await respuesta.json();
-    generarFiltros();
-    mostrarNegocios("todos");
+    
+    generarFiltros(); // Pinta los botones de categorías
+    mostrarNegocios("todos"); // Pinta el directorio
+    iniciarCarruselPortada(); // Pinta el carrusel
+    
   } catch (error) {
-    console.error("Error cargando los negocios:", error);
-    document.getElementById("lista-negocios").innerHTML = '<div class="col-span-2 text-center py-8 text-gray-400">Error al cargar el directorio. Recarga la página.</div>';
+    console.error("Error cargando el archivo negocios.json:", error);
+    const contenedor = document.getElementById("lista-negocios");
+    if (contenedor) {
+        contenedor.innerHTML = '<div class="col-span-2 text-center py-8 text-gray-400">Error al cargar el directorio. Asegúrate de que el archivo negocios.json exista en GitHub.</div>';
+    }
   }
 }
 
@@ -29,7 +35,6 @@ function mostrarNegocios(categoria) {
   }
 
   contenedor.innerHTML = filtrados.map(n => {
-    // Si el negocio tiene teléfono, creamos el botón de WhatsApp
     let botonWhatsApp = '';
     if (n.telefono && n.telefono.trim() !== "") {
       const linkWhatsApp = `https://wa.me/${n.telefono.replace(/\s+/g, '')}?text=Hola,%20vi%20tu%20negocio%20en%20la%20Guía%20Digital%20de%20Cúcuta`;
@@ -118,7 +123,64 @@ function generarFiltros() {
   });
 }
 
-// 4. Resto de la página (Menú, Carrusel de promoción, Formularios, etc.)
+// 4. CARRUSEL CUADRADO (Lógica integrada)
+let indicePortada = 0;
+let totalFotosPortada = 0;
+let intervaloPortada;
+
+function iniciarCarruselPortada() {
+  const contenedor = document.getElementById('carruselPortadaInner');
+  const indicadores = document.getElementById('indicadoresPortada');
+  if (!contenedor || !indicadores) return;
+
+  totalFotosPortada = negocios.length;
+  let html = '';
+  let puntos = '';
+
+  negocios.forEach((negocio, i) => {
+    // Crea el nombre del archivo: "Fajas Edi" -> "fajas-edi.jpg"
+    const nombreFoto = negocio.nombre.toLowerCase().replace(/\s+/g, '-') + '.jpg';
+    
+    html += `
+      <div class="carrusel-cuadrado-slide ${i === 0 ? 'active' : ''}">
+        <a href="${negocio.link || negocio.url}" target="_blank">
+          <img src="${nombreFoto}" alt="${negocio.nombre}" onerror="this.src='https://placehold.co/400x400/112b4f/fbbf24?text=Sin+Foto'">
+        </a>
+      </div>
+    `;
+    puntos += `<span class="indicator ${i === 0 ? 'active' : ''}" onclick="irAlPortada(${i})"></span>`;
+  });
+
+  contenedor.innerHTML = html;
+  indicadores.innerHTML = puntos;
+
+  if (totalFotosPortada > 0) {
+    intervaloPortada = setInterval(() => moverCarruselPortada(1), 4000);
+  }
+}
+
+function moverCarruselPortada(direccion) {
+  if (totalFotosPortada === 0) return;
+  indicePortada = (indicePortada + direccion + totalFotosPortada) % totalFotosPortada;
+  actualizarCarruselPortada();
+}
+
+function irAlPortada(indice) {
+  indicePortada = indice;
+  actualizarCarruselPortada();
+  clearInterval(intervaloPortada);
+  intervaloPortada = setInterval(() => moverCarruselPortada(1), 4000);
+}
+
+function actualizarCarruselPortada() {
+  const slides = document.querySelectorAll('.carrusel-cuadrado-slide');
+  const puntos = document.querySelectorAll('#indicadoresPortada .indicator');
+
+  slides.forEach((slide, i) => slide.classList.toggle('active', i === indicePortada));
+  puntos.forEach((punto, i) => punto.classList.toggle('active', i === indicePortada));
+}
+
+// 5. Resto de la página (Menú, Formularios, etc.)
 document.getElementById('menu-btn')?.addEventListener('click', () => {
   document.getElementById('mobile-menu').classList.toggle('open');
 });
@@ -126,7 +188,6 @@ document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(el => {
   el.addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
 });
 
-// CARRUSEL DE PROMOCIÓN (EL DE 3 DIAPOSITIVAS)
 const carruselInner = document.getElementById('carruselInner');
 const slides = document.querySelectorAll('.carrusel-slide');
 const totalSlides = slides.length;
@@ -156,7 +217,6 @@ document.getElementById('prevBtn')?.addEventListener('click', prevSlide);
 document.getElementById('nextBtn')?.addEventListener('click', nextSlide);
 setInterval(nextSlide, 5000);
 
-// COMPARTIR
 const NUEVA_URL = 'https://cucuta.guia-digital.com';
 function compartirSitio() {
   if (navigator.share) {
@@ -167,7 +227,6 @@ function compartirSitio() {
   }
 }
 
-// WHATSAPP Y BUSCADOR
 const WHATSAPP = '584227159158';
 const btnBuscar = document.getElementById('btnBuscarLocal');
 const inputBuscar = document.getElementById('buscadorLocal');
@@ -188,7 +247,6 @@ if (btnBuscar) {
   });
 }
 
-// FORMULARIOS
 function abrirFormulario(tipo) {
   const ids = { local: 'formLocal', influencer: 'formInfluencer', impulsador: 'formImpulsador', disenador: 'formDisenador' };
   Object.values(ids).forEach(id => document.getElementById(id)?.classList.add('hidden'));
@@ -223,7 +281,6 @@ function enviarFormulario(e, tipo) {
   cerrarFormulario(tipo);
 }
 
-// SALUDO DEL PULPO Y VOZ
 function mostrarSaludo() {
   const ahora = new Date();
   const hora = ahora.getHours();
@@ -254,7 +311,6 @@ document.getElementById('portadaImg')?.addEventListener('click', function() {
   window.speechSynthesis.speak(voz);
 });
 
-// CHAT DE EMPLEO
 let pasoChat = 0;
 function respuestaChat(valor) {
   const chatMensajes = document.getElementById('chatMensajes');
@@ -271,7 +327,6 @@ function respuestaChat(valor) {
   chatMensajes.scrollTop = chatMensajes.scrollHeight;
 }
 
-// CONTADOR DE VISITAS
 let visitas = localStorage.getItem("contadorGuiaCucuta");
 if (visitas === null) {
   visitas = 100;

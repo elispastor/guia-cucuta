@@ -24,6 +24,11 @@
     box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     background: #000;
     border: 3px solid #fbbf24;
+    cursor: pointer; /* Aquí aparece la manito */
+    transition: transform 0.3s ease;
+  }
+  .carrusel-prueba:hover {
+    transform: scale(1.02); /* Un efecto bonito al pasar el mouse */
   }
   .carrusel-prueba img {
     width: 100%;
@@ -31,33 +36,14 @@
     object-fit: cover;
     display: block;
   }
-  .letrero-nombre {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(transparent, rgba(11, 28, 58, 0.95));
-    color: #ffffff;
-    padding: 40px 15px 15px;
-    text-align: center;
-    font-weight: 900;
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-    border-bottom: 2px solid #fbbf24;
-    box-sizing: border-box; /* Para que el padding no desborde */
-  }
 </style>
 </head>
 <body>
 
-  <div class="carrusel-prueba">
-    <!-- Aquí va la imagen de prueba -->
-    <img src="prueba.jpg" alt="Prueba de negocio">
-    <!-- Aquí va el letrero con el nombre -->
-    <div class="letrero-nombre">NOMBRE DEL NEGOCIO</div>
-  </div>
+  <!-- Aquí envolvemos la imagen en un enlace con la dirección del negocio -->
+  <a href="https://restauranteelsabordedonarosa.netlify.app/" target="_blank" class="carrusel-prueba">
+    <img src="prueba.jpg" alt="El Sabor de Doña Rosa">
+  </a>
 
 </body>
 </html>

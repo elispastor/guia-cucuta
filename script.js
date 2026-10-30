@@ -1,64 +1,81 @@
-SCRIPT PRINCIPAL DE LA GUÍA DIGITAL (UNIFICADO) =====
+// ===== 75 NEGOCIOS =====
+const negocios = [
+    { nombre: "Fajas Edi", url: "https://fajasedi.netlify.app/", categoria: "belleza" },
+    { nombre: "STYLE COLLECTION", url: "https://tdi-julio-vargas.ngegestion.workers.dev/", categoria: "belleza", icono: "💄" },
+    { nombre: "La Estación de la Calidad", url: "https://cucuta.guia-digital.com/estacion-calidad", categoria: "accesorios" },
+    { nombre: "Tracto Auto M.F.", url: "https://tracto-auto-mf.pages.dev/", categoria: "mecanica" },
+    { nombre: "Taller Barney", url: "https://taller-barney.netlify.app/", categoria: "mecanica" },
+    { nombre: "Autotaller Murillo", url: "https://autotallermurillo.netlify.app/", categoria: "mecanica" },
+    { nombre: "Taller Mecánico TS", url: "https://taller-mecanico-ts.netlify.app/", categoria: "mecanica" },
+    { nombre: "Mecánica Willson y Gustavo", url: "https://mecanicaautomotrizwillsonygustavo.netlify.app/", categoria: "mecanica" },
+    { nombre: "Taller Osama", url: "https://taller-osama.pages.dev", categoria: "mecanica" },
+    { nombre: "Multiservicios Los Torres", url: "https://multiserviciosautomotrizlostorres.netlify.app/", categoria: "mecanica" },
+    { nombre: "Electroauto El Rolo", url: "https://electroautoelrolo.netlify.app/", categoria: "mecanica" },
+    { nombre: "Papa Barney", url: "https://papa-barney.netlify.app/", categoria: "mecanica" },
+    { nombre: "Cone Junior Torrado", url: "https://taller-cone.pages.dev", categoria: "mecanica" },
+    { nombre: "Ferretería La 17", url: "https://ferreteria-la-17.pages.dev/", categoria: "ferreterias" },
+    { nombre: "Gustavo Rojas", url: "https://taller-de-electricidad-gustavo-rojas.pages.dev", categoria: "mecanica" },
+    { nombre: "Jhon Rubio III", url: "https://cucuta.guia-digital.com/jhon-rubio.html", categoria: "mecanica" },
+    { nombre: "Motores Jesús", url: "https://motores-motoreductores-jesus.netlify.app/", categoria: "motores" },
+    { nombre: "Embobinados Dacoor", url: "https://embobinadosdacoor.netlify.app/", categoria: "motores" },
+    { nombre: "Montallantas El Indio", url: "https://montallantas-el-indio.netlify.app/", categoria: "llantas" },
+    { nombre: "Ruedas y Rodamientos El Shaddai", url: "https://ruedasyrodamientoselshaddai.netlify.app/", categoria: "llantas" },
+    { nombre: "Servigomas", url: "https://servigomas.netlify.app/", categoria: "llantas" },
+    { nombre: "Herrería Duarte", url: "https://tallerdeherreriaduarte.netlify.app/", categoria: "herreria" },
+    { nombre: "Acero y Gas", url: "https://aceroygas.netlify.app/", categoria: "herreria" },
+    { nombre: "Aceros PC", url: "https://acerospc.netlify.app/", categoria: "herreria" },
+    { nombre: "Herramientas El Segundazo", url: "https://herramientas-el-segundazo.netlify.app/", categoria: "herreria" },
+    { nombre: "Muebles RQ", url: "https://mueblesrq.netlify.app/", categoria: "tapiceria" },
+    { nombre: "La Clínica del Mueble", url: "https://laclinicadelmueble.netlify.app/", categoria: "tapiceria" },
+    { nombre: "Carpintería JK", url: "https://carpinteriajk.netlify.app/", categoria: "tapiceria" },
+    { nombre: "Carpintería 10 con 2da", url: "https://carpinteria10con2da.netlify.app/", categoria: "tapiceria" },
+    { nombre: "Muebles Diseños y Punto", url: "https://mueblesdisenosypunto.netlify.app/", categoria: "tapiceria" },
+    { nombre: "TOYOMACK", url: "https://toyomack.pages.dev/", categoria: "accesorios" },
+    { nombre: "WAHL · Servicio Técnico", url: "https://cucuta.guia-digital.com/wahl.html", categoria: "accesorios" },
+    { nombre: "Quincallería Blanca", url: "https://quincalleriablanca.netlify.app/", categoria: "accesorios" },
+    { nombre: "Fabrigomas", url: "https://fabrigomas.netlify.app/", categoria: "accesorios" },
+    { nombre: "Otoniel Acarreos", url: "https://otoniel-acarreos.netlify.app/", categoria: "acarreos" },
+    { nombre: "Acarreos Carlos", url: "https://acarreoscarlos.netlify.app/", categoria: "acarreos" },
+    { nombre: "Acarreos y Viajes Luis Díaz", url: "https://cucuta.guia-digital.com/luis-diaz.html", categoria: "acarreos" },
+    { nombre: "Acarreos Luis Bueno", url: "https://acarreosluisbueno.netlify.app/", categoria: "acarreos" },
+    { nombre: "Acarreos Isidro", url: "https://acarreos-isidro.netlify.app/", categoria: "acarreos" },
+    { nombre: "Gatos Hidráulicos María", url: "https://gatoshidraulicosmaria.netlify.app/", categoria: "acarreos" },
+    { nombre: "Servipuertas", url: "https://servipuertas.netlify.app/", categoria: "puertas" },
+    { nombre: "Cerrajería El Mago", url: "https://cerrajeriaelmago.netlify.app/", categoria: "puertas" },
+    { nombre: "Marianacell", url: "https://marianacell.netlify.app/", categoria: "celulares" },
+    { nombre: "Davidcell", url: "https://davidcell.netlify.app/", categoria: "celulares" },
+    { nombre: "KATA - Servicio Técnico Celular", url: "https://cucuta.guia-digital.com/kata", categoria: "celulares" },
+    { nombre: "HDMovil2", url: "https://hdmovil2.netlify.app/", categoria: "celulares" },
+    { nombre: "Esbedcell", url: "https://esbedcell.netlify.app/", categoria: "celulares" },
+    { nombre: "Mis Antojos", url: "https://mis-antojos-restaurante.netlify.app/", categoria: "restaurantes" },
+    { nombre: "Restaurante La Mano de Dios", url: "https://restaurantlamanodedios.netlify.app/", categoria: "restaurantes" },
+    { nombre: "Charcutería Jireh", url: "https://charcuteriajireh.netlify.app/", categoria: "restaurantes" },
+    { nombre: "Restaurante El Sabor de Doña Rosa", url: "https://restauranteelsabordedonarosa.netlify.app/", categoria: "restaurantes" },
+    { nombre: "Proyecto Comedor NGE", url: "https://proyecto-comedor-nge.netlify.app/", categoria: "restaurantes" },
+    { nombre: "El Punto de Jack", url: "https://elpuntode-jack.netlify.app/", categoria: "maquinas" },
+    { nombre: "Hotel La Puerta del Sol", url: "https://hotel-lapuertadelsol.netlify.app/", categoria: "hoteles" },
+    { nombre: "Salón D'Steffy", url: "https://salondebellezadsteffy.pages.dev/", categoria: "belleza" },
+    { nombre: "Liam Stylos Peluquería", url: "https://liam-stylos-peluqueria.netlify.app/", categoria: "belleza" },
+    { nombre: "Ciclorepuestos Biker10", url: "https://ciclorepuestosbiker10.netlify.app/", categoria: "bicicletas" },
+    { nombre: "Bicicletas Alex", url: "https://bicicletas-alex.netlify.app/", categoria: "bicicletas" },
+    { nombre: "Frioaire Vásquez", url: "https://frioaire-vasquez.netlify.app/", categoria: "refrigeracion" },
+    { nombre: "Hidrotec Cúcuta", url: "https://hidrotec-cucuta.netlify.app/", categoria: "hidraulica" },
+    { nombre: "Comercializadora El Campo", url: "https://comercializadoraelcampo.netlify.app/", categoria: "comercializadoras" },
+    { nombre: "Autodiagnóstico y Cerrajería CJI", url: "https://autodiagnostico-ferreteria-cji.pages.dev/", categoria: "puertas" },
+    { nombre: "Hidrocool", url: "https://hidrocool.pages.dev/", categoria: "hidraulica" },
+    { nombre: "Polarizados Julio", url: "https://polarizados-julio.pages.dev/", categoria: "accesorios" },
+    { nombre: "AUTO REPUESTOS MUNDO CHINO", url: "https://auto-repuestos-mundochino.netlify.app", categoria: "repuestos", icono: "🚗" },
+    { nombre: "Taller El Gaterito", url: "https://taller-el-gaterito.netlify.app", categoria: "mecanica", icono: "🔧" },
+    { nombre: "Repuestos Taller César", url: "https://repuestos-taller-cesar.netlify.app", categoria: "repuestos", icono: "🔩" },
+    { nombre: "GRUPO OCCIDENTAL", url: "https://grupooccidental.netlify.app", categoria: "tramites", icono: "📄" },
+    { nombre: "Generador de Ingresos NGE", url: "https://generador-de-ingresos-nge.netlify.app", categoria: "emprendimiento", icono: "💰" },
+    { nombre: "EmprendeWorld NGE", url: "https://gane-dinero-con-la-publicidad.netlify.app", categoria: "publicidad", icono: "📢" },
+    { nombre: "Tarjeta Digital Online", url: "https://tarjetaonline.netlify.app", categoria: "tarjetas digitales", icono: "💳" },
+    { nombre: "Metalicas VALDERRAMA", url: "https://metalicas-valderrama.vercel.app", categoria: "soldadura", icono: "🔨" },
+    { nombre: "Alex Mariachi", url: "https://cucuta.guia-digital.com/alex-mariachi", categoria: "eventos" }
+];
 
-let negocios = [];
-let categoriaActual = "todos";
-
-// 1. Cargar los negocios desde el archivo JSON
-async function cargarNegocios() {
-  try {
-    const respuesta = await fetch('negocios.json');
-    negocios = await respuesta.json();
-    
-    generarFiltros(); // Pinta los botones de categorías
-    mostrarNegocios("todos"); // Pinta el directorio
-    iniciarCarruselPortada(); // Pinta el carrusel
-    
-  } catch (error) {
-    console.error("Error cargando el archivo negocios.json:", error);
-    const contenedor = document.getElementById("lista-negocios");
-    if (contenedor) {
-        contenedor.innerHTML = '<div class="col-span-2 text-center py-8 text-gray-400">Error al cargar el directorio. Asegúrate de que el archivo negocios.json exista en GitHub.</div>';
-    }
-  }
-}
-
-// 2. Mostrar los negocios en el directorio
-function mostrarNegocios(categoria) {
-  const contenedor = document.getElementById("lista-negocios");
-  if (!contenedor) return;
-
-  const filtrados = categoria === "todos" ? negocios : negocios.filter(n => n.categoria === categoria);
-  
-  if (filtrados.length === 0) {
-    contenedor.innerHTML = '<div class="col-span-2 text-center py-8 text-gray-400">Aún no hay negocios en esta categoría.</div>';
-    return;
-  }
-
-  contenedor.innerHTML = filtrados.map(n => {
-    let botonWhatsApp = '';
-    if (n.telefono && n.telefono.trim() !== "") {
-      const linkWhatsApp = `https://wa.me/${n.telefono.replace(/\s+/g, '')}?text=Hola,%20vi%20tu%20negocio%20en%20la%20Guía%20Digital%20de%20Cúcuta`;
-      botonWhatsApp = `<a href="${linkWhatsApp}" target="_blank" class="btn btn-wsp">💬 WhatsApp</a>`;
-    }
-
-    return `
-      <div class="taller-card">
-        <h3 class="text-xl font-bold text-[#fbbf24]">
-          <a href="${n.link || n.url}" target="_blank" style="text-decoration: none; color: inherit;">${n.nombre}</a>
-        </h3>
-        <p class="text-sm text-gray-300 mb-3">${obtenerNombreCategoria(n.categoria)}</p>
-        <div class="flex gap-3 flex-wrap">
-          <a href="${n.url}" target="_blank" rel="noopener noreferrer" class="btn btn-sitio">🔗 Ver sitio</a>
-          ${botonWhatsApp}
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-// 3. Categorías y filtros
-function obtenerNombreCategoria(catId) {
-  const categorias = [
+const categorias = [
     { id: "todos", nombre: "🔧 Todos" },
     { id: "ferreterias", nombre: "🏪 Ferreterías" },
     { id: "mecanica", nombre: "🚗 Mecánica" },
@@ -78,41 +95,37 @@ function obtenerNombreCategoria(catId) {
     { id: "refrigeracion", nombre: "❄️ Refrigeración" },
     { id: "hidraulica", nombre: "💧 Hidráulica" },
     { id: "comercializadoras", nombre: "🏪 Comercializadoras" },
-    { id: "eventos", nombre: "🎵 Eventos y Música" }
-  ];
+    { id: "eventos", nombre: "🎵 Eventos y Música" },
+];
+
+let categoriaActual = "todos";
+
+function mostrarNegocios(categoria) {
+  const contenedor = document.getElementById("lista-negocios");
+  const filtrados = categoria === "todos" ? negocios : negocios.filter(n => n.categoria === categoria);
+  if (filtrados.length === 0) {
+    contenedor.innerHTML = '<div class="col-span-2 text-center py-8 text-gray-400">Aún no hay negocios en esta categoría.</div>';
+    return;
+  }
+  contenedor.innerHTML = filtrados.map(n => `
+    <div class="taller-card">
+      <h3 class="text-xl font-bold text-[#fbbf24]">${n.nombre}</h3>
+      <p class="text-sm text-gray-300 mb-3">${obtenerNombreCategoria(n.categoria)}</p>
+      <div class="flex gap-3 flex-wrap">
+        <a href="${n.url}" target="_blank" rel="noopener noreferrer" class="btn btn-sitio">🔗 Ver sitio</a>
+      </div>
+    </div>
+  `).join("");
+}
+
+function obtenerNombreCategoria(catId) {
   const cat = categorias.find(c => c.id === catId);
   return cat ? cat.nombre : catId;
 }
 
 function generarFiltros() {
-  const categorias = [
-    { id: "todos", nombre: "🔧 Todos" },
-    { id: "ferreterias", nombre: "🏪 Ferreterías" },
-    { id: "mecanica", nombre: "🚗 Mecánica" },
-    { id: "motores", nombre: "⚙️ Motores" },
-    { id: "llantas", nombre: "🛞 Llantas" },
-    { id: "herreria", nombre: "🔩 Herrería" },
-    { id: "tapiceria", nombre: "🪑 Tapicería" },
-    { id: "accesorios", nombre: "🔧 Accesorios" },
-    { id: "acarreos", nombre: "🚛 Acarreos" },
-    { id: "puertas", nombre: "🚪 Puertas" },
-    { id: "celulares", nombre: "📱 Celulares" },
-    { id: "restaurantes", nombre: "🍽️ Restaurantes" },
-    { id: "maquinas", nombre: "🧵 Máquinas de coser" },
-    { id: "hoteles", nombre: "🏨 Hoteles" },
-    { id: "belleza", nombre: "💇 Belleza" },
-    { id: "bicicletas", nombre: "🚴 Bicicletas" },
-    { id: "refrigeracion", nombre: "❄️ Refrigeración" },
-    { id: "hidraulica", nombre: "💧 Hidráulica" },
-    { id: "comercializadoras", nombre: "🏪 Comercializadoras" },
-    { id: "eventos", nombre: "🎵 Eventos y Música" }
-  ];
-  
   const contenedor = document.getElementById("filtros");
-  if (!contenedor) return;
-
   contenedor.innerHTML = categorias.map(cat => `<button class="btn-categoria ${cat.id === categoriaActual ? 'activo' : ''}" data-categoria="${cat.id}">${cat.nombre}</button>`).join("");
-  
   document.querySelectorAll(".btn-categoria").forEach(btn => {
     btn.addEventListener("click", () => {
       categoriaActual = btn.dataset.categoria;
@@ -123,64 +136,10 @@ function generarFiltros() {
   });
 }
 
-// 4. CARRUSEL CUADRADO (Lógica integrada)
-let indicePortada = 0;
-let totalFotosPortada = 0;
-let intervaloPortada;
+generarFiltros();
+mostrarNegocios("todos");
 
-function iniciarCarruselPortada() {
-  const contenedor = document.getElementById('carruselPortadaInner');
-  const indicadores = document.getElementById('indicadoresPortada');
-  if (!contenedor || !indicadores) return;
-
-  totalFotosPortada = negocios.length;
-  let html = '';
-  let puntos = '';
-
-  negocios.forEach((negocio, i) => {
-    // Crea el nombre del archivo: "Fajas Edi" -> "fajas-edi.jpg"
-    const nombreFoto = negocio.nombre.toLowerCase().replace(/\s+/g, '-') + '.jpg';
-    
-    html += `
-      <div class="carrusel-cuadrado-slide ${i === 0 ? 'active' : ''}">
-        <a href="${negocio.link || negocio.url}" target="_blank">
-          <img src="${nombreFoto}" alt="${negocio.nombre}" onerror="this.src='https://placehold.co/400x400/112b4f/fbbf24?text=Sin+Foto'">
-        </a>
-      </div>
-    `;
-    puntos += `<span class="indicator ${i === 0 ? 'active' : ''}" onclick="irAlPortada(${i})"></span>`;
-  });
-
-  contenedor.innerHTML = html;
-  indicadores.innerHTML = puntos;
-
-  if (totalFotosPortada > 0) {
-    intervaloPortada = setInterval(() => moverCarruselPortada(1), 4000);
-  }
-}
-
-function moverCarruselPortada(direccion) {
-  if (totalFotosPortada === 0) return;
-  indicePortada = (indicePortada + direccion + totalFotosPortada) % totalFotosPortada;
-  actualizarCarruselPortada();
-}
-
-function irAlPortada(indice) {
-  indicePortada = indice;
-  actualizarCarruselPortada();
-  clearInterval(intervaloPortada);
-  intervaloPortada = setInterval(() => moverCarruselPortada(1), 4000);
-}
-
-function actualizarCarruselPortada() {
-  const slides = document.querySelectorAll('.carrusel-cuadrado-slide');
-  const puntos = document.querySelectorAll('#indicadoresPortada .indicator');
-
-  slides.forEach((slide, i) => slide.classList.toggle('active', i === indicePortada));
-  puntos.forEach((punto, i) => punto.classList.toggle('active', i === indicePortada));
-}
-
-// 5. Resto de la página (Menú, Formularios, etc.)
+// MENÚ MÓVIL
 document.getElementById('menu-btn')?.addEventListener('click', () => {
   document.getElementById('mobile-menu').classList.toggle('open');
 });
@@ -188,6 +147,7 @@ document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(el => {
   el.addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
 });
 
+// CARRUSEL
 const carruselInner = document.getElementById('carruselInner');
 const slides = document.querySelectorAll('.carrusel-slide');
 const totalSlides = slides.length;
@@ -217,6 +177,7 @@ document.getElementById('prevBtn')?.addEventListener('click', prevSlide);
 document.getElementById('nextBtn')?.addEventListener('click', nextSlide);
 setInterval(nextSlide, 5000);
 
+// COMPARTIR
 const NUEVA_URL = 'https://cucuta.guia-digital.com';
 function compartirSitio() {
   if (navigator.share) {
@@ -227,17 +188,17 @@ function compartirSitio() {
   }
 }
 
+// WHATSAPP
 const WHATSAPP = '584227159158';
+// BUSCADOR
 const btnBuscar = document.getElementById('btnBuscarLocal');
 const inputBuscar = document.getElementById('buscadorLocal');
 const resultadosDiv = document.getElementById('resultadosBusqueda');
-
 if (btnBuscar) {
   btnBuscar.addEventListener('click', function() {
     const termino = inputBuscar.value.trim().toLowerCase();
     if (termino === '') { alert('Escribe lo que quieres buscar'); return; }
     const resultados = negocios.filter(n => n.nombre.toLowerCase().includes(termino) || obtenerNombreCategoria(n.categoria).toLowerCase().includes(termino));
-    
     if (resultados.length === 0) {
       resultadosDiv.innerHTML = `<div class="mt-4 p-4 bg-black/30 rounded-xl text-center text-gray-300">❌ No encontramos "${termino}" en nuestra guía.</div>`;
     } else {
@@ -247,6 +208,7 @@ if (btnBuscar) {
   });
 }
 
+// FORMULARIOS
 function abrirFormulario(tipo) {
   const ids = { local: 'formLocal', influencer: 'formInfluencer', impulsador: 'formImpulsador', disenador: 'formDisenador' };
   Object.values(ids).forEach(id => document.getElementById(id)?.classList.add('hidden'));
@@ -281,6 +243,7 @@ function enviarFormulario(e, tipo) {
   cerrarFormulario(tipo);
 }
 
+// SALUDO DEL PULPO
 function mostrarSaludo() {
   const ahora = new Date();
   const hora = ahora.getHours();
@@ -311,6 +274,7 @@ document.getElementById('portadaImg')?.addEventListener('click', function() {
   window.speechSynthesis.speak(voz);
 });
 
+// CHAT DE EMPLEO
 let pasoChat = 0;
 function respuestaChat(valor) {
   const chatMensajes = document.getElementById('chatMensajes');
@@ -327,6 +291,7 @@ function respuestaChat(valor) {
   chatMensajes.scrollTop = chatMensajes.scrollHeight;
 }
 
+// CONTADOR DE VISITAS
 let visitas = localStorage.getItem("contadorGuiaCucuta");
 if (visitas === null) {
   visitas = 100;
@@ -335,6 +300,3 @@ if (visitas === null) {
 }
 localStorage.setItem("contadorGuiaCucuta", visitas);
 document.getElementById("numeroVisitas").innerText = visitas;
-
-// ¡INICIAR TODO!
-cargarNegocios();
